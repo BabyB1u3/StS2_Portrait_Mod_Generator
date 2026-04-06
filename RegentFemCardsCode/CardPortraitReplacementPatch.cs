@@ -1,7 +1,7 @@
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Models;
-using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -13,72 +13,95 @@ internal static class CardPortraitReplacementPatch
     private static readonly BindingFlags InstanceBindings =
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-    private static bool _loggedTarget;
+    private static readonly string[] PreferredPropertyNames =
+    [
+        "PortraitPath",
+        "Portrait",
+        "CardArtPath",
+        "CardArt"
+    ];
 
-    private static MethodBase? TargetMethod()
+    private static readonly string[] PreferredMethodNames =
+    [
+        "GetPortraitPath",
+        "GetPortrait",
+        "GetCardArtPath",
+        "GetCardArt"
+    ];
+
+    private static bool _loggedTargets;
+
+    private static IEnumerable<MethodBase> TargetMethods()
     {
-        Type cardModelType = typeof(CardModel);
+        HashSet<MethodBase> targets = [];
 
-        string[] preferredPropertyNames =
-        [
-            "PortraitPath",
-            "Portrait",
-            "CardArtPath",
-            "CardArt"
-        ];
+        AddTargetsFromType(targets, typeof(CardModel));
 
-        foreach (string propertyName in preferredPropertyNames)
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            PropertyInfo? property = cardModelType.GetProperty(propertyName, InstanceBindings);
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(type => type is not null).Cast<Type>().ToArray();
+            }
+            catch
+            {
+                continue;
+            }
+
+            foreach (Type type in types)
+            {
+                if (!typeof(CardModel).IsAssignableFrom(type) || type == typeof(CardModel))
+                {
+                    continue;
+                }
+
+                AddTargetsFromType(targets, type);
+            }
+        }
+
+        if (!_loggedTargets)
+        {
+            _loggedTargets = true;
+            if (targets.Count == 0)
+            {
+                GD.PushWarning("[RegentFemCards] No explicit portrait getter target was found. Portrait replacement patch will be inactive.");
+            }
+            else
+            {
+                foreach (MethodBase target in targets.OrderBy(static method => method.DeclaringType?.FullName).ThenBy(static method => method.Name))
+                {
+                    GD.Print($"[RegentFemCards] Patching portrait getter: {target.DeclaringType?.FullName}.{target.Name}");
+                }
+            }
+        }
+
+        return targets;
+    }
+
+    private static void AddTargetsFromType(ISet<MethodBase> targets, Type type)
+    {
+        foreach (string propertyName in PreferredPropertyNames)
+        {
+            PropertyInfo? property = type.GetProperty(propertyName, InstanceBindings);
             if (property?.PropertyType == typeof(string) && property.GetMethod is not null)
             {
-                LogTarget(property.GetMethod);
-                return property.GetMethod;
+                targets.Add(property.GetMethod);
             }
         }
 
-        foreach (PropertyInfo property in cardModelType.GetProperties(InstanceBindings))
+        foreach (string methodName in PreferredMethodNames)
         {
-            if (property.PropertyType == typeof(string) &&
-                property.GetMethod is not null &&
-                IsPortraitLikeName(property.Name))
+            MethodInfo? method = type.GetMethod(methodName, InstanceBindings, null, Type.EmptyTypes, null);
+            if (method?.ReturnType == typeof(string))
             {
-                LogTarget(property.GetMethod);
-                return property.GetMethod;
+                targets.Add(method);
             }
         }
-
-        foreach (MethodInfo method in cardModelType.GetMethods(InstanceBindings))
-        {
-            if (method.ReturnType == typeof(string) &&
-                method.GetParameters().Length == 0 &&
-                IsPortraitLikeName(method.Name))
-            {
-                LogTarget(method);
-                return method;
-            }
-        }
-
-        GD.PushWarning("[RegentFemCards] Could not locate a portrait-path getter on CardModel. Falling back is required.");
-        return null;
-    }
-
-    private static bool IsPortraitLikeName(string name)
-    {
-        return name.Contains("Portrait", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("CardArt", StringComparison.OrdinalIgnoreCase) ||
-               name.Contains("ArtPath", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static void LogTarget(MethodBase target)
-    {
-        if (_loggedTarget)
-        {
-            return;
-        }
-
-        _loggedTarget = true;
-        GD.Print($"[RegentFemCards] Patching portrait getter: {target.DeclaringType?.FullName}.{target.Name}");
     }
 
     [SuppressMessage("Style", "IDE0051", Justification = "Harmony discovers patch methods via reflection.")]

@@ -1,5 +1,7 @@
 using Godot;
 using MegaCrit.Sts2.Core.Models;
+using System;
+using System.Collections.Generic;
 
 namespace RegentFemCards.RegentFemCardsCode;
 
