@@ -1,8 +1,8 @@
 using Godot;
 using HarmonyLib;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.Cards;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace RegentFemCards.RegentFemCardsCode;
@@ -13,51 +13,83 @@ internal static class CardPortraitReplacementPatch
     private static readonly BindingFlags InstanceBindings =
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-    private static readonly FieldInfo? PortraitField =
-        typeof(NCard).GetField("_portrait", InstanceBindings);
+    private static bool _loggedTarget;
 
-    private static readonly FieldInfo? AncientPortraitField =
-        typeof(NCard).GetField("_ancientPortrait", InstanceBindings);
+    private static MethodBase? TargetMethod()
+    {
+        Type cardModelType = typeof(CardModel);
 
+        string[] preferredPropertyNames =
+        [
+            "PortraitPath",
+            "Portrait",
+            "CardArtPath",
+            "CardArt"
+        ];
+
+        foreach (string propertyName in preferredPropertyNames)
+        {
+            PropertyInfo? property = cardModelType.GetProperty(propertyName, InstanceBindings);
+            if (property?.PropertyType == typeof(string) && property.GetMethod is not null)
+            {
+                LogTarget(property.GetMethod);
+                return property.GetMethod;
+            }
+        }
+
+        foreach (PropertyInfo property in cardModelType.GetProperties(InstanceBindings))
+        {
+            if (property.PropertyType == typeof(string) &&
+                property.GetMethod is not null &&
+                IsPortraitLikeName(property.Name))
+            {
+                LogTarget(property.GetMethod);
+                return property.GetMethod;
+            }
+        }
+
+        foreach (MethodInfo method in cardModelType.GetMethods(InstanceBindings))
+        {
+            if (method.ReturnType == typeof(string) &&
+                method.GetParameters().Length == 0 &&
+                IsPortraitLikeName(method.Name))
+            {
+                LogTarget(method);
+                return method;
+            }
+        }
+
+        GD.PushWarning("[RegentFemCards] Could not locate a portrait-path getter on CardModel. Falling back is required.");
+        return null;
+    }
+
+    private static bool IsPortraitLikeName(string name)
+    {
+        return name.Contains("Portrait", StringComparison.OrdinalIgnoreCase) ||
+               name.Contains("CardArt", StringComparison.OrdinalIgnoreCase) ||
+               name.Contains("ArtPath", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static void LogTarget(MethodBase target)
+    {
+        if (_loggedTarget)
+        {
+            return;
+        }
+
+        _loggedTarget = true;
+        GD.Print($"[RegentFemCards] Patching portrait getter: {target.DeclaringType?.FullName}.{target.Name}");
+    }
+
+    [SuppressMessage("Style", "IDE0051", Justification = "Harmony discovers patch methods via reflection.")]
+    [SuppressMessage("Style", "IDE1006", Justification = "Harmony requires the __instance parameter name.")]
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(NCard), nameof(NCard.UpdateVisuals))]
-    private static void UpdateVisualsPostfix(NCard __instance, PileType pileType, CardPreviewMode previewMode)
+    private static void Postfix(CardModel __instance, ref string __result)
     {
-        TryApplyReplacement(__instance);
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(NCard), nameof(NCard._EnterTree))]
-    private static void EnterTreePostfix(NCard __instance)
-    {
-        TryApplyReplacement(__instance);
-    }
-
-    private static void TryApplyReplacement(NCard cardNode)
-    {
-        if (cardNode.Model is not CardModel model)
+        if (PortraitReplacementRegistry.TryGetPath(__instance, out string? replacementPath) &&
+            !string.IsNullOrWhiteSpace(replacementPath))
         {
-            return;
+            __result = replacementPath;
         }
-
-        if (!PortraitReplacementRegistry.TryGetTexture(model, out Texture2D? texture) || texture is null)
-        {
-            return;
-        }
-
-        ApplyTexture(PortraitField?.GetValue(cardNode) as TextureRect, texture);
-        ApplyTexture(AncientPortraitField?.GetValue(cardNode) as TextureRect, texture);
-    }
-
-    private static void ApplyTexture(TextureRect? textureRect, Texture2D texture)
-    {
-        if (textureRect is null)
-        {
-            return;
-        }
-
-        textureRect.Texture = texture;
-        textureRect.StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered;
-        textureRect.Visible = true;
     }
 }
