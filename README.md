@@ -42,9 +42,11 @@ If you have never installed mods before, please note that Slay the Spire 2 separ
 
 If you want to keep your original saves, go to:
 
-`C:\Users\<YourUserName>\AppData\Roaming\SlayTheSpire\steam\<YourSteamID>`
+`C:\Users\<YourUserName>\AppData\Roaming\SlayTheSpire2\steam\<YourSteamID>`
 
 Then copy your `profile_0`, `profile_1`, `profile_2` or other profile files into the corresponding modded save location if needed.
+
+If you the `modded` folder does not exist, lanching the game with mod enabled will automatically create it.
 
 If you cannot see the `AppData` folder, enable **Hidden items** in File Explorer.
 
@@ -54,9 +56,11 @@ If you cannot see the `AppData` folder, enable **Hidden items** in File Explorer
 
 如果你想保留原来的存档，请前往：
 
-`C:\Users\你的用户名\AppData\Roaming\SlayTheSpire\steam\你的SteamID`
+`C:\Users\你的用户名\AppData\Roaming\SlayTheSpire2\steam\你的SteamID`
 
-然后根据需要，将其中的 `profile_0`、`profile_1`、`profile_2` 等存档文件复制到对应的 modded 存档位置中。
+然后根据需要，将其中的 `profile_0`、`profile_1`、`profile_2` 等存档文件复制到 modded 存档位置中。
+
+如果没有 `modded` 文件夹，就先安装mod运行一次游戏。
 
 如果你看不到 `AppData` 文件夹，请在文件资源管理器中勾选 **显示隐藏的项目**。
 
