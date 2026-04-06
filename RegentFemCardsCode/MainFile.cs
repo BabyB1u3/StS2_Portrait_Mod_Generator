@@ -12,6 +12,7 @@ public partial class MainFile : Node
     public static void Initialize()
     {
         PortraitReplacementRegistry.EnsureLoaded();
+        FrameReplacementRegistry.EnsureLoaded();
 
         Harmony harmony = new(ModId);
         harmony.PatchAll();
