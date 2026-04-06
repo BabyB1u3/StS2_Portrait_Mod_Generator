@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace RegentFemCards.RegentFemCardsCode;
 
 internal static class FrameReplacementRegistry
@@ -22,65 +19,62 @@ internal static class FrameReplacementRegistry
         public string HighlightMaterial { get; init; } = string.Empty;
     }
 
-    private static readonly Dictionary<string, FrameReplacementEntry> Entries = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["SovereignBlade"] = new FrameReplacementEntry
-        {
-            CardId = "SovereignBlade",
-            UiMode = "Ancient",
-            Frame = "res://images/atlases/compressed.sprites/card_template/ancient_card_border.tres",
-            BannerTexture = "res://images/atlases/ui_atlas.sprites/card/ancient_banner.tres",
-            PortraitBorder = "res://images/atlases/ui_atlas.sprites/card/card_portrait_border_attack_s.tres",
-            AncientTextBackground = "res://images/atlases/compressed.sprites/card_template/ancient_card_text_bg_attack.tres",
-            Highlight = "res://images/atlases/compressed.sprites/card_template/card_highlight_ancient.tres",
-        },
-    };
-
     public static void EnsureLoaded()
     {
-        // Hardcoded config for now. Extend Entries with more cards when needed.
+        CardReplacementConfig.EnsureLoaded();
     }
 
     public static bool TryGetEntry(string? cardId, out FrameReplacementEntry entry)
     {
+        EnsureLoaded();
+
         if (string.IsNullOrWhiteSpace(cardId))
         {
             entry = new FrameReplacementEntry();
             return false;
         }
 
-        string normalizedCardId = Normalize(cardId);
-        if (Entries.TryGetValue(normalizedCardId, out FrameReplacementEntry? existing))
+        if (!CardReplacementConfig.TryGetEntry(cardId, out CardReplacementConfig.ReplacementEntry? sourceEntry) ||
+            sourceEntry is null)
         {
-            entry = existing;
-            return true;
+            entry = new FrameReplacementEntry();
+            return false;
         }
 
-        string shortName = ExtractShortName(normalizedCardId);
-        if (Entries.TryGetValue(shortName, out existing))
+        entry = new FrameReplacementEntry
         {
-            entry = existing;
-            return true;
-        }
+            CardId = sourceEntry.CardId,
+            UiMode = sourceEntry.UiMode,
+            Frame = sourceEntry.Frame,
+            FrameMaterial = sourceEntry.FrameMaterial,
+            BannerTexture = sourceEntry.BannerTexture,
+            BannerMaterial = sourceEntry.BannerMaterial,
+            PortraitBorder = sourceEntry.PortraitBorder,
+            PortraitBorderMaterial = sourceEntry.PortraitBorderMaterial,
+            AncientTextBackground = sourceEntry.AncientTextBackground,
+            TextBackgroundMaterial = sourceEntry.TextBackgroundMaterial,
+            EnergyIcon = sourceEntry.EnergyIcon,
+            Highlight = sourceEntry.Highlight,
+            HighlightMaterial = sourceEntry.HighlightMaterial
+        };
 
-        entry = new FrameReplacementEntry();
-        return false;
+        return !(string.IsNullOrWhiteSpace(entry.Frame) &&
+                 string.IsNullOrWhiteSpace(entry.FrameMaterial) &&
+                 string.IsNullOrWhiteSpace(entry.BannerTexture) &&
+                 string.IsNullOrWhiteSpace(entry.BannerMaterial) &&
+                 string.IsNullOrWhiteSpace(entry.PortraitBorder) &&
+                 string.IsNullOrWhiteSpace(entry.PortraitBorderMaterial) &&
+                 string.IsNullOrWhiteSpace(entry.AncientTextBackground) &&
+                 string.IsNullOrWhiteSpace(entry.TextBackgroundMaterial) &&
+                 string.IsNullOrWhiteSpace(entry.EnergyIcon) &&
+                 string.IsNullOrWhiteSpace(entry.Highlight) &&
+                 string.IsNullOrWhiteSpace(entry.HighlightMaterial) &&
+                 string.IsNullOrWhiteSpace(entry.UiMode));
     }
 
     public static bool ShouldSpoofAncientUi(string? cardId)
     {
         return TryGetEntry(cardId, out FrameReplacementEntry entry) &&
                string.Equals(entry.UiMode, "Ancient", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static string Normalize(string value)
-    {
-        return value.Trim();
-    }
-
-    private static string ExtractShortName(string value)
-    {
-        int index = value.LastIndexOf('.');
-        return index >= 0 ? value[(index + 1)..] : value;
     }
 }
