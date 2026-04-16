@@ -39,6 +39,9 @@ try
         case "import-pck":
             RunPckImport(arguments);
             return 0;
+        case "scan-assets":
+            RunAssetScan(arguments);
+            return 0;
         default:
             throw new ArgumentException($"Unknown command '{command}'.");
     }
@@ -92,6 +95,24 @@ static void RunPckImport(IReadOnlyDictionary<string, string> arguments)
     Console.WriteLine($"GDRE: {result.GdreToolsPath}");
     Console.WriteLine($"ExitCode: {result.ExitCode}");
     Console.WriteLine($"Log: {result.LogFilePath}");
+}
+
+static void RunAssetScan(IReadOnlyDictionary<string, string> arguments)
+{
+    AssetScanner scanner = new();
+    AssetScanRequest request = new()
+    {
+        InputDirectory = GetRequired(arguments, "--input"),
+        OutputJsonPath = GetOptional(arguments, "--output-json", string.Empty)
+    };
+
+    AssetScanResult result = scanner.Scan(request);
+
+    Console.WriteLine("Asset scan completed.");
+    Console.WriteLine($"Input: {result.InputDirectory}");
+    Console.WriteLine($"ScannedFiles: {result.TotalFilesScanned}");
+    Console.WriteLine($"ImageFiles: {result.ImageFilesFound}");
+    Console.WriteLine($"OutputJson: {result.OutputJsonPath}");
 }
 
 static Dictionary<string, string> ParseArguments(string[] args)
@@ -190,6 +211,18 @@ static void PrintUsage(string? command)
             Console.WriteLine("  --overwrite      Allow using an existing output directory");
             Console.WriteLine("  --help           Show this help");
             break;
+        case "scan-assets":
+            Console.WriteLine("Usage:");
+            Console.WriteLine("  dotnet run --project tools/PortraitModGenerator.Cli -- scan-assets \\");
+            Console.WriteLine("    --input <recoverDir> [options]");
+            Console.WriteLine();
+            Console.WriteLine("Required:");
+            Console.WriteLine("  --input          Directory to scan for extracted image assets");
+            Console.WriteLine();
+            Console.WriteLine("Optional:");
+            Console.WriteLine("  --output-json    Explicit output JSON path");
+            Console.WriteLine("  --help           Show this help");
+            break;
         case null:
         case "generate-template":
             Console.WriteLine("Usage:");
@@ -214,10 +247,11 @@ static void PrintUsage(string? command)
             Console.WriteLine("Commands:");
             Console.WriteLine("  generate-template   Generate a mod project from a template");
             Console.WriteLine("  import-pck          Extract a PCK with GDRETools");
+            Console.WriteLine("  scan-assets         Scan a recovered directory for image assets");
             break;
         default:
             Console.WriteLine($"Unknown command '{command}'.");
-            Console.WriteLine("Available commands: generate-template, import-pck");
+            Console.WriteLine("Available commands: generate-template, import-pck, scan-assets");
             break;
     }
 }
