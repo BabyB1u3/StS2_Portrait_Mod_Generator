@@ -12,3 +12,4 @@ archive/**/obj/
 *.DotSettings.user
 cache
 artifacts
+.idea/
