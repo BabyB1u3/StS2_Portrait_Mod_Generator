@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Windows.Forms;
+using PortraitModGenerator.Core.Abstractions;
 using PortraitModGenerator.Core.Models;
 using PortraitModGenerator.Core.Services;
 
@@ -28,6 +29,15 @@ public sealed class MainForm : Form
     private readonly ComboBox _groupComboBox;
     private readonly ComboBox _cardComboBox;
     private readonly Label _summaryLabel;
+    private readonly TextBox _modIdTextBox;
+    private readonly TextBox _modNameTextBox;
+    private readonly TextBox _authorTextBox;
+    private readonly TextBox _descriptionTextBox;
+    private readonly TextBox _outputDirectoryTextBox;
+    private readonly Button _browseOutputButton;
+    private readonly Button _generateModButton;
+    private readonly Label _generationStatusLabel;
+    private readonly Panel _detailsPanel;
 
     private string? _analysisPath;
     private string? _officialCardIndexPath;
@@ -38,8 +48,8 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Text = "Portrait Mod Generator - Mapping Review";
-        Width = 1440;
-        Height = 920;
+        Width = 1590;
+        Height = 1070;
         StartPosition = FormStartPosition.CenterScreen;
 
         TableLayoutPanel rootLayout = new()
@@ -118,6 +128,14 @@ public sealed class MainForm : Form
             SplitterDistance = 700
         };
         rootLayout.Controls.Add(contentSplit, 0, 2);
+        Shown += (_, _) =>
+        {
+            int availableWidth = contentSplit.ClientSize.Width;
+            if (availableWidth > 0)
+            {
+                contentSplit.SplitterDistance = availableWidth / 2;
+            }
+        };
 
         _assetListBox = new ListBox
         {
@@ -131,16 +149,10 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 8
+            RowCount = 9
         };
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 65));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
+        detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+        detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
         contentSplit.Panel2.Controls.Add(detailLayout);
 
         _previewBox = new PictureBox
@@ -152,21 +164,37 @@ public sealed class MainForm : Form
         };
         detailLayout.Controls.Add(_previewBox, 0, 0);
 
+        _detailsPanel = new Panel
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+        };
+        detailLayout.Controls.Add(_detailsPanel, 0, 1);
+
+        TableLayoutPanel detailsContentLayout = new()
+        {
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            ColumnCount = 1,
+            RowCount = 7
+        };
+        _detailsPanel.Controls.Add(detailsContentLayout);
+
         _statusLabel = CreateInfoLabel();
-        detailLayout.Controls.Add(_statusLabel, 0, 1);
+        detailsContentLayout.Controls.Add(_statusLabel, 0, 0);
 
         _pathLabel = CreateInfoLabel();
-        detailLayout.Controls.Add(_pathLabel, 0, 2);
+        detailsContentLayout.Controls.Add(_pathLabel, 0, 1);
 
         _reasonLabel = CreateInfoLabel();
-        detailLayout.Controls.Add(_reasonLabel, 0, 3);
+        detailsContentLayout.Controls.Add(_reasonLabel, 0, 2);
 
         FlowLayoutPanel statePanel = new()
         {
             AutoSize = true,
             Dock = DockStyle.Fill
         };
-        detailLayout.Controls.Add(statePanel, 0, 4);
+        detailsContentLayout.Controls.Add(statePanel, 0, 3);
 
         _selectedCheckBox = new CheckBox
         {
@@ -190,7 +218,7 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             WrapContents = false
         };
-        detailLayout.Controls.Add(cardPanel, 0, 5);
+        detailsContentLayout.Controls.Add(cardPanel, 0, 4);
 
         Label cardLabel = new()
         {
@@ -230,9 +258,81 @@ public sealed class MainForm : Form
 
         Label helpLabel = CreateInfoLabel();
         helpLabel.Text = "Use the card dropdown to assign unmatched images, or mark them ignored.";
-        detailLayout.Controls.Add(helpLabel, 0, 6);
+        detailsContentLayout.Controls.Add(helpLabel, 0, 5);
+
+        GroupBox generationGroup = new()
+        {
+            Text = "Generate Mod",
+            Dock = DockStyle.Fill,
+            Padding = new Padding(12),
+            AutoSize = true
+        };
+        detailsContentLayout.Controls.Add(generationGroup, 0, 6);
+
+        TableLayoutPanel generationLayout = new()
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 3,
+            RowCount = 6,
+            AutoSize = true
+        };
+        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        generationGroup.Controls.Add(generationLayout);
+
+        generationLayout.Controls.Add(CreateFieldLabel("Mod ID:"), 0, 0);
+        _modIdTextBox = CreateFieldTextBox();
+        generationLayout.Controls.Add(_modIdTextBox, 1, 0);
+
+        generationLayout.Controls.Add(CreateFieldLabel("Mod Name:"), 0, 1);
+        _modNameTextBox = CreateFieldTextBox();
+        generationLayout.Controls.Add(_modNameTextBox, 1, 1);
+
+        generationLayout.Controls.Add(CreateFieldLabel("Author:"), 0, 2);
+        _authorTextBox = CreateFieldTextBox();
+        generationLayout.Controls.Add(_authorTextBox, 1, 2);
+
+        generationLayout.Controls.Add(CreateFieldLabel("Description:"), 0, 3);
+        _descriptionTextBox = CreateFieldTextBox();
+        generationLayout.Controls.Add(_descriptionTextBox, 1, 3);
+
+        generationLayout.Controls.Add(CreateFieldLabel("Output Dir:"), 0, 4);
+        _outputDirectoryTextBox = CreateFieldTextBox();
+        generationLayout.Controls.Add(_outputDirectoryTextBox, 1, 4);
+
+        _browseOutputButton = new Button
+        {
+            Text = "Browse",
+            AutoSize = true
+        };
+        _browseOutputButton.Click += (_, _) => BrowseOutputDirectory();
+        generationLayout.Controls.Add(_browseOutputButton, 2, 4);
+
+        FlowLayoutPanel generatePanel = new()
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill
+        };
+        generationLayout.Controls.Add(generatePanel, 1, 5);
+        generationLayout.SetColumnSpan(generatePanel, 2);
+
+        _generateModButton = new Button
+        {
+            Text = "Generate Mod Project",
+            AutoSize = true
+        };
+        _generateModButton.Click += (_, _) => GenerateModProject();
+        generatePanel.Controls.Add(_generateModButton);
+
+        _generationStatusLabel = CreateInfoLabel();
+        _generationStatusLabel.Text = "Load an analysis, review it, then generate a mod project here.";
+        generatePanel.Controls.Add(_generationStatusLabel);
 
         _analysisPathLabel.Text = "Load a mapping analysis JSON to begin review.";
+        _authorTextBox.Text = "Unknown Author";
+        _descriptionTextBox.Text = "Generated portrait replacement mod";
+        _outputDirectoryTextBox.Text = Path.Combine(Environment.CurrentDirectory, "generated");
     }
 
     private static Label CreateInfoLabel()
@@ -242,6 +342,25 @@ public sealed class MainForm : Form
             AutoSize = true,
             MaximumSize = new Size(860, 0),
             Padding = new Padding(0, 4, 0, 4)
+        };
+    }
+
+    private static Label CreateFieldLabel(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            AutoSize = true,
+            Padding = new Padding(0, 8, 8, 0)
+        };
+    }
+
+    private static TextBox CreateFieldTextBox()
+    {
+        return new TextBox
+        {
+            Dock = DockStyle.Fill,
+            Width = 420
         };
     }
 
@@ -277,6 +396,16 @@ public sealed class MainForm : Form
         _session = session;
         _analysisPathLabel.Text = $"Analysis: {fullPath}";
         _saveAnalysisButton.Enabled = true;
+        if (string.IsNullOrWhiteSpace(_modIdTextBox.Text))
+        {
+            _modIdTextBox.Text = "GeneratedPortraitMod";
+        }
+
+        if (string.IsNullOrWhiteSpace(_modNameTextBox.Text))
+        {
+            _modNameTextBox.Text = "Generated Portrait Mod";
+        }
+
         RefreshAssetList();
     }
 
@@ -298,7 +427,7 @@ public sealed class MainForm : Form
         _suppressEvents = true;
         _groupComboBox.DataSource = groups;
         _groupComboBox.SelectedIndex = 0;
-        ApplyGroupFilterCore();
+        ApplyGroupFilterCore(keepText: false);
         _cardComboBox.SelectedIndex = -1;
         _suppressEvents = false;
     }
@@ -416,9 +545,14 @@ public sealed class MainForm : Form
     private void BindCardSelection(ReviewCandidate candidate)
     {
         string targetGroup = candidate.Group ?? "All";
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            targetGroup = "All";
+        }
+
         int groupIndex = _groupComboBox.FindStringExact(targetGroup);
         _groupComboBox.SelectedIndex = groupIndex >= 0 ? groupIndex : 0;
-        ApplyGroupFilterCore();
+        ApplyGroupFilterCore(keepText: true);
 
         if (_cardComboBox.DataSource is not List<CardChoice> choices)
         {
@@ -539,10 +673,10 @@ public sealed class MainForm : Form
             return;
         }
 
-        ApplyGroupFilterCore();
+        ApplyGroupFilterCore(keepText: false);
     }
 
-    private void ApplyGroupFilterCore()
+    private void ApplyGroupFilterCore(bool keepText)
     {
         string selectedGroup = _groupComboBox.SelectedItem?.ToString() ?? "All";
         List<CardChoice> filtered = string.Equals(selectedGroup, "All", StringComparison.OrdinalIgnoreCase)
@@ -551,9 +685,10 @@ public sealed class MainForm : Form
                 .Where(choice => string.Equals(choice.Card.Group, selectedGroup, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
+        string existingText = _cardComboBox.Text;
         _cardComboBox.DataSource = filtered;
         _cardComboBox.SelectedIndex = -1;
-        _cardComboBox.Text = string.Empty;
+        _cardComboBox.Text = keepText ? existingText : string.Empty;
     }
 
     private void RefreshCurrentBindings()
@@ -605,6 +740,103 @@ public sealed class MainForm : Form
 
         File.WriteAllText(dialog.FileName, JsonSerializer.Serialize(output, JsonOptions));
         MessageBox.Show(this, $"Saved review file to:\n{dialog.FileName}", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void BrowseOutputDirectory()
+    {
+        using FolderBrowserDialog dialog = new();
+        if (!string.IsNullOrWhiteSpace(_outputDirectoryTextBox.Text) && Directory.Exists(_outputDirectoryTextBox.Text))
+        {
+            dialog.InitialDirectory = _outputDirectoryTextBox.Text;
+        }
+
+        if (dialog.ShowDialog(this) == DialogResult.OK)
+        {
+            _outputDirectoryTextBox.Text = dialog.SelectedPath;
+        }
+    }
+
+    private void GenerateModProject()
+    {
+        if (_session is null || string.IsNullOrWhiteSpace(_officialCardIndexPath))
+        {
+            MessageBox.Show(this, "Load and review a mapping analysis first.", "Generate mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        string modId = _modIdTextBox.Text.Trim();
+        string modName = _modNameTextBox.Text.Trim();
+        string author = _authorTextBox.Text.Trim();
+        string description = _descriptionTextBox.Text.Trim();
+        string outputParent = _outputDirectoryTextBox.Text.Trim();
+
+        if (string.IsNullOrWhiteSpace(modId))
+        {
+            MessageBox.Show(this, "Mod ID is required.", "Generate mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(outputParent))
+        {
+            MessageBox.Show(this, "Output directory is required.", "Generate mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        string templateDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "templates", "PortraitReplacementTemplate"));
+        string generatedRoot = Path.Combine(Path.GetFullPath(outputParent), modId);
+        string reviewPath = Path.Combine(generatedRoot, $"{modId}.mapping_review.json");
+
+        try
+        {
+            Directory.CreateDirectory(Path.GetFullPath(outputParent));
+
+            TemplateProjectGenerator templateGenerator = new();
+            templateGenerator.Generate(new TemplateGenerationRequest
+            {
+                TemplateDirectory = templateDirectory,
+                OutputDirectory = generatedRoot,
+                OverwriteExistingOutput = true,
+                TokenValues = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["__MOD_ID__"] = modId,
+                    ["__MOD_NAME__"] = string.IsNullOrWhiteSpace(modName) ? modId : modName,
+                    ["__AUTHOR__"] = string.IsNullOrWhiteSpace(author) ? "Unknown Author" : author,
+                    ["__DESCRIPTION__"] = string.IsNullOrWhiteSpace(description) ? "Generated portrait replacement mod" : description,
+                    ["__VERSION__"] = "v0.1.0"
+                }
+            });
+
+            ReviewSession review = _session with
+            {
+                OfficialCardIndexPath = _officialCardIndexPath,
+                OutputJsonPath = reviewPath,
+                MatchedAssets = _session.Candidates.Count(candidate => !string.IsNullOrWhiteSpace(candidate.MatchedCardId)),
+                IgnoredAssets = _session.Candidates.Count(candidate => candidate.Ignored),
+                Candidates = _session.Candidates
+            };
+            File.WriteAllText(reviewPath, JsonSerializer.Serialize(review, JsonOptions));
+
+            MappingMaterializer materializer = new();
+            MaterializeMappingsResult result = materializer.Materialize(new MaterializeMappingsRequest
+            {
+                MappingAnalysisPath = reviewPath,
+                ModProjectRoot = generatedRoot,
+                ModId = modId
+            });
+
+            _generationStatusLabel.Text = $"Generated {result.EntriesWritten} entries at {generatedRoot}";
+            MessageBox.Show(
+                this,
+                $"Generated mod project:\n{generatedRoot}\n\nConfig:\n{result.ConfigPath}",
+                "Generate mod",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            _generationStatusLabel.Text = $"Generation failed: {ex.Message}";
+            MessageBox.Show(this, ex.Message, "Generate mod failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private sealed class CardChoice
