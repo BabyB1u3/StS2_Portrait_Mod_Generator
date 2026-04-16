@@ -13,3 +13,4 @@ archive/**/obj/
 cache
 artifacts
 .idea/
+dist/
