@@ -22,6 +22,7 @@ public sealed class MainForm : Form
     private readonly ProgressBar _importProgressBar;
     private readonly ComboBox _filterComboBox;
     private readonly TextBox _searchTextBox;
+    private readonly ListBox _packageListBox;
     private readonly ListBox _assetListBox;
     private readonly PictureBox _previewBox;
     private readonly Label _statusLabel;
@@ -46,8 +47,9 @@ public sealed class MainForm : Form
 
     private string? _analysisPath;
     private string? _officialCardIndexPath;
-    private ReviewSession? _session;
+    private MergedReviewSession? _session;
     private List<CardChoice> _allCardChoices = [];
+    private readonly ConflictResolutionService _conflictResolutionService = new();
     private bool _suppressEvents;
 
     public MainForm()
@@ -92,20 +94,22 @@ public sealed class MainForm : Form
 
         _importPckButton = new Button
         {
-            Text = "Load Analysis",
+            Text = "Load Session",
             AutoSize = true,
-            Visible = false
+            Visible = true
         };
-        _importPckButton.Click += (_, _) => LoadAnalysisFromDialog();
+        _importPckButton.Click += (_, _) => LoadSessionFromDialog();
+        toolbar.Controls.Add(_importPckButton);
 
         _saveAnalysisButton = new Button
         {
-            Text = "Save Review As",
+            Text = "Save Session As",
             AutoSize = true,
             Enabled = false,
-            Visible = false
+            Visible = true
         };
-        _saveAnalysisButton.Click += (_, _) => SaveAnalysisAs();
+        _saveAnalysisButton.Click += (_, _) => SaveSessionAs();
+        toolbar.Controls.Add(_saveAnalysisButton);
 
         _filterComboBox = new ComboBox
         {
@@ -174,6 +178,23 @@ public sealed class MainForm : Form
             }
         };
 
+        TableLayoutPanel leftPanelLayout = new()
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 1,
+            RowCount = 2
+        };
+        leftPanelLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 120));
+        leftPanelLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        contentSplit.Panel1.Controls.Add(leftPanelLayout);
+
+        _packageListBox = new ListBox
+        {
+            Dock = DockStyle.Fill,
+            HorizontalScrollbar = true
+        };
+        leftPanelLayout.Controls.Add(_packageListBox, 0, 0);
+
         _assetListBox = new ListBox
         {
             Dock = DockStyle.Fill,
@@ -183,7 +204,7 @@ public sealed class MainForm : Form
         };
         _assetListBox.SelectedIndexChanged += (_, _) => BindSelectedItem();
         _assetListBox.DrawItem += DrawAssetListItem;
-        contentSplit.Panel1.Controls.Add(_assetListBox);
+        leftPanelLayout.Controls.Add(_assetListBox, 0, 1);
 
         TableLayoutPanel detailLayout = new()
         {
@@ -391,7 +412,7 @@ public sealed class MainForm : Form
         generationLayout.Controls.Add(_buildProgressBar, 0, 6);
         generationLayout.SetColumnSpan(_buildProgressBar, 3);
 
-        _analysisPathLabel.Text = "Import a portrait PCK to begin review.";
+        _analysisPathLabel.Text = "Import one or more portrait PCK files to begin review.";
         _importStatusLabel.Text = $"GDRE: {AppPaths.GdreToolsPath} | Cache: {AppPaths.CacheRoot}";
         _authorTextBox.Text = "Unknown Author";
         _descriptionTextBox.Text = "Generated portrait replacement mod";
@@ -429,17 +450,17 @@ public sealed class MainForm : Form
         };
     }
 
-    private void LoadAnalysisFromDialog()
+    private void LoadSessionFromDialog()
     {
         using OpenFileDialog dialog = new()
         {
-            Title = "Open mapping analysis result",
+            Title = "Open review session",
             Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*"
         };
 
         if (dialog.ShowDialog(this) == DialogResult.OK)
         {
-            LoadAnalysis(dialog.FileName);
+            LoadSession(dialog.FileName);
         }
     }
 
@@ -448,12 +469,13 @@ public sealed class MainForm : Form
         using OpenFileDialog dialog = new()
         {
             Title = "Import portrait PCK",
-            Filter = "PCK files (*.pck)|*.pck|All files (*.*)|*.*"
+            Filter = "PCK files (*.pck)|*.pck|All files (*.*)|*.*",
+            Multiselect = true
         };
 
         if (dialog.ShowDialog(this) == DialogResult.OK)
         {
-            await ImportPckAsync(dialog.FileName);
+            await ImportPcksAsync(dialog.FileNames);
         }
     }
 
@@ -472,17 +494,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (pckPaths.Length > 1)
-        {
-            MessageBox.Show(
-                this,
-                $"Dropped {pckPaths.Length} PCK files. The current GUI flow imports one PCK at a time, so only the first file will be used:\n{pckPaths[0]}",
-                "Import PCK",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-
-        await ImportPckAsync(pckPaths[0]);
+        await ImportPcksAsync(pckPaths);
     }
 
     private void EnablePckDragDrop(Control control)
@@ -516,7 +528,7 @@ public sealed class MainForm : Form
             .ToArray();
     }
 
-    private async Task ImportPckAsync(string pckPath)
+    private async Task ImportPcksAsync(IReadOnlyList<string> pckPaths)
     {
         string gdreToolsPath = AppPaths.GdreToolsPath;
         if (!File.Exists(gdreToolsPath))
@@ -530,55 +542,112 @@ public sealed class MainForm : Form
             return;
         }
 
-        string sourcePckPath = Path.GetFullPath(pckPath);
-        string sessionName = $"{DateTime.Now:yyyyMMdd_HHmmss}_{SanitizeSessionName(Path.GetFileNameWithoutExtension(sourcePckPath))}";
-        string sessionRoot = Path.Combine(AppPaths.CacheRoot, "sessions", sessionName);
-        string recoverRoot = Path.Combine(sessionRoot, "recover");
-        string scanJsonPath = Path.Combine(sessionRoot, "asset_scan_result.json");
-        string mappingJsonPath = Path.Combine(sessionRoot, "mapping_analysis_result.json");
-        string suggestedModId = SanitizeModId(Path.GetFileNameWithoutExtension(sourcePckPath));
+        string[] normalizedPckPaths = pckPaths
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        if (normalizedPckPaths.Length == 0)
+        {
+            return;
+        }
+
+        string firstSourcePckPath = normalizedPckPaths[0];
+        string sessionRoot = ResolveOrCreateSessionRoot(firstSourcePckPath);
+        string sessionId = Path.GetFileName(sessionRoot);
+        string mergedJsonPath = Path.Combine(sessionRoot, "merged", "merged_review_session.json");
+        string suggestedModId = SanitizeModId(Path.GetFileNameWithoutExtension(firstSourcePckPath));
 
         try
         {
             UseWaitCursor = true;
             TogglePrimaryActions(enabled: false);
-            SetImportBusy(true, $"Importing {Path.GetFileName(sourcePckPath)} into {sessionRoot}");
+            SetImportBusy(true, $"Importing {normalizedPckPaths.Length} PCK file(s) into {sessionRoot}");
 
             IProgress<string> progress = new Progress<string>(status => _importStatusLabel.Text = status);
             await Task.Run(() =>
             {
                 Directory.CreateDirectory(sessionRoot);
 
-                progress.Report($"Recovering {Path.GetFileName(sourcePckPath)}");
-                GdrePckImporter importer = new();
-                importer.Import(new PckImportRequest
-                {
-                    SourcePckPath = sourcePckPath,
-                    OutputDirectory = recoverRoot,
-                    GdreToolsPath = gdreToolsPath,
-                    OverwriteOutput = true
-                });
+                List<ImportedPackage> packages = _session?.Packages
+                    .OrderBy(package => package.ImportOrder)
+                    .ToList() ?? [];
+                int nextImportOrder = packages.Count + 1;
 
-                progress.Report("Scanning extracted images");
-                AssetScanner scanner = new();
-                scanner.Scan(new AssetScanRequest
+                foreach (string sourcePckPath in normalizedPckPaths)
                 {
-                    InputDirectory = recoverRoot,
-                    OutputJsonPath = scanJsonPath
-                });
+                    if (packages.Any(package => string.Equals(package.SourcePckPath, sourcePckPath, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        progress.Report($"Skipping already imported package: {Path.GetFileName(sourcePckPath)}");
+                        continue;
+                    }
 
-                progress.Report("Analyzing mapping candidates");
-                MappingAnalyzer analyzer = new();
-                analyzer.Analyze(new MappingAnalysisRequest
+                    string packageId = CreatePackageId(nextImportOrder, sourcePckPath);
+                    string packageRoot = Path.Combine(sessionRoot, "imports", packageId);
+                    string recoverRoot = Path.Combine(packageRoot, "recover");
+                    string scanJsonPath = Path.Combine(packageRoot, "asset_scan_result.json");
+                    string mappingJsonPath = Path.Combine(packageRoot, "mapping_analysis_result.json");
+
+                    progress.Report($"Recovering {Path.GetFileName(sourcePckPath)}");
+                    GdrePckImporter importer = new();
+                    importer.Import(new PckImportRequest
+                    {
+                        SourcePckPath = sourcePckPath,
+                        OutputDirectory = recoverRoot,
+                        GdreToolsPath = gdreToolsPath,
+                        OverwriteOutput = true
+                    });
+
+                    progress.Report($"Scanning extracted images from {Path.GetFileName(sourcePckPath)}");
+                    AssetScanner scanner = new();
+                    scanner.Scan(new AssetScanRequest
+                    {
+                        InputDirectory = recoverRoot,
+                        OutputJsonPath = scanJsonPath
+                    });
+
+                    progress.Report($"Analyzing mapping candidates for {Path.GetFileName(sourcePckPath)}");
+                    MappingAnalyzer analyzer = new();
+                    analyzer.Analyze(new MappingAnalysisRequest
+                    {
+                        ScanResultPath = scanJsonPath,
+                        OfficialCardIndexPath = AppPaths.OfficialCardIndexPath,
+                        OutputJsonPath = mappingJsonPath
+                    });
+
+                    packages.Add(new ImportedPackage
+                    {
+                        PackageId = packageId,
+                        DisplayName = Path.GetFileNameWithoutExtension(sourcePckPath),
+                        SourcePckPath = sourcePckPath,
+                        RecoverRoot = recoverRoot,
+                        ScanResultPath = scanJsonPath,
+                        MappingAnalysisPath = mappingJsonPath,
+                        ImportedAt = DateTimeOffset.UtcNow,
+                        ImportOrder = nextImportOrder
+                    });
+                    nextImportOrder++;
+                }
+
+                progress.Report("Merging package analyses into a review session");
+                MergeMappingsService mergeService = new();
+                MergedReviewSession mergedSession = mergeService.Merge(new MergeMappingsRequest
                 {
-                    ScanResultPath = scanJsonPath,
+                    SessionId = sessionId,
+                    SessionRoot = sessionRoot,
                     OfficialCardIndexPath = AppPaths.OfficialCardIndexPath,
-                    OutputJsonPath = mappingJsonPath
+                    OutputJsonPath = mergedJsonPath,
+                    Packages = packages
                 });
+
+                _session = mergedSession;
             });
 
-            LoadAnalysis(mappingJsonPath);
-            _importStatusLabel.Text = $"Imported {Path.GetFileName(sourcePckPath)} | Session: {sessionRoot}";
+            if (_session is not null)
+            {
+                BindSession(_session, mergedJsonPath);
+            }
+
+            _importStatusLabel.Text = $"Imported {normalizedPckPaths.Length} package(s) | Session: {sessionRoot}";
 
             if (string.IsNullOrWhiteSpace(_modIdTextBox.Text) || string.Equals(_modIdTextBox.Text, "GeneratedPortraitMod", StringComparison.Ordinal))
             {
@@ -599,23 +668,57 @@ public sealed class MainForm : Form
         }
     }
 
-    private void LoadAnalysis(string path)
+    private void LoadSession(string path)
     {
         string fullPath = Path.GetFullPath(path);
-        string json = File.ReadAllText(fullPath);
-        ReviewSession? session = JsonSerializer.Deserialize<ReviewSession>(json, JsonOptions);
-        if (session is null)
+        try
         {
-            MessageBox.Show(this, "Failed to deserialize mapping analysis file.", "Load failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
+            string json = File.ReadAllText(fullPath);
+            MergedReviewSession? session;
+            using JsonDocument document = JsonDocument.Parse(json);
+            if (document.RootElement.TryGetProperty("packages", out _))
+            {
+                session = JsonSerializer.Deserialize<MergedReviewSession>(json, JsonOptions);
+                if (session is null)
+                {
+                    throw new InvalidOperationException("Failed to deserialize merged review session.");
+                }
 
-        _analysisPath = fullPath;
-        _officialCardIndexPath = ResolveOfficialCardIndexPath(fullPath, session.OfficialCardIndexPath);
+                _conflictResolutionService.Refresh(session);
+            }
+            else
+            {
+                MappingAnalysisResult? analysis = JsonSerializer.Deserialize<MappingAnalysisResult>(json, JsonOptions);
+                if (analysis is null)
+                {
+                    throw new InvalidOperationException("Failed to deserialize legacy mapping analysis file.");
+                }
+
+                session = ConvertLegacyAnalysis(fullPath, analysis);
+            }
+
+            BindSession(session, fullPath);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, ex.Message, "Load failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void BindSession(MergedReviewSession session, string sessionPath)
+    {
+        _analysisPath = sessionPath;
+        _officialCardIndexPath = ResolveOfficialCardIndexPath(sessionPath, session.OfficialCardIndexPath);
         LoadOfficialCards(_officialCardIndexPath);
 
+        session.OfficialCardIndexPath = _officialCardIndexPath;
+        session.SessionRoot = string.IsNullOrWhiteSpace(session.SessionRoot)
+            ? Path.GetDirectoryName(sessionPath) ?? AppPaths.CacheRoot
+            : session.SessionRoot;
+        session.OutputJsonPath = sessionPath;
+
         _session = session;
-        _analysisPathLabel.Text = $"Analysis: {fullPath}";
+        _analysisPathLabel.Text = $"Session: {sessionPath}";
         _saveAnalysisButton.Enabled = true;
         if (string.IsNullOrWhiteSpace(_modIdTextBox.Text))
         {
@@ -627,15 +730,28 @@ public sealed class MainForm : Form
             _modNameTextBox.Text = "Generated Portrait Mod";
         }
 
+        BindPackageList();
         RefreshAssetList();
+    }
+
+    private void BindPackageList()
+    {
+        List<ImportedPackage> packages = _session?.Packages
+            .OrderBy(package => package.ImportOrder)
+            .ToList() ?? [];
+
+        _packageListBox.DataSource = packages;
+        _packageListBox.DisplayMember = nameof(ImportedPackage.ListDisplayText);
     }
 
     private void TogglePrimaryActions(bool enabled)
     {
         _loadAnalysisButton.Enabled = enabled;
+        _importPckButton.Enabled = enabled;
+        _saveAnalysisButton.Enabled = enabled && _session is not null;
         _generateModButton.Enabled = enabled;
         _browseOutputButton.Enabled = enabled;
-        _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is ReviewCandidate && _cardComboBox.SelectedItem is CardChoice;
+        _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is MergedMappingCandidate && _cardComboBox.SelectedItem is CardChoice;
     }
 
     private void SetImportBusy(bool busy, string? statusText = null)
@@ -710,7 +826,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        IEnumerable<ReviewCandidate> filtered = _session.Candidates;
+        IEnumerable<MergedMappingCandidate> filtered = _session.Candidates;
         string filter = _filterComboBox.SelectedItem?.ToString() ?? "All";
         filtered = filter switch
         {
@@ -726,18 +842,19 @@ public sealed class MainForm : Form
         {
             filtered = filtered.Where(candidate =>
                 candidate.FileName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                candidate.RelativePath.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                candidate.SourceRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                 (candidate.MatchedCardId?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (candidate.CanonicalName?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false));
+                (candidate.CanonicalName?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                candidate.SourcePackageName.Contains(search, StringComparison.OrdinalIgnoreCase));
         }
 
-        List<ReviewCandidate> items = filtered.ToList();
+        List<MergedMappingCandidate> items = filtered.ToList();
         _suppressEvents = true;
         _assetListBox.DataSource = items;
-        _assetListBox.DisplayMember = nameof(ReviewCandidate.ListDisplayText);
         _suppressEvents = false;
 
-        _summaryLabel.Text = $"Visible {items.Count} | Matched {_session.Candidates.Count(candidate => !string.IsNullOrWhiteSpace(candidate.MatchedCardId))} | Unmatched {_session.Candidates.Count(candidate => !candidate.Ignored && string.IsNullOrWhiteSpace(candidate.MatchedCardId))} | Ignored {_session.Candidates.Count(candidate => candidate.Ignored)}";
+        _summaryLabel.Text =
+            $"Packages {_session.Packages.Count} | Visible {items.Count} | Resolved {_session.ResolvedAssets} | Conflicts {_session.ConflictGroups.Count} | Pending {_session.PendingAssets} | Unmatched {_session.UnmatchedAssets} | Ignored {_session.IgnoredAssets}";
 
         if (items.Count > 0)
         {
@@ -758,7 +875,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (_assetListBox.Items[eventArgs.Index] is not ReviewCandidate candidate)
+        if (_assetListBox.Items[eventArgs.Index] is not MergedMappingCandidate candidate)
         {
             return;
         }
@@ -766,7 +883,7 @@ public sealed class MainForm : Form
         Font font = eventArgs.Font ?? _assetListBox.Font;
         Font badgeFont = new(font, FontStyle.Bold);
 
-        Color prefixColor = candidate.StatusColor;
+        Color prefixColor = GetCandidateStatusColor(candidate);
         Color remainderColor = (eventArgs.State & DrawItemState.Selected) == DrawItemState.Selected
             ? SystemColors.HighlightText
             : eventArgs.ForeColor;
@@ -788,7 +905,7 @@ public sealed class MainForm : Form
 
         TextRenderer.DrawText(
             eventArgs.Graphics,
-            candidate.StatusPrefix,
+            GetCandidateStatusPrefix(candidate),
             badgeFont,
             statusRect,
             prefixColor,
@@ -816,7 +933,7 @@ public sealed class MainForm : Form
         eventArgs.DrawFocusRectangle();
     }
 
-    private static void DrawTargetCell(Graphics graphics, Font font, Font badgeFont, Rectangle targetRect, ReviewCandidate candidate, Color defaultTextColor)
+    private static void DrawTargetCell(Graphics graphics, Font font, Font badgeFont, Rectangle targetRect, MergedMappingCandidate candidate, Color defaultTextColor)
     {
         if (candidate.Ignored)
         {
@@ -830,7 +947,9 @@ public sealed class MainForm : Form
             return;
         }
 
-        string targetText = candidate.CanonicalName ?? candidate.MatchedCardId!;
+        string targetText = candidate.IsConflict
+            ? $"{candidate.CanonicalName ?? candidate.MatchedCardId!} [{candidate.SourcePackageName}]"
+            : candidate.CanonicalName ?? candidate.MatchedCardId!;
         TextRenderer.DrawText(
             graphics,
             targetText,
@@ -864,6 +983,66 @@ public sealed class MainForm : Form
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
     }
 
+    private static string GetCandidateStatusPrefix(MergedMappingCandidate candidate)
+    {
+        if (candidate.Ignored)
+        {
+            return "[Ignored]";
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            return "[Unmatched]";
+        }
+
+        if (candidate.Selected)
+        {
+            return candidate.IsConflict ? "[Winner]" : "[Selected]";
+        }
+
+        return "[Pending]";
+    }
+
+    private static string GetCandidateStatusName(MergedMappingCandidate candidate)
+    {
+        if (candidate.Ignored)
+        {
+            return "Ignored";
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            return "Unmatched";
+        }
+
+        if (candidate.Selected)
+        {
+            return candidate.IsConflict ? "Conflict winner" : "Selected";
+        }
+
+        return "Pending";
+    }
+
+    private static Color GetCandidateStatusColor(MergedMappingCandidate candidate)
+    {
+        if (candidate.Ignored)
+        {
+            return Color.Goldenrod;
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            return Color.Firebrick;
+        }
+
+        if (candidate.Selected)
+        {
+            return candidate.IsConflict ? Color.MediumSeaGreen : Color.ForestGreen;
+        }
+
+        return candidate.IsConflict ? Color.DarkOrange : Color.SteelBlue;
+    }
+
     private void BindSelectedItem()
     {
         if (_suppressEvents)
@@ -871,7 +1050,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        ReviewCandidate? candidate = _assetListBox.SelectedItem as ReviewCandidate;
+        MergedMappingCandidate? candidate = _assetListBox.SelectedItem as MergedMappingCandidate;
         _suppressEvents = true;
 
         try
@@ -898,8 +1077,8 @@ public sealed class MainForm : Form
 
             _selectedCheckBox.Checked = candidate.Selected;
             _ignoredCheckBox.Checked = candidate.Ignored;
-            _statusLabel.Text = $"Status: {candidate.StatusName} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"}";
-            _pathLabel.Text = $"Path: {candidate.RelativePath}";
+            _statusLabel.Text = $"Status: {GetCandidateStatusName(candidate)} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"} | Package: {candidate.SourcePackageName}";
+            _pathLabel.Text = $"Path: {candidate.SourceRelativePath}";
             _reasonLabel.Text = $"Reason: {candidate.MatchReason ?? candidate.IgnoredReason ?? "(none)"}";
             BindCardSelection(candidate);
             LoadPreview(candidate.SourceAbsolutePath);
@@ -910,7 +1089,7 @@ public sealed class MainForm : Form
         }
     }
 
-    private void BindCardSelection(ReviewCandidate candidate)
+    private void BindCardSelection(MergedMappingCandidate candidate)
     {
         if (_groupComboBox.DataSource is not List<string> groups || groups.Count == 0)
         {
@@ -975,7 +1154,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (_assetListBox.SelectedItem is not ReviewCandidate candidate)
+        if (_assetListBox.SelectedItem is not MergedMappingCandidate candidate)
         {
             return;
         }
@@ -985,9 +1164,11 @@ public sealed class MainForm : Form
         {
             candidate.Ignored = false;
             candidate.IgnoredReason = null;
+            DeselectSiblingCandidates(candidate);
             _ignoredCheckBox.Checked = false;
         }
 
+        SynchronizeSession();
         RefreshCurrentBindings();
     }
 
@@ -998,7 +1179,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (_assetListBox.SelectedItem is not ReviewCandidate candidate)
+        if (_assetListBox.SelectedItem is not MergedMappingCandidate candidate)
         {
             return;
         }
@@ -1015,6 +1196,7 @@ public sealed class MainForm : Form
             candidate.IgnoredReason = null;
         }
 
+        SynchronizeSession();
         RefreshCurrentBindings();
     }
 
@@ -1026,7 +1208,7 @@ public sealed class MainForm : Form
         }
 
         _updateMappingButton.Enabled =
-            _assetListBox.SelectedItem is ReviewCandidate &&
+            _assetListBox.SelectedItem is MergedMappingCandidate &&
             _cardComboBox.SelectedItem is CardChoice;
     }
 
@@ -1037,7 +1219,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (_assetListBox.SelectedItem is not ReviewCandidate candidate)
+        if (_assetListBox.SelectedItem is not MergedMappingCandidate candidate)
         {
             return;
         }
@@ -1055,6 +1237,8 @@ public sealed class MainForm : Form
         candidate.IgnoredReason = null;
         candidate.Confidence = 1.0;
         candidate.MatchReason = "Manually assigned in GUI.";
+        DeselectSiblingCandidates(candidate);
+        SynchronizeSession();
         _updateMappingButton.Enabled = false;
         RefreshCurrentBindings();
     }
@@ -1086,17 +1270,17 @@ public sealed class MainForm : Form
 
     private void RefreshCurrentBindings()
     {
-        ReviewCandidate? current = _assetListBox.SelectedItem as ReviewCandidate;
+        MergedMappingCandidate? current = _assetListBox.SelectedItem as MergedMappingCandidate;
         RefreshAssetList();
         if (current is null)
         {
             return;
         }
 
-        if (_assetListBox.DataSource is List<ReviewCandidate> items)
+        if (_assetListBox.DataSource is List<MergedMappingCandidate> items)
         {
-            ReviewCandidate? updated = items.FirstOrDefault(item =>
-                string.Equals(item.SourceAbsolutePath, current.SourceAbsolutePath, StringComparison.OrdinalIgnoreCase));
+            MergedMappingCandidate? updated = items.FirstOrDefault(item =>
+                string.Equals(item.CandidateId, current.CandidateId, StringComparison.OrdinalIgnoreCase));
             if (updated is not null)
             {
                 _assetListBox.SelectedItem = updated;
@@ -1104,7 +1288,7 @@ public sealed class MainForm : Form
         }
     }
 
-    private void SaveAnalysisAs()
+    private void SaveSessionAs()
     {
         if (_session is null || string.IsNullOrWhiteSpace(_analysisPath))
         {
@@ -1113,7 +1297,7 @@ public sealed class MainForm : Form
 
         using SaveFileDialog dialog = new()
         {
-            Title = "Save reviewed mapping analysis",
+            Title = "Save reviewed session",
             Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
             FileName = Path.GetFileName(_analysisPath)
         };
@@ -1123,16 +1307,12 @@ public sealed class MainForm : Form
             return;
         }
 
-        ReviewSession output = _session with
-        {
-            OutputJsonPath = dialog.FileName,
-            MatchedAssets = _session.Candidates.Count(candidate => !string.IsNullOrWhiteSpace(candidate.MatchedCardId)),
-            IgnoredAssets = _session.Candidates.Count(candidate => candidate.Ignored),
-            Candidates = _session.Candidates
-        };
-
-        File.WriteAllText(dialog.FileName, JsonSerializer.Serialize(output, JsonOptions));
-        MessageBox.Show(this, $"Saved review file to:\n{dialog.FileName}", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        _session.OutputJsonPath = dialog.FileName;
+        SynchronizeSession();
+        File.WriteAllText(dialog.FileName, JsonSerializer.Serialize(_session, JsonOptions));
+        _analysisPath = dialog.FileName;
+        _analysisPathLabel.Text = $"Session: {dialog.FileName}";
+        MessageBox.Show(this, $"Saved session file to:\n{dialog.FileName}", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void BrowseOutputDirectory()
@@ -1153,13 +1333,12 @@ public sealed class MainForm : Form
     {
         if (_session is null || string.IsNullOrWhiteSpace(_officialCardIndexPath))
         {
-            MessageBox.Show(this, "Import and review a portrait PCK first.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, "Import and review portrait PCK packages first.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        int pendingCount = _session.Candidates.Count(candidate =>
-            !candidate.Ignored &&
-            !candidate.Selected);
+        SynchronizeSession();
+        int pendingCount = _session.PendingAssets;
         if (pendingCount > 0)
         {
             DialogResult pendingDecision = MessageBox.Show(
@@ -1198,7 +1377,7 @@ public sealed class MainForm : Form
         string sessionRoot = ResolveSessionRoot();
         string sourceGenerationRoot = Path.Combine(sessionRoot, "generated_src", modId);
         string artifactOutputDirectory = Path.Combine(Path.GetFullPath(artifactOutputParent), modId);
-        string reviewPath = Path.Combine(sessionRoot, $"{modId}.mapping_review.json");
+        string reviewPath = Path.Combine(sessionRoot, "merged", $"{modId}.merged_review_session.json");
         string buildLogPath = Path.Combine(sessionRoot, "build", modId, "publish.log");
 
         try
@@ -1230,15 +1409,10 @@ public sealed class MainForm : Form
                 });
 
                 progress.Report("Writing reviewed mapping data");
-                ReviewSession review = _session with
-                {
-                    OfficialCardIndexPath = _officialCardIndexPath,
-                    OutputJsonPath = reviewPath,
-                    MatchedAssets = _session.Candidates.Count(candidate => !string.IsNullOrWhiteSpace(candidate.MatchedCardId)),
-                    IgnoredAssets = _session.Candidates.Count(candidate => candidate.Ignored),
-                    Candidates = _session.Candidates
-                };
-                File.WriteAllText(reviewPath, JsonSerializer.Serialize(review, JsonOptions));
+                _session.OfficialCardIndexPath = _officialCardIndexPath;
+                _session.OutputJsonPath = reviewPath;
+                SynchronizeSession();
+                File.WriteAllText(reviewPath, JsonSerializer.Serialize(_session, JsonOptions));
 
                 progress.Report("Materializing portraits and config");
                 MappingMaterializer materializer = new();
@@ -1286,6 +1460,12 @@ public sealed class MainForm : Form
 
     private string ResolveSessionRoot()
     {
+        if (_session is not null && !string.IsNullOrWhiteSpace(_session.SessionRoot))
+        {
+            Directory.CreateDirectory(_session.SessionRoot);
+            return _session.SessionRoot;
+        }
+
         if (!string.IsNullOrWhiteSpace(_analysisPath))
         {
             string? analysisDirectory = Path.GetDirectoryName(_analysisPath);
@@ -1299,6 +1479,25 @@ public sealed class MainForm : Form
         string fallbackSessionRoot = Path.Combine(AppPaths.CacheRoot, "sessions", fallbackSessionName);
         Directory.CreateDirectory(fallbackSessionRoot);
         return fallbackSessionRoot;
+    }
+
+    private string ResolveOrCreateSessionRoot(string sourcePckPath)
+    {
+        if (_session is not null && !string.IsNullOrWhiteSpace(_session.SessionRoot))
+        {
+            Directory.CreateDirectory(_session.SessionRoot);
+            return _session.SessionRoot;
+        }
+
+        string sessionName = $"{DateTime.Now:yyyyMMdd_HHmmss}_merge_{SanitizeSessionName(Path.GetFileNameWithoutExtension(sourcePckPath))}";
+        string sessionRoot = Path.Combine(AppPaths.CacheRoot, "sessions", sessionName);
+        Directory.CreateDirectory(sessionRoot);
+        return sessionRoot;
+    }
+
+    private static string CreatePackageId(int importOrder, string sourcePckPath)
+    {
+        return $"{importOrder:000}_{SanitizeSessionName(Path.GetFileNameWithoutExtension(sourcePckPath))}";
     }
 
     private static string SanitizeSessionName(string value)
@@ -1322,6 +1521,80 @@ public sealed class MainForm : Form
         return cleaned;
     }
 
+    private void DeselectSiblingCandidates(MergedMappingCandidate selectedCandidate)
+    {
+        if (_session is null || string.IsNullOrWhiteSpace(selectedCandidate.MatchedCardId))
+        {
+            return;
+        }
+
+        foreach (MergedMappingCandidate sibling in _session.Candidates.Where(candidate =>
+                     !string.Equals(candidate.CandidateId, selectedCandidate.CandidateId, StringComparison.OrdinalIgnoreCase) &&
+                     string.Equals(candidate.MatchedCardId, selectedCandidate.MatchedCardId, StringComparison.OrdinalIgnoreCase)))
+        {
+            sibling.Selected = false;
+        }
+    }
+
+    private void SynchronizeSession()
+    {
+        if (_session is null)
+        {
+            return;
+        }
+
+        _conflictResolutionService.Refresh(_session);
+        BindPackageList();
+    }
+
+    private MergedReviewSession ConvertLegacyAnalysis(string analysisPath, MappingAnalysisResult analysis)
+    {
+        string sessionRoot = Path.GetDirectoryName(analysisPath) ?? AppPaths.CacheRoot;
+        string sessionId = Path.GetFileName(sessionRoot);
+        string packageName = Path.GetFileNameWithoutExtension(analysisPath);
+        string mergedOutputPath = Path.Combine(sessionRoot, "merged", "merged_review_session.json");
+
+        ImportedPackage package = new()
+        {
+            PackageId = CreatePackageId(1, packageName),
+            DisplayName = packageName,
+            SourcePckPath = packageName,
+            RecoverRoot = ResolvePathRelativeToDocument(analysisPath, string.Empty, preferDirectory: true),
+            ScanResultPath = ResolvePathRelativeToDocument(analysisPath, analysis.ScanResultPath),
+            MappingAnalysisPath = analysisPath,
+            ImportedAt = DateTimeOffset.UtcNow,
+            ImportOrder = 1
+        };
+
+        MergeMappingsService mergeService = new();
+        return mergeService.Merge(new MergeMappingsRequest
+        {
+            SessionId = sessionId,
+            SessionRoot = sessionRoot,
+            OfficialCardIndexPath = ResolveOfficialCardIndexPath(analysisPath, analysis.OfficialCardIndexPath),
+            OutputJsonPath = mergedOutputPath,
+            Packages = [package]
+        });
+    }
+
+    private static string ResolvePathRelativeToDocument(string documentPath, string targetPath, bool preferDirectory = false)
+    {
+        if (string.IsNullOrWhiteSpace(targetPath))
+        {
+            return preferDirectory
+                ? Path.GetDirectoryName(documentPath) ?? Path.GetFullPath(documentPath)
+                : Path.GetFullPath(documentPath);
+        }
+
+        if (Path.IsPathRooted(targetPath))
+        {
+            return targetPath;
+        }
+
+        string documentDirectory = Path.GetDirectoryName(documentPath) ?? Directory.GetCurrentDirectory();
+        return Path.GetFullPath(Path.Combine(documentDirectory, targetPath));
+    }
+
     private sealed class CardChoice
     {
         public CardChoice(OfficialCardEntry card)
@@ -1333,80 +1606,5 @@ public sealed class MainForm : Form
         public OfficialCardEntry Card { get; }
 
         public string DisplayText { get; }
-    }
-
-    private sealed record ReviewSession
-    {
-        public required string ScanResultPath { get; init; }
-
-        public required string OfficialCardIndexPath { get; init; }
-
-        public required string OutputJsonPath { get; init; }
-
-        public required int TotalAssets { get; init; }
-
-        public required int MatchedAssets { get; init; }
-
-        public required int IgnoredAssets { get; init; }
-
-        public required List<ReviewCandidate> Candidates { get; init; }
-    }
-
-    private sealed class ReviewCandidate
-    {
-        public required string SourceAbsolutePath { get; set; }
-
-        public required string RelativePath { get; set; }
-
-        public required string FileName { get; set; }
-
-        public required bool Selected { get; set; }
-
-        public required bool Ignored { get; set; }
-
-        public string? IgnoredReason { get; set; }
-
-        public string? MatchedCardId { get; set; }
-
-        public string? CanonicalName { get; set; }
-
-        public string? Group { get; set; }
-
-        public double Confidence { get; set; }
-
-        public string? MatchReason { get; set; }
-
-        public string ListDisplayText
-        {
-            get
-            {
-                string target = CanonicalName ?? MatchedCardId ?? "(manual review needed)";
-                return $"{StatusPrefix} {FileName} -> {target}";
-            }
-        }
-
-        public string StatusPrefix => Ignored
-            ? "[Ignored]"
-            : string.IsNullOrWhiteSpace(MatchedCardId)
-                ? "[Unmatched]"
-                : Selected
-                    ? "[Selected]"
-                    : "[Pending]";
-
-        public string StatusName => Ignored
-            ? "Ignored"
-            : string.IsNullOrWhiteSpace(MatchedCardId)
-                ? "Unmatched"
-                : Selected
-                    ? "Selected"
-                    : "Pending";
-
-        public Color StatusColor => Ignored
-            ? Color.Goldenrod
-            : string.IsNullOrWhiteSpace(MatchedCardId)
-                ? Color.Firebrick
-                : Selected
-                    ? Color.ForestGreen
-                    : Color.SteelBlue;
     }
 }

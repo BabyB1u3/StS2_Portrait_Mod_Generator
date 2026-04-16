@@ -29,46 +29,27 @@ public sealed class MappingMaterializer
             throw new DirectoryNotFoundException($"Mod project root not found: {modProjectRoot}");
         }
 
-        MappingAnalysisResult analysis = LoadAnalysis(mappingAnalysisPath);
         string configPath = Path.Combine(modProjectRoot, request.ModId, "config", "card_replacements.json");
         string portraitRoot = Path.Combine(modProjectRoot, request.ModId, "CardPortraits");
 
         Directory.CreateDirectory(Path.GetDirectoryName(configPath)!);
         Directory.CreateDirectory(portraitRoot);
 
-        List<ReplacementEntry> entries = [];
-        int portraitsCopied = 0;
-
-        foreach (MappingCandidate candidate in analysis.Candidates
-                     .Where(candidate => candidate.Selected && !candidate.Ignored && candidate.CanonicalName is not null)
-                     .OrderBy(candidate => candidate.CanonicalName, StringComparer.OrdinalIgnoreCase))
+        IReadOnlyList<ReplacementEntry> entriesToWrite;
+        int portraitsCopied;
+        if (TryLoadMergedSession(mappingAnalysisPath, out MergedReviewSession? mergedSession))
         {
-            string sourcePath = candidate.SourceAbsolutePath;
-            if (!File.Exists(sourcePath))
-            {
-                continue;
-            }
-
-            string extension = Path.GetExtension(sourcePath);
-            string groupFolder = ToDisplayGroup(candidate.Group ?? "unassigned");
-            string destinationDirectory = Path.Combine(portraitRoot, groupFolder);
-            string destinationFileName = $"{candidate.CanonicalName}{extension}";
-            string destinationPath = Path.Combine(destinationDirectory, destinationFileName);
-
-            Directory.CreateDirectory(destinationDirectory);
-            File.Copy(sourcePath, destinationPath, overwrite: true);
-            portraitsCopied++;
-
-            entries.Add(new ReplacementEntry
-            {
-                CardId = candidate.CanonicalName!,
-                Portrait = $"res://{request.ModId}/CardPortraits/{groupFolder}/{destinationFileName}"
-            });
+            (entriesToWrite, portraitsCopied) = MaterializeResolvedMappings(mergedSession!, portraitRoot, request.ModId);
+        }
+        else
+        {
+            MappingAnalysisResult analysis = LoadAnalysis(mappingAnalysisPath);
+            (entriesToWrite, portraitsCopied) = MaterializeCandidates(analysis.Candidates, portraitRoot, request.ModId);
         }
 
         ReplacementDocument document = new()
         {
-            Entries = entries
+            Entries = entriesToWrite.ToList()
         };
 
         File.WriteAllText(configPath, JsonSerializer.Serialize(document, JsonOptions));
@@ -79,9 +60,64 @@ public sealed class MappingMaterializer
             ModProjectRoot = modProjectRoot,
             ConfigPath = configPath,
             PortraitRoot = portraitRoot,
-            EntriesWritten = entries.Count,
+            EntriesWritten = entriesToWrite.Count,
             PortraitsCopied = portraitsCopied
         };
+    }
+
+    private static (IReadOnlyList<ReplacementEntry> Entries, int PortraitsCopied) MaterializeResolvedMappings(
+        MergedReviewSession session,
+        string portraitRoot,
+        string modId)
+    {
+        List<ReplacementEntry> entries = [];
+        int portraitsCopied = 0;
+
+        foreach (ResolvedMapping mapping in session.ResolvedMappings
+                     .OrderBy(mapping => mapping.CanonicalName, StringComparer.OrdinalIgnoreCase))
+        {
+            if (!TryCopyPortrait(mapping.SourceAbsolutePath, portraitRoot, modId, mapping.Group, mapping.CanonicalName, out string? portraitPath))
+            {
+                continue;
+            }
+
+            portraitsCopied++;
+            entries.Add(new ReplacementEntry
+            {
+                CardId = mapping.CanonicalName,
+                Portrait = portraitPath!
+            });
+        }
+
+        return (entries, portraitsCopied);
+    }
+
+    private static (IReadOnlyList<ReplacementEntry> Entries, int PortraitsCopied) MaterializeCandidates(
+        IEnumerable<MappingCandidate> candidates,
+        string portraitRoot,
+        string modId)
+    {
+        List<ReplacementEntry> entries = [];
+        int portraitsCopied = 0;
+
+        foreach (MappingCandidate candidate in candidates
+                     .Where(candidate => candidate.Selected && !candidate.Ignored && candidate.CanonicalName is not null)
+                     .OrderBy(candidate => candidate.CanonicalName, StringComparer.OrdinalIgnoreCase))
+        {
+            if (!TryCopyPortrait(candidate.SourceAbsolutePath, portraitRoot, modId, candidate.Group, candidate.CanonicalName!, out string? portraitPath))
+            {
+                continue;
+            }
+
+            portraitsCopied++;
+            entries.Add(new ReplacementEntry
+            {
+                CardId = candidate.CanonicalName!,
+                Portrait = portraitPath!
+            });
+        }
+
+        return (entries, portraitsCopied);
     }
 
     private static MappingAnalysisResult LoadAnalysis(string mappingAnalysisPath)
@@ -94,6 +130,51 @@ public sealed class MappingMaterializer
         }
 
         return analysis;
+    }
+
+    private static bool TryLoadMergedSession(string mappingAnalysisPath, out MergedReviewSession? session)
+    {
+        string json = File.ReadAllText(mappingAnalysisPath);
+        using JsonDocument document = JsonDocument.Parse(json);
+        if (!document.RootElement.TryGetProperty("packages", out _))
+        {
+            session = null;
+            return false;
+        }
+
+        session = JsonSerializer.Deserialize<MergedReviewSession>(json, JsonOptions);
+        if (session is null)
+        {
+            throw new InvalidOperationException($"Failed to deserialize merged review session '{mappingAnalysisPath}'.");
+        }
+
+        return true;
+    }
+
+    private static bool TryCopyPortrait(
+        string sourcePath,
+        string portraitRoot,
+        string modId,
+        string? group,
+        string canonicalName,
+        out string? portraitPath)
+    {
+        portraitPath = null;
+        if (!File.Exists(sourcePath))
+        {
+            return false;
+        }
+
+        string extension = Path.GetExtension(sourcePath);
+        string groupFolder = ToDisplayGroup(group ?? "unassigned");
+        string destinationDirectory = Path.Combine(portraitRoot, groupFolder);
+        string destinationFileName = $"{canonicalName}{extension}";
+        string destinationPath = Path.Combine(destinationDirectory, destinationFileName);
+
+        Directory.CreateDirectory(destinationDirectory);
+        File.Copy(sourcePath, destinationPath, overwrite: true);
+        portraitPath = $"res://{modId}/CardPortraits/{groupFolder}/{destinationFileName}";
+        return true;
     }
 
     private static string ToDisplayGroup(string group)
