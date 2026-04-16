@@ -17,6 +17,7 @@ public sealed class MainForm : Form
     private readonly Button _loadAnalysisButton;
     private readonly Button _importPckButton;
     private readonly Button _saveAnalysisButton;
+    private readonly Button _openConflictsButton;
     private readonly Label _analysisPathLabel;
     private readonly Label _importStatusLabel;
     private readonly ProgressBar _importProgressBar;
@@ -50,6 +51,7 @@ public sealed class MainForm : Form
     private MergedReviewSession? _session;
     private List<CardChoice> _allCardChoices = [];
     private readonly ConflictResolutionService _conflictResolutionService = new();
+    private ConflictReviewForm? _conflictReviewForm;
     private bool _suppressEvents;
 
     public MainForm()
@@ -110,6 +112,15 @@ public sealed class MainForm : Form
         };
         _saveAnalysisButton.Click += (_, _) => SaveSessionAs();
         toolbar.Controls.Add(_saveAnalysisButton);
+
+        _openConflictsButton = new Button
+        {
+            Text = "Open Conflicts",
+            AutoSize = true,
+            Enabled = false
+        };
+        _openConflictsButton.Click += (_, _) => OpenConflictWindow();
+        toolbar.Controls.Add(_openConflictsButton);
 
         _filterComboBox = new ComboBox
         {
@@ -732,6 +743,10 @@ public sealed class MainForm : Form
 
         BindPackageList();
         RefreshAssetList();
+        if (_conflictReviewForm is not null && !_conflictReviewForm.IsDisposed)
+        {
+            _conflictReviewForm.SetSession(session);
+        }
     }
 
     private void BindPackageList()
@@ -749,6 +764,7 @@ public sealed class MainForm : Form
         _loadAnalysisButton.Enabled = enabled;
         _importPckButton.Enabled = enabled;
         _saveAnalysisButton.Enabled = enabled && _session is not null;
+        _openConflictsButton.Enabled = enabled && _session is not null && _session.ConflictGroups.Count > 0;
         _generateModButton.Enabled = enabled;
         _browseOutputButton.Enabled = enabled;
         _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is MergedMappingCandidate && _cardComboBox.SelectedItem is CardChoice;
@@ -1545,6 +1561,42 @@ public sealed class MainForm : Form
 
         _conflictResolutionService.Refresh(_session);
         BindPackageList();
+        _openConflictsButton.Enabled = _session.ConflictGroups.Count > 0;
+        if (_conflictReviewForm is not null && !_conflictReviewForm.IsDisposed)
+        {
+            _conflictReviewForm.SetSession(_session);
+        }
+    }
+
+    private void OpenConflictWindow()
+    {
+        if (_session is null)
+        {
+            MessageBox.Show(this, "Import and merge packages first.", "Conflicts", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        SynchronizeSession();
+        if (_conflictReviewForm is not null && !_conflictReviewForm.IsDisposed)
+        {
+            _conflictReviewForm.Focus();
+            return;
+        }
+
+        _conflictReviewForm = new ConflictReviewForm(_session, HandleConflictSessionChanged);
+        _conflictReviewForm.FormClosed += (_, _) => _conflictReviewForm = null;
+        _conflictReviewForm.Show(this);
+    }
+
+    private void HandleConflictSessionChanged()
+    {
+        if (_session is null)
+        {
+            return;
+        }
+
+        SynchronizeSession();
+        RefreshCurrentBindings();
     }
 
     private MergedReviewSession ConvertLegacyAnalysis(string analysisPath, MappingAnalysisResult analysis)
