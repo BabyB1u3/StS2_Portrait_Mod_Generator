@@ -69,11 +69,19 @@ public sealed class NameCanonicalizer
         AddKey(keys, ToPascalCase(rawTokens));
         AddKey(keys, ToPascalCase(cleanedTokens));
 
-        for (int start = 1; start < cleanedTokens.Count; start++)
+        for (int start = 0; start < cleanedTokens.Count; start++)
         {
-            List<string> suffixTokens = cleanedTokens[start..];
-            AddKey(keys, ToSnakeCase(suffixTokens));
-            AddKey(keys, ToPascalCase(suffixTokens));
+            for (int length = 1; length <= cleanedTokens.Count - start; length++)
+            {
+                if (start == 0 && length == cleanedTokens.Count)
+                {
+                    continue;
+                }
+
+                List<string> spanTokens = cleanedTokens.GetRange(start, length);
+                AddKey(keys, ToSnakeCase(spanTokens));
+                AddKey(keys, ToPascalCase(spanTokens));
+            }
         }
 
         return new CanonicalizedName(keys.ToList(), false, null);
