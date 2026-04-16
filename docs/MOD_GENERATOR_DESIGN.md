@@ -11,7 +11,7 @@
 
 这样做的原因很直接：
 
-- 当前仓库里的 `RegentFemCards` 是一个具体成品，它能运行，但不适合直接承载导入、解包、识别、筛选、生成这些“工具链职责”。
+- 当前仓库最初是从一个具体成品 Mod 演化而来，但这类运行时项目并不适合直接承载导入、解包、识别、筛选、生成这些“工具链职责”。
 - `.pck` 导入、图片分析、文件名 normalize、用户选择、JSON 生成、编译输出，本质上是一条“资产处理与脚手架生成流水线”，而不是游戏运行时逻辑。
 - 如果不拆层，未来一改模板就容易把现有 Mod、生成器、构建链路绑死在一起，维护成本会很高。
 
@@ -21,21 +21,20 @@
 
 ### 2.1 当前关键结构
 
-- 运行时代码位于 `archive/RegentFemCardsReference/RegentFemCardsCode/`
-- 资源位于 `archive/RegentFemCardsReference/RegentFemCards/`
-- 配置文件位于 `archive/RegentFemCardsReference/RegentFemCards/config/card_replacements.json`
-- 构建与导出入口位于根目录：
-  - `archive/RegentFemCardsReference/RegentFemCards.csproj`
-  - `archive/RegentFemCardsReference/RegentFemCards.json`
-  - `archive/RegentFemCardsReference/project.godot`
-  - `archive/RegentFemCardsReference/Directory.Build.props`
-  - `archive/RegentFemCardsReference/Sts2PathDiscovery.props`
+- 运行时模板代码位于 `templates/PortraitReplacementTemplate/src/__MOD_ID__Code/`
+- 资源与配置输出位于模板目录下的 `__MOD_ID__/`
+- 构建与导出入口位于模板根目录：
+  - `templates/PortraitReplacementTemplate/src/__MOD_ID__.csproj`
+  - `templates/PortraitReplacementTemplate/src/__MOD_ID__.json`
+  - `templates/PortraitReplacementTemplate/src/project.godot`
+  - `templates/PortraitReplacementTemplate/src/Directory.Build.props`
+  - `templates/PortraitReplacementTemplate/src/Sts2PathDiscovery.props`
 
 ### 2.2 当前配置机制
 
-当前参考 Mod 的核心配置入口是 `archive/RegentFemCardsReference/RegentFemCardsCode/CardReplacementConfig.cs`。它会从固定路径加载：
+当前模板运行时的核心配置入口是 `templates/PortraitReplacementTemplate/src/__MOD_ID__Code/CardReplacementConfig.cs`。生成后的项目会从固定路径加载：
 
-`res://RegentFemCards/config/card_replacements.json`
+`res://__MOD_ID__/config/card_replacements.json`
 
 配置中的一条记录目前支持以下字段：
 
@@ -58,14 +57,14 @@
 
 ### 2.3 当前路径与命名耦合点
 
-当前仓库存在几组强耦合关系：
+当前仓库存在几组需要统一模板化的耦合关系：
 
-- `MainFile.ModId = "RegentFemCards"`
-- `RegentFemCards.json` 中的 `id/name`
+- `MainFile.ModId`
+- Mod manifest `.json` 中的 `id/name`
 - `project.godot` 中的 `config/name` 与 `project/assembly_name`
-- `RegentFemCards.csproj` 的项目名与输出目录
-- `res://RegentFemCards/...` 资源根路径
-- `RegentFemCards/` 目录名本身
+- `.csproj` 的项目名与输出目录
+- `res://__MOD_ID__/...` 资源根路径
+- `__MOD_ID__/` 目录名本身
 
 这意味着未来如果生成器要输出一个新 Mod，不能只替换 JSON 里的名称，必须把“项目名、程序集名、manifest、资源根目录、配置路径”整体一起模板化。
 
@@ -239,13 +238,13 @@ StS2_Portrait_Mod_Generator/
 
 ## 7.1 模板化原则
 
-不要把当前可运行的 `RegentFemCards` 直接改成满地占位符。
+不要把已经抽离好的模板直接改成满地分散占位符。
 
 更稳的做法是：
 
-1. 保留当前项目继续可编译、可运行
-2. 复制出一份模板目录
-3. 只在模板目录中引入占位符
+1. 保持模板目录结构稳定、可编译
+2. 在模板目录中集中维护占位符
+3. 由生成器把模板实例化到输出目录
 
 ### 7.2 建议模板参数
 
@@ -821,13 +820,13 @@ temp/
 
 下面是基于现有仓库的具体建议。
 
-### 13.1 当前项目保留为参考实现
+### 13.1 模板作为当前参考实现
 
-`archive/RegentFemCardsReference` 当前已经是一个可工作的参考样板，应保留：
+当前仓库不再保留独立的参考项目，相关可复用逻辑已经收敛到 `templates/PortraitReplacementTemplate/`：
 
-- 作为运行时验证项目
-- 作为模板抽取来源
-- 作为生成器回归测试样本
+- 作为当前运行时模板来源
+- 作为生成器输出结构的基线
+- 作为后续回归测试样本的候选来源
 
 ### 13.2 新增模板目录
 
@@ -853,16 +852,16 @@ temp/
 
 ### 13.4 当前仓库中的关键复用点
 
-这些文件几乎可以直接成为模板运行时层的一部分：
+这些文件现在已经是模板运行时层的一部分：
 
-- `RegentFemCardsCode/CardReplacementConfig.cs`
-- `RegentFemCardsCode/PortraitReplacementRegistry.cs`
-- `RegentFemCardsCode/FrameReplacementRegistry.cs`
-- `RegentFemCardsCode/CardPortraitReplacementPatch.cs`
-- `RegentFemCardsCode/FramePatch.cs`
-- `RegentFemCardsCode/CardUiModeSpoofPatch.cs`
+- `__MOD_ID__Code/CardReplacementConfig.cs`
+- `__MOD_ID__Code/PortraitReplacementRegistry.cs`
+- `__MOD_ID__Code/FrameReplacementRegistry.cs`
+- `__MOD_ID__Code/CardPortraitReplacementPatch.cs`
+- `__MOD_ID__Code/FramePatch.cs`
+- `__MOD_ID__Code/CardUiModeSpoofPatch.cs`
 
-需要注意的是它们里面当前写死了 `RegentFemCards` 命名空间和资源路径，模板化时必须改为参数驱动。
+需要注意的是，模板化时仍然要保持命名空间、资源路径和输出目录由参数驱动。
 
 ## 14. 失败场景与容错设计
 
@@ -973,7 +972,7 @@ temp/
 
 目标：
 
-- 从当前 `RegentFemCards` 提取 `PortraitReplacementTemplate`
+- 基于当前模板整理 `PortraitReplacementTemplate`
 - 定义 `template.json`
 - 跑通“复制模板并替换基本信息”
 
@@ -1053,11 +1052,10 @@ temp/
 
 对当前仓库来说，最稳的方向是：
 
-1. 保留 `RegentFemCards` 作为参考实现
-2. 新建 `PortraitReplacementTemplate`
-3. 新建独立的 `Generator Tool`
-4. 先做 CLI 核心流程
-5. 再补 GUI 和一键编译体验
+1. 保持 `PortraitReplacementTemplate` 作为参考基线
+2. 新建独立的 `Generator Tool`
+3. 先做 CLI 核心流程
+4. 再补 GUI 和一键编译体验
 
 这样拆完之后，模板负责“生成出来的 Mod 长什么样”，生成器负责“用户如何从 `.pck` 走到新 Mod”，两边职责清晰，后续扩展也不会互相拖累。
 

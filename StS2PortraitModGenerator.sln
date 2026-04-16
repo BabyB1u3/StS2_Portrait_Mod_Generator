@@ -1,9 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegentFemCards", "archive\RegentFemCardsReference\RegentFemCards.csproj", "{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "archive", "archive", "{8BE1B7A8-6034-4DB1-A44A-F2F845113E0D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E-EAC7-C090-1BA3-A61EC2A24D84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortraitModGenerator.Core", "tools\PortraitModGenerator.Core\PortraitModGenerator.Core.csproj", "{DECA24BE-121D-4594-BBD0-05779C940067}"
@@ -28,30 +24,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|x64.Build.0 = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Debug|x86.Build.0 = Debug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|x64.ActiveCfg = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|x64.Build.0 = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|x86.ActiveCfg = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportDebug|x86.Build.0 = ExportDebug|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|x64.ActiveCfg = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|x64.Build.0 = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|x86.ActiveCfg = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.ExportRelease|x86.Build.0 = ExportRelease|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|x64.ActiveCfg = Release|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|x64.Build.0 = Release|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|x86.ActiveCfg = Release|Any CPU
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69}.Release|x86.Build.0 = Release|Any CPU
 		{DECA24BE-121D-4594-BBD0-05779C940067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DECA24BE-121D-4594-BBD0-05779C940067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DECA24BE-121D-4594-BBD0-05779C940067}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -129,7 +101,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A23532DC-AC31-43C4-8DDC-9B875B4F3E69} = {8BE1B7A8-6034-4DB1-A44A-F2F845113E0D}
 		{DECA24BE-121D-4594-BBD0-05779C940067} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{4C05BCD7-8175-4FD2-99EC-BBFB13FDDD70} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{5B97A55A-4B8F-4F10-83B8-E5294595AFD7} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}

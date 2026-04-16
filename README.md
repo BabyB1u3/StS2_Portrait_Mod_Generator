@@ -1,11 +1,9 @@
 # StS2 Portrait Mod Generator
 
-This repository is being reshaped from a single portrait-replacement mod into a reusable toolchain for generating new Slay the Spire 2 portrait replacement mods.
+This repository contains a reusable toolchain for generating new Slay the Spire 2 portrait replacement mods.
 
 ## What is in the repo
 
-- `archive/RegentFemCardsReference/`
-  Reference implementation of an existing portrait replacement mod.
 - `templates/PortraitReplacementTemplate/`
   Clean reusable template for generated mods.
 - `data/official_card_index.json`
@@ -35,7 +33,7 @@ The long-term goal is:
 Already done:
 
 - Extracted a reusable `PortraitReplacementTemplate`.
-- Cleaned the template so it no longer carries the current mod's real portrait assets or mappings.
+- Removed the old reference project after extracting the reusable template pieces it was providing.
 - Added `PortraitModGenerator.Core` with template generation, GDRE recover import, and asset scanning.
 - Added `PortraitModGenerator.Cli` with `generate-template`, `import-pck`, `scan-assets`, and `analyze-mappings`.
 - Added a pre-generated `official_card_index.json` baseline for authoritative card ids.
@@ -51,10 +49,7 @@ Not done yet:
 
 ## Build notes
 
-The reference mod and the generator core are separate concerns:
-
-- The reference mod is tied to the Slay the Spire 2 / Godot mod environment.
-- The generator core is a standalone tooling project.
+The generator core is a standalone tooling project, while the generated mod template is tied to the Slay the Spire 2 / Godot mod environment.
 
 In the current environment, `PortraitModGenerator.Core` targets `net10.0` so it can build with the locally available SDK/reference packs.
 
