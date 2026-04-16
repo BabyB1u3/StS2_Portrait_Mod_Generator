@@ -40,9 +40,6 @@ public sealed class MergeMappingsService
             .ThenBy(package => package.ImportedAt)
             .ToList();
 
-        Dictionary<string, ImportedPackage> packageById = packages
-            .ToDictionary(package => package.PackageId, StringComparer.OrdinalIgnoreCase);
-
         List<MergedMappingCandidate> mergedCandidates = [];
 
         foreach (ImportedPackage package in packages)
@@ -72,7 +69,7 @@ public sealed class MergeMappingsService
             }
         }
 
-        ApplyDefaultSelections(mergedCandidates, packageById);
+        ApplyDefaultSelections(mergedCandidates);
 
         MergedReviewSession session = new()
         {
@@ -107,9 +104,7 @@ public sealed class MergeMappingsService
         return analysis;
     }
 
-    private static void ApplyDefaultSelections(
-        IReadOnlyList<MergedMappingCandidate> candidates,
-        IReadOnlyDictionary<string, ImportedPackage> packageById)
+    private static void ApplyDefaultSelections(IReadOnlyList<MergedMappingCandidate> candidates)
     {
         foreach (MergedMappingCandidate candidate in candidates)
         {
@@ -131,11 +126,10 @@ public sealed class MergeMappingsService
                 continue;
             }
 
-            MergedMappingCandidate winner = ConflictResolutionService.ChooseDefaultCandidate(groupCandidates, packageById);
             foreach (MergedMappingCandidate candidate in groupCandidates)
             {
-                candidate.Selected = string.Equals(candidate.CandidateId, winner.CandidateId, StringComparison.OrdinalIgnoreCase);
-                candidate.IsAutoSelected = candidate.Selected;
+                candidate.Selected = false;
+                candidate.IsAutoSelected = false;
             }
         }
     }

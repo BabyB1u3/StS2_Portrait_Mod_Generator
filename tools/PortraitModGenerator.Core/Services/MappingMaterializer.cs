@@ -136,7 +136,11 @@ public sealed class MappingMaterializer
     {
         string json = File.ReadAllText(mappingAnalysisPath);
         using JsonDocument document = JsonDocument.Parse(json);
-        if (!document.RootElement.TryGetProperty("packages", out _))
+        bool hasPackagesProperty = document.RootElement
+            .EnumerateObject()
+            .Any(property => string.Equals(property.Name, nameof(MergedReviewSession.Packages), StringComparison.OrdinalIgnoreCase));
+
+        if (!hasPackagesProperty)
         {
             session = null;
             return false;

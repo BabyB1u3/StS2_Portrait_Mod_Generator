@@ -8,9 +8,6 @@ public sealed class ConflictResolutionService
     {
         ArgumentNullException.ThrowIfNull(session);
 
-        Dictionary<string, ImportedPackage> packageById = session.Packages
-            .ToDictionary(package => package.PackageId, StringComparer.OrdinalIgnoreCase);
-
         foreach (MergedMappingCandidate candidate in session.Candidates)
         {
             candidate.IsConflict = false;
@@ -45,13 +42,12 @@ public sealed class ConflictResolutionService
 
             if (selectedCandidates.Count > 1)
             {
-                MergedMappingCandidate winner = ChooseDefaultCandidate(selectedCandidates, packageById);
                 foreach (MergedMappingCandidate candidate in activeCandidates)
                 {
-                    candidate.Selected = string.Equals(candidate.CandidateId, winner.CandidateId, StringComparison.OrdinalIgnoreCase);
+                    candidate.Selected = false;
                 }
 
-                selectedCandidates = [winner];
+                selectedCandidates = [];
             }
 
             if (candidates.Count > 1)
@@ -103,7 +99,7 @@ public sealed class ConflictResolutionService
     {
         if (candidates.All(candidate => candidate.Ignored))
         {
-            return "Ignored";
+            return "Discarded";
         }
 
         if (hasSelectedCandidate)
@@ -114,14 +110,4 @@ public sealed class ConflictResolutionService
         return "Pending";
     }
 
-    internal static MergedMappingCandidate ChooseDefaultCandidate(
-        IReadOnlyList<MergedMappingCandidate> candidates,
-        IReadOnlyDictionary<string, ImportedPackage> packageById)
-    {
-        return candidates
-            .OrderByDescending(candidate => packageById.TryGetValue(candidate.SourcePackageId, out ImportedPackage? package) ? package.ImportOrder : 0)
-            .ThenByDescending(candidate => candidate.Confidence)
-            .ThenBy(candidate => candidate.SourceRelativePath, StringComparer.OrdinalIgnoreCase)
-            .First();
-    }
 }

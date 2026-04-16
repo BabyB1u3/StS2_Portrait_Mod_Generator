@@ -6,6 +6,10 @@ namespace PortraitModGenerator.Gui;
 
 internal sealed class ConflictReviewForm : Form
 {
+    private const int PreferredLeftPaneRatioDivisor = 4;
+    private const int MinimumLeftPaneWidth = 220;
+    private const int MinimumRightPaneWidth = 520;
+
     private readonly Action _sessionChanged;
     private readonly ConflictResolutionService _conflictResolutionService = new();
     private readonly ComboBox _filterComboBox;
@@ -15,9 +19,11 @@ internal sealed class ConflictReviewForm : Form
     private readonly Label _groupHeaderLabel;
     private readonly Label _groupStateLabel;
     private readonly FlowLayoutPanel _candidatePanel;
-    private readonly Button _toggleGroupIgnoreButton;
+    private readonly CheckBox _discardGroupCheckBox;
+    private readonly SplitContainer _contentSplit;
 
     private MergedReviewSession? _session;
+    private bool _suppressEvents;
 
     public ConflictReviewForm(MergedReviewSession session, Action sessionChanged)
     {
@@ -25,8 +31,9 @@ internal sealed class ConflictReviewForm : Form
         _sessionChanged = sessionChanged;
 
         Text = "Conflict Review";
-        Width = 1500;
-        Height = 920;
+        Width = 1494;
+        Height = 910;
+        MinimumSize = new Size(1480, 820);
         StartPosition = FormStartPosition.CenterParent;
 
         TableLayoutPanel rootLayout = new()
@@ -53,7 +60,7 @@ internal sealed class ConflictReviewForm : Form
             Width = 180,
             DropDownStyle = ComboBoxStyle.DropDownList
         };
-        _filterComboBox.Items.AddRange(["All", "Pending", "Resolved", "Ignored"]);
+        _filterComboBox.Items.AddRange(["All", "Pending", "Resolved", "Discarded"]);
         _filterComboBox.SelectedIndex = 0;
         _filterComboBox.SelectedIndexChanged += (_, _) => RefreshConflictGroups(keepSelection: false);
         toolbar.Controls.Add(_filterComboBox);
@@ -66,14 +73,6 @@ internal sealed class ConflictReviewForm : Form
         _nextPendingButton.Click += (_, _) => SelectNextPendingConflict();
         toolbar.Controls.Add(_nextPendingButton);
 
-        _toggleGroupIgnoreButton = new Button
-        {
-            Text = "Ignore Group",
-            AutoSize = true
-        };
-        _toggleGroupIgnoreButton.Click += (_, _) => ToggleGroupIgnoredState();
-        toolbar.Controls.Add(_toggleGroupIgnoreButton);
-
         _summaryLabel = new Label
         {
             AutoSize = true,
@@ -81,12 +80,13 @@ internal sealed class ConflictReviewForm : Form
         };
         toolbar.Controls.Add(_summaryLabel);
 
-        SplitContainer split = new()
+        _contentSplit = new SplitContainer
         {
-            Dock = DockStyle.Fill,
-            SplitterDistance = 360
+            Dock = DockStyle.Fill
         };
-        rootLayout.Controls.Add(split, 0, 1);
+        rootLayout.Controls.Add(_contentSplit, 0, 1);
+        Shown += (_, _) => ApplyPreferredLayout();
+        Resize += (_, _) => ApplyPreferredLayout();
 
         _groupListBox = new ListBox
         {
@@ -97,18 +97,19 @@ internal sealed class ConflictReviewForm : Form
         };
         _groupListBox.DrawItem += DrawConflictGroupItem;
         _groupListBox.SelectedIndexChanged += (_, _) => BindSelectedGroup();
-        split.Panel1.Controls.Add(_groupListBox);
+        _contentSplit.Panel1.Controls.Add(_groupListBox);
 
         TableLayoutPanel detailLayout = new()
         {
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 3
+            RowCount = 4
         };
         detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        split.Panel2.Controls.Add(detailLayout);
+        detailLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _contentSplit.Panel2.Controls.Add(detailLayout);
 
         _groupHeaderLabel = new Label
         {
@@ -141,7 +142,42 @@ internal sealed class ConflictReviewForm : Form
         };
         candidateScrollHost.Controls.Add(_candidatePanel);
 
+        _discardGroupCheckBox = new CheckBox
+        {
+            Text = "Discard Group",
+            AutoSize = true,
+            Padding = new Padding(0, 8, 0, 0)
+        };
+        _discardGroupCheckBox.CheckedChanged += (_, _) => ToggleGroupDiscardedState();
+        detailLayout.Controls.Add(_discardGroupCheckBox, 0, 3);
+
         RefreshConflictGroups(keepSelection: false);
+    }
+
+    private void ApplyPreferredLayout()
+    {
+        int totalWidth = _contentSplit.ClientSize.Width;
+        if (totalWidth <= 0)
+        {
+            return;
+        }
+
+        int usableWidth = totalWidth - _contentSplit.SplitterWidth;
+        if (usableWidth <= 0)
+        {
+            return;
+        }
+
+        int maxLeftWidth = Math.Max(1, usableWidth - MinimumRightPaneWidth);
+        int preferredWidth = usableWidth / PreferredLeftPaneRatioDivisor;
+        preferredWidth = Math.Max(MinimumLeftPaneWidth, preferredWidth);
+        preferredWidth = Math.Min(preferredWidth, maxLeftWidth);
+        preferredWidth = Math.Max(1, Math.Min(preferredWidth, usableWidth - 1));
+
+        if (_contentSplit.SplitterDistance != preferredWidth)
+        {
+            _contentSplit.SplitterDistance = preferredWidth;
+        }
     }
 
     public void SetSession(MergedReviewSession session)
@@ -162,12 +198,14 @@ internal sealed class ConflictReviewForm : Form
 
         _summaryLabel.Text = _session is null
             ? string.Empty
-            : $"Conflicts {_session.ConflictGroups.Count} | Pending {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Pending", StringComparison.OrdinalIgnoreCase))} | Resolved {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Resolved", StringComparison.OrdinalIgnoreCase))} | Ignored {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Ignored", StringComparison.OrdinalIgnoreCase))}";
+            : $"Conflicts {_session.ConflictGroups.Count} | Pending {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Pending", StringComparison.OrdinalIgnoreCase))} | Resolved {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Resolved", StringComparison.OrdinalIgnoreCase))} | Discarded {_session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Discarded", StringComparison.OrdinalIgnoreCase))}";
 
         if (groups.Count == 0)
         {
             _groupHeaderLabel.Text = "No conflicts";
             _groupStateLabel.Text = "This session currently has no cardId conflicts.";
+            _discardGroupCheckBox.Checked = false;
+            _discardGroupCheckBox.Enabled = false;
             ClearCandidateCards();
             return;
         }
@@ -201,7 +239,7 @@ internal sealed class ConflictReviewForm : Form
         {
             "Pending" => groups.Where(group => string.Equals(group.ResolutionState, "Pending", StringComparison.OrdinalIgnoreCase)),
             "Resolved" => groups.Where(group => string.Equals(group.ResolutionState, "Resolved", StringComparison.OrdinalIgnoreCase)),
-            "Ignored" => groups.Where(group => string.Equals(group.ResolutionState, "Ignored", StringComparison.OrdinalIgnoreCase)),
+            "Discarded" => groups.Where(group => string.Equals(group.ResolutionState, "Discarded", StringComparison.OrdinalIgnoreCase)),
             _ => groups
         };
 
@@ -265,9 +303,10 @@ internal sealed class ConflictReviewForm : Form
 
         _groupHeaderLabel.Text = $"{group.CanonicalName} [{group.Group}]";
         _groupStateLabel.Text = $"cardId: {group.CardId} | candidates: {group.CandidateIds.Count} | state: {group.ResolutionState}";
-        _toggleGroupIgnoreButton.Text = string.Equals(group.ResolutionState, "Ignored", StringComparison.OrdinalIgnoreCase)
-            ? "Unignore Group"
-            : "Ignore Group";
+        _suppressEvents = true;
+        _discardGroupCheckBox.Enabled = true;
+        _discardGroupCheckBox.Checked = string.Equals(group.ResolutionState, "Discarded", StringComparison.OrdinalIgnoreCase);
+        _suppressEvents = false;
 
         ClearCandidateCards();
         List<MergedMappingCandidate> candidates = _session.Candidates
@@ -285,13 +324,21 @@ internal sealed class ConflictReviewForm : Form
 
     private Control CreateCandidateCard(CardConflictGroup group, MergedMappingCandidate candidate)
     {
+        Panel container = new()
+        {
+            Width = 320,
+            Height = 556,
+            Margin = new Padding(8)
+        };
+
         Panel card = new()
         {
             Width = 320,
             Height = 520,
             BorderStyle = BorderStyle.FixedSingle,
-            Margin = new Padding(8)
+            Margin = new Padding(0)
         };
+        container.Controls.Add(card);
 
         TableLayoutPanel layout = new()
         {
@@ -315,12 +362,12 @@ internal sealed class ConflictReviewForm : Form
             Font = new Font(Font, FontStyle.Bold),
             ForeColor = candidate.Selected ? Color.ForestGreen : candidate.Ignored ? Color.Goldenrod : Color.SteelBlue,
             Text = candidate.Selected
-                ? "Current Winner"
+                ? "Included"
                 : candidate.Ignored
-                    ? "Ignored"
-                    : candidate.IsAutoSelected
-                        ? "Default Pick"
-                        : "Available Candidate"
+                    ? "Discarded"
+                    : string.Equals(group.ResolutionState, "Resolved", StringComparison.OrdinalIgnoreCase)
+                        ? "Resolved"
+                        : "Pending"
         };
         layout.Controls.Add(statusLabel, 0, 0);
 
@@ -341,30 +388,23 @@ internal sealed class ConflictReviewForm : Form
 
         FlowLayoutPanel buttonPanel = new()
         {
-            Dock = DockStyle.Fill,
+            Dock = DockStyle.Bottom,
             AutoSize = true,
-            WrapContents = true
+            WrapContents = true,
+            Margin = new Padding(0, 8, 0, 0)
         };
-        layout.Controls.Add(buttonPanel, 0, 6);
+        container.Controls.Add(buttonPanel);
 
-        Button selectButton = new()
+        CheckBox chooseCheckBox = new()
         {
-            Text = candidate.Selected ? "Selected" : "Select Winner",
+            Text = "Choose",
             AutoSize = true,
-            Enabled = !candidate.Selected
+            Checked = candidate.Selected
         };
-        selectButton.Click += (_, _) => SelectCandidate(group, candidate);
-        buttonPanel.Controls.Add(selectButton);
+        chooseCheckBox.CheckedChanged += (_, _) => ToggleCandidateSelection(group, candidate, chooseCheckBox.Checked);
+        buttonPanel.Controls.Add(chooseCheckBox);
 
-        Button ignoreButton = new()
-        {
-            Text = candidate.Ignored ? "Unignore" : "Ignore",
-            AutoSize = true
-        };
-        ignoreButton.Click += (_, _) => ToggleCandidateIgnoredState(group, candidate);
-        buttonPanel.Controls.Add(ignoreButton);
-
-        return card;
+        return container;
     }
 
     private static Label CreateInfoLabel(string text)
@@ -389,9 +429,14 @@ internal sealed class ConflictReviewForm : Form
         return new Bitmap(loadedImage);
     }
 
-    private void SelectCandidate(CardConflictGroup group, MergedMappingCandidate candidate)
+    private void ToggleCandidateSelection(CardConflictGroup group, MergedMappingCandidate candidate, bool isChecked)
     {
         if (_session is null)
+        {
+            return;
+        }
+
+        if (!isChecked && !candidate.Selected)
         {
             return;
         }
@@ -399,7 +444,8 @@ internal sealed class ConflictReviewForm : Form
         foreach (MergedMappingCandidate groupCandidate in _session.Candidates.Where(item =>
                      string.Equals(item.MatchedCardId, group.CardId, StringComparison.OrdinalIgnoreCase)))
         {
-            groupCandidate.Selected = string.Equals(groupCandidate.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase);
+            groupCandidate.Selected = isChecked &&
+                                      string.Equals(groupCandidate.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase);
             if (groupCandidate.Selected)
             {
                 groupCandidate.Ignored = false;
@@ -410,64 +456,20 @@ internal sealed class ConflictReviewForm : Form
         AfterSessionMutation();
     }
 
-    private void ToggleCandidateIgnoredState(CardConflictGroup group, MergedMappingCandidate candidate)
+    private void ToggleGroupDiscardedState()
     {
-        if (_session is null)
+        if (_suppressEvents || _session is null || _groupListBox.SelectedItem is not CardConflictGroup group)
         {
             return;
         }
 
-        MergedMappingCandidate? target = _session.Candidates.FirstOrDefault(item =>
-            string.Equals(item.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase));
-        if (target is null)
-        {
-            return;
-        }
-
-        target.Ignored = !target.Ignored;
-        target.IgnoredReason = target.Ignored ? "Ignored in conflicts review." : null;
-        if (target.Ignored)
-        {
-            target.Selected = false;
-        }
-
-        if (!target.Ignored && _session.Candidates.Where(item =>
-                string.Equals(item.MatchedCardId, group.CardId, StringComparison.OrdinalIgnoreCase) &&
-                !item.Ignored).All(item => !item.Selected))
-        {
-            target.Selected = true;
-        }
-
-        AfterSessionMutation();
-    }
-
-    private void ToggleGroupIgnoredState()
-    {
-        if (_session is null || _groupListBox.SelectedItem is not CardConflictGroup group)
-        {
-            return;
-        }
-
-        bool ignoreGroup = !string.Equals(group.ResolutionState, "Ignored", StringComparison.OrdinalIgnoreCase);
+        bool discardGroup = _discardGroupCheckBox.Checked;
         foreach (MergedMappingCandidate candidate in _session.Candidates.Where(item =>
                      string.Equals(item.MatchedCardId, group.CardId, StringComparison.OrdinalIgnoreCase)))
         {
-            candidate.Ignored = ignoreGroup;
-            candidate.IgnoredReason = ignoreGroup ? "Ignored in conflicts review." : null;
+            candidate.Ignored = discardGroup;
+            candidate.IgnoredReason = discardGroup ? "Discarded in conflicts review." : null;
             candidate.Selected = false;
-        }
-
-        if (!ignoreGroup)
-        {
-            MergedMappingCandidate? defaultCandidate = _session.Candidates
-                .Where(item => string.Equals(item.MatchedCardId, group.CardId, StringComparison.OrdinalIgnoreCase))
-                .OrderByDescending(item => item.IsAutoSelected)
-                .ThenByDescending(item => item.Confidence)
-                .FirstOrDefault();
-            if (defaultCandidate is not null)
-            {
-                defaultCandidate.Selected = true;
-            }
         }
 
         AfterSessionMutation();
@@ -544,7 +546,7 @@ internal sealed class ConflictReviewForm : Form
         return resolutionState switch
         {
             "Resolved" => Color.ForestGreen,
-            "Ignored" => Color.Goldenrod,
+            "Discarded" => Color.Goldenrod,
             _ => Color.IndianRed
         };
     }

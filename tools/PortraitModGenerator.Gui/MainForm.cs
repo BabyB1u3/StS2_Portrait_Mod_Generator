@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Windows.Forms;
 using PortraitModGenerator.Core.Abstractions;
 using PortraitModGenerator.Core.Models;
@@ -8,16 +7,9 @@ namespace PortraitModGenerator.Gui;
 
 public sealed class MainForm : Form
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        WriteIndented = true
-    };
-
     private readonly Button _loadAnalysisButton;
-    private readonly Button _importPckButton;
-    private readonly Button _saveAnalysisButton;
     private readonly Button _openConflictsButton;
+    private readonly Button _openBuildModButton;
     private readonly Label _analysisPathLabel;
     private readonly Label _importStatusLabel;
     private readonly ProgressBar _importProgressBar;
@@ -29,21 +21,11 @@ public sealed class MainForm : Form
     private readonly Label _statusLabel;
     private readonly Label _pathLabel;
     private readonly Label _reasonLabel;
-    private readonly CheckBox _selectedCheckBox;
-    private readonly CheckBox _ignoredCheckBox;
+    private readonly CheckBox _discardCheckBox;
     private readonly ComboBox _groupComboBox;
     private readonly ComboBox _cardComboBox;
     private readonly Label _summaryLabel;
-    private readonly TextBox _modIdTextBox;
-    private readonly TextBox _modNameTextBox;
-    private readonly TextBox _authorTextBox;
-    private readonly TextBox _descriptionTextBox;
-    private readonly TextBox _outputDirectoryTextBox;
-    private readonly Button _browseOutputButton;
     private readonly Button _updateMappingButton;
-    private readonly Button _generateModButton;
-    private readonly Label _generationStatusLabel;
-    private readonly ProgressBar _buildProgressBar;
     private readonly Panel _detailsPanel;
 
     private string? _analysisPath;
@@ -52,6 +34,8 @@ public sealed class MainForm : Form
     private List<CardChoice> _allCardChoices = [];
     private readonly ConflictResolutionService _conflictResolutionService = new();
     private ConflictReviewForm? _conflictReviewForm;
+    private BuildModForm? _buildModForm;
+    private readonly BuildModDraft _buildModDraft = new();
     private bool _suppressEvents;
 
     public MainForm()
@@ -94,25 +78,6 @@ public sealed class MainForm : Form
         _loadAnalysisButton.Click += async (_, _) => await ImportPckFromDialogAsync();
         toolbar.Controls.Add(_loadAnalysisButton);
 
-        _importPckButton = new Button
-        {
-            Text = "Load Session",
-            AutoSize = true,
-            Visible = true
-        };
-        _importPckButton.Click += (_, _) => LoadSessionFromDialog();
-        toolbar.Controls.Add(_importPckButton);
-
-        _saveAnalysisButton = new Button
-        {
-            Text = "Save Session As",
-            AutoSize = true,
-            Enabled = false,
-            Visible = true
-        };
-        _saveAnalysisButton.Click += (_, _) => SaveSessionAs();
-        toolbar.Controls.Add(_saveAnalysisButton);
-
         _openConflictsButton = new Button
         {
             Text = "Open Conflicts",
@@ -122,12 +87,21 @@ public sealed class MainForm : Form
         _openConflictsButton.Click += (_, _) => OpenConflictWindow();
         toolbar.Controls.Add(_openConflictsButton);
 
+        _openBuildModButton = new Button
+        {
+            Text = "Build Mod",
+            AutoSize = true,
+            Enabled = false
+        };
+        _openBuildModButton.Click += (_, _) => OpenBuildModWindow();
+        toolbar.Controls.Add(_openBuildModButton);
+
         _filterComboBox = new ComboBox
         {
             Width = 180,
             DropDownStyle = ComboBoxStyle.DropDownList
         };
-        _filterComboBox.Items.AddRange(["All", "Matched", "Unmatched", "Ignored", "Selected"]);
+        _filterComboBox.Items.AddRange(["All", "Included", "Conflict", "Unmatched", "Discarded"]);
         _filterComboBox.SelectedIndex = 0;
         _filterComboBox.SelectedIndexChanged += (_, _) => RefreshAssetList();
         toolbar.Controls.Add(_filterComboBox);
@@ -248,7 +222,7 @@ public sealed class MainForm : Form
             Dock = DockStyle.Top,
             AutoSize = true,
             ColumnCount = 1,
-            RowCount = 7
+            RowCount = 6
         };
         _detailsPanel.Controls.Add(detailsContentLayout);
 
@@ -268,21 +242,13 @@ public sealed class MainForm : Form
         };
         detailsContentLayout.Controls.Add(statePanel, 0, 3);
 
-        _selectedCheckBox = new CheckBox
+        _discardCheckBox = new CheckBox
         {
-            Text = "Selected",
+            Text = "Discard",
             AutoSize = true
         };
-        _selectedCheckBox.CheckedChanged += (_, _) => ApplySelectionState();
-        statePanel.Controls.Add(_selectedCheckBox);
-
-        _ignoredCheckBox = new CheckBox
-        {
-            Text = "Ignored",
-            AutoSize = true
-        };
-        _ignoredCheckBox.CheckedChanged += (_, _) => ApplyIgnoredState();
-        statePanel.Controls.Add(_ignoredCheckBox);
+        _discardCheckBox.CheckedChanged += (_, _) => ApplyDiscardState();
+        statePanel.Controls.Add(_discardCheckBox);
 
         FlowLayoutPanel cardPanel = new()
         {
@@ -339,95 +305,11 @@ public sealed class MainForm : Form
         cardPanel.Controls.Add(_updateMappingButton);
 
         Label helpLabel = CreateInfoLabel();
-        helpLabel.Text = "Use the card dropdown to assign unmatched images, or mark them ignored.";
+        helpLabel.Text = "Use the card dropdown to assign unmatched images, or discard assets that should not enter the final mod.";
         detailsContentLayout.Controls.Add(helpLabel, 0, 5);
-
-        GroupBox generationGroup = new()
-        {
-            Text = "Generate Mod",
-            Dock = DockStyle.Fill,
-            Padding = new Padding(12),
-            AutoSize = true
-        };
-        detailsContentLayout.Controls.Add(generationGroup, 0, 6);
-
-        TableLayoutPanel generationLayout = new()
-        {
-            Dock = DockStyle.Fill,
-            ColumnCount = 3,
-            RowCount = 6,
-            AutoSize = true
-        };
-        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        generationLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        generationGroup.Controls.Add(generationLayout);
-
-        generationLayout.Controls.Add(CreateFieldLabel("Mod ID:"), 0, 0);
-        _modIdTextBox = CreateFieldTextBox();
-        generationLayout.Controls.Add(_modIdTextBox, 1, 0);
-
-        generationLayout.Controls.Add(CreateFieldLabel("Mod Name:"), 0, 1);
-        _modNameTextBox = CreateFieldTextBox();
-        generationLayout.Controls.Add(_modNameTextBox, 1, 1);
-
-        generationLayout.Controls.Add(CreateFieldLabel("Author:"), 0, 2);
-        _authorTextBox = CreateFieldTextBox();
-        generationLayout.Controls.Add(_authorTextBox, 1, 2);
-
-        generationLayout.Controls.Add(CreateFieldLabel("Description:"), 0, 3);
-        _descriptionTextBox = CreateFieldTextBox();
-        generationLayout.Controls.Add(_descriptionTextBox, 1, 3);
-
-        generationLayout.Controls.Add(CreateFieldLabel("Artifact Dir:"), 0, 4);
-        _outputDirectoryTextBox = CreateFieldTextBox();
-        generationLayout.Controls.Add(_outputDirectoryTextBox, 1, 4);
-
-        _browseOutputButton = new Button
-        {
-            Text = "Browse",
-            AutoSize = true
-        };
-        _browseOutputButton.Click += (_, _) => BrowseOutputDirectory();
-        generationLayout.Controls.Add(_browseOutputButton, 2, 4);
-
-        FlowLayoutPanel generatePanel = new()
-        {
-            AutoSize = true,
-            Dock = DockStyle.Fill
-        };
-        generationLayout.Controls.Add(generatePanel, 1, 5);
-        generationLayout.SetColumnSpan(generatePanel, 2);
-
-        _generateModButton = new Button
-        {
-            Text = "Build Mod",
-            AutoSize = true
-        };
-        _generateModButton.Click += async (_, _) => await GenerateModProjectAsync();
-        generatePanel.Controls.Add(_generateModButton);
-
-        _generationStatusLabel = CreateInfoLabel();
-        _generationStatusLabel.Text = "Import a PCK, review mappings, then build the final mod output here.";
-        generatePanel.Controls.Add(_generationStatusLabel);
-
-        _buildProgressBar = new ProgressBar
-        {
-            Dock = DockStyle.Top,
-            Height = 18,
-            Style = ProgressBarStyle.Marquee,
-            MarqueeAnimationSpeed = 24,
-            Visible = false,
-            Margin = new Padding(0, 8, 0, 0)
-        };
-        generationLayout.Controls.Add(_buildProgressBar, 0, 6);
-        generationLayout.SetColumnSpan(_buildProgressBar, 3);
 
         _analysisPathLabel.Text = "Import one or more portrait PCK files to begin review.";
         _importStatusLabel.Text = $"GDRE: {AppPaths.GdreToolsPath} | Cache: {AppPaths.CacheRoot}";
-        _authorTextBox.Text = "Unknown Author";
-        _descriptionTextBox.Text = "Generated portrait replacement mod";
-        _outputDirectoryTextBox.Text = AppPaths.ArtifactOutputRoot;
 
         EnablePckDragDrop(rootLayout);
     }
@@ -440,39 +322,6 @@ public sealed class MainForm : Form
             MaximumSize = new Size(860, 0),
             Padding = new Padding(0, 4, 0, 4)
         };
-    }
-
-    private static Label CreateFieldLabel(string text)
-    {
-        return new Label
-        {
-            Text = text,
-            AutoSize = true,
-            Padding = new Padding(0, 8, 8, 0)
-        };
-    }
-
-    private static TextBox CreateFieldTextBox()
-    {
-        return new TextBox
-        {
-            Dock = DockStyle.Fill,
-            Width = 420
-        };
-    }
-
-    private void LoadSessionFromDialog()
-    {
-        using OpenFileDialog dialog = new()
-        {
-            Title = "Open review session",
-            Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*"
-        };
-
-        if (dialog.ShowDialog(this) == DialogResult.OK)
-        {
-            LoadSession(dialog.FileName);
-        }
     }
 
     private async Task ImportPckFromDialogAsync()
@@ -660,10 +509,21 @@ public sealed class MainForm : Form
 
             _importStatusLabel.Text = $"Imported {normalizedPckPaths.Length} package(s) | Session: {sessionRoot}";
 
-            if (string.IsNullOrWhiteSpace(_modIdTextBox.Text) || string.Equals(_modIdTextBox.Text, "GeneratedPortraitMod", StringComparison.Ordinal))
+            if (string.IsNullOrWhiteSpace(_buildModDraft.ModId) || string.Equals(_buildModDraft.ModId, "GeneratedPortraitMod", StringComparison.Ordinal))
             {
-                _modIdTextBox.Text = suggestedModId;
-                _modNameTextBox.Text = suggestedModId;
+                _buildModDraft.ModId = suggestedModId;
+                _buildModDraft.ModName = suggestedModId;
+                if (_buildModForm is not null && !_buildModForm.IsDisposed)
+                {
+                    _buildModForm.ApplySuggestedModId(suggestedModId);
+                }
+            }
+
+            if (_session is not null &&
+                _session.Packages.Count > 1 &&
+                _session.ConflictGroups.Count > 0)
+            {
+                OpenConflictWindow();
             }
         }
         catch (Exception ex)
@@ -676,43 +536,6 @@ public sealed class MainForm : Form
             SetImportBusy(false);
             TogglePrimaryActions(enabled: true);
             UseWaitCursor = false;
-        }
-    }
-
-    private void LoadSession(string path)
-    {
-        string fullPath = Path.GetFullPath(path);
-        try
-        {
-            string json = File.ReadAllText(fullPath);
-            MergedReviewSession? session;
-            using JsonDocument document = JsonDocument.Parse(json);
-            if (document.RootElement.TryGetProperty("packages", out _))
-            {
-                session = JsonSerializer.Deserialize<MergedReviewSession>(json, JsonOptions);
-                if (session is null)
-                {
-                    throw new InvalidOperationException("Failed to deserialize merged review session.");
-                }
-
-                _conflictResolutionService.Refresh(session);
-            }
-            else
-            {
-                MappingAnalysisResult? analysis = JsonSerializer.Deserialize<MappingAnalysisResult>(json, JsonOptions);
-                if (analysis is null)
-                {
-                    throw new InvalidOperationException("Failed to deserialize legacy mapping analysis file.");
-                }
-
-                session = ConvertLegacyAnalysis(fullPath, analysis);
-            }
-
-            BindSession(session, fullPath);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(this, ex.Message, "Load failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -730,17 +553,6 @@ public sealed class MainForm : Form
 
         _session = session;
         _analysisPathLabel.Text = $"Session: {sessionPath}";
-        _saveAnalysisButton.Enabled = true;
-        if (string.IsNullOrWhiteSpace(_modIdTextBox.Text))
-        {
-            _modIdTextBox.Text = "GeneratedPortraitMod";
-        }
-
-        if (string.IsNullOrWhiteSpace(_modNameTextBox.Text))
-        {
-            _modNameTextBox.Text = "Generated Portrait Mod";
-        }
-
         BindPackageList();
         RefreshAssetList();
         if (_conflictReviewForm is not null && !_conflictReviewForm.IsDisposed)
@@ -762,11 +574,8 @@ public sealed class MainForm : Form
     private void TogglePrimaryActions(bool enabled)
     {
         _loadAnalysisButton.Enabled = enabled;
-        _importPckButton.Enabled = enabled;
-        _saveAnalysisButton.Enabled = enabled && _session is not null;
         _openConflictsButton.Enabled = enabled && _session is not null && _session.ConflictGroups.Count > 0;
-        _generateModButton.Enabled = enabled;
-        _browseOutputButton.Enabled = enabled;
+        _openBuildModButton.Enabled = enabled && _session is not null;
         _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is MergedMappingCandidate && _cardComboBox.SelectedItem is CardChoice;
     }
 
@@ -776,15 +585,6 @@ public sealed class MainForm : Form
         if (statusText is not null)
         {
             _importStatusLabel.Text = statusText;
-        }
-    }
-
-    private void SetBuildBusy(bool busy, string? statusText = null)
-    {
-        _buildProgressBar.Visible = busy;
-        if (statusText is not null)
-        {
-            _generationStatusLabel.Text = statusText;
         }
     }
 
@@ -846,10 +646,10 @@ public sealed class MainForm : Form
         string filter = _filterComboBox.SelectedItem?.ToString() ?? "All";
         filtered = filter switch
         {
-            "Matched" => filtered.Where(candidate => !string.IsNullOrWhiteSpace(candidate.MatchedCardId)),
+            "Included" => filtered.Where(candidate => string.Equals(GetCandidateStatusName(candidate), "Included", StringComparison.Ordinal)),
+            "Conflict" => filtered.Where(candidate => string.Equals(GetCandidateStatusName(candidate), "Conflict", StringComparison.Ordinal)),
             "Unmatched" => filtered.Where(candidate => !candidate.Ignored && string.IsNullOrWhiteSpace(candidate.MatchedCardId)),
-            "Ignored" => filtered.Where(candidate => candidate.Ignored),
-            "Selected" => filtered.Where(candidate => candidate.Selected),
+            "Discarded" => filtered.Where(candidate => string.Equals(GetCandidateStatusName(candidate), "Discarded", StringComparison.Ordinal)),
             _ => filtered
         };
 
@@ -869,8 +669,14 @@ public sealed class MainForm : Form
         _assetListBox.DataSource = items;
         _suppressEvents = false;
 
+        int includedCount = _session.Candidates.Count(candidate => string.Equals(GetCandidateStatusName(candidate), "Included", StringComparison.Ordinal));
+        int conflictCount = _session.Candidates.Count(candidate => string.Equals(GetCandidateStatusName(candidate), "Conflict", StringComparison.Ordinal));
+        int unmatchedCount = _session.Candidates.Count(candidate => string.Equals(GetCandidateStatusName(candidate), "Unmatched", StringComparison.Ordinal));
+        int discardedCount = _session.Candidates.Count(candidate => string.Equals(GetCandidateStatusName(candidate), "Discarded", StringComparison.Ordinal));
+        int pendingConflictGroups = _session.ConflictGroups.Count(group => string.Equals(group.ResolutionState, "Pending", StringComparison.OrdinalIgnoreCase));
+
         _summaryLabel.Text =
-            $"Packages {_session.Packages.Count} | Visible {items.Count} | Resolved {_session.ResolvedAssets} | Conflicts {_session.ConflictGroups.Count} | Pending {_session.PendingAssets} | Unmatched {_session.UnmatchedAssets} | Ignored {_session.IgnoredAssets}";
+            $"Packages {_session.Packages.Count} | Visible {items.Count} | Included {includedCount} | Conflict {conflictCount} | Unmatched {unmatchedCount} | Discarded {discardedCount} | Pending Groups {pendingConflictGroups}";
 
         if (items.Count > 0)
         {
@@ -898,6 +704,7 @@ public sealed class MainForm : Form
 
         Font font = eventArgs.Font ?? _assetListBox.Font;
         Font badgeFont = new(font, FontStyle.Bold);
+        string candidateState = GetCandidateStatusName(candidate);
 
         Color prefixColor = GetCandidateStatusColor(candidate);
         Color remainderColor = (eventArgs.State & DrawItemState.Selected) == DrawItemState.Selected
@@ -907,7 +714,14 @@ public sealed class MainForm : Form
         Rectangle bounds = eventArgs.Bounds;
         Rectangle contentBounds = Rectangle.Inflate(bounds, -4, 0);
 
-        int statusWidth = 96;
+        int statusWidth = Math.Max(
+            118,
+            TextRenderer.MeasureText(
+                eventArgs.Graphics,
+                GetCandidateStatusPrefix(candidate),
+                badgeFont,
+                new Size(int.MaxValue, int.MaxValue),
+                TextFormatFlags.NoPadding).Width + 8);
         int arrowWidth = 26;
         int gap = 8;
         int availableWidth = Math.Max(120, contentBounds.Width - statusWidth - arrowWidth - (gap * 2));
@@ -929,7 +743,9 @@ public sealed class MainForm : Form
 
         TextRenderer.DrawText(
             eventArgs.Graphics,
-            candidate.FileName,
+            string.Equals(candidateState, "Conflict", StringComparison.Ordinal)
+                ? $"{GetConflictCandidateCount(candidate)} candidates"
+                : $"{candidate.SourcePackageName} / {candidate.FileName}",
             font,
             sourceRect,
             remainderColor,
@@ -949,23 +765,27 @@ public sealed class MainForm : Form
         eventArgs.DrawFocusRectangle();
     }
 
-    private static void DrawTargetCell(Graphics graphics, Font font, Font badgeFont, Rectangle targetRect, MergedMappingCandidate candidate, Color defaultTextColor)
+    private void DrawTargetCell(Graphics graphics, Font font, Font badgeFont, Rectangle targetRect, MergedMappingCandidate candidate, Color defaultTextColor)
     {
-        if (candidate.Ignored)
+        string candidateState = GetCandidateStatusName(candidate);
+        if (string.Equals(candidateState, "Discarded", StringComparison.Ordinal))
         {
-            DrawBadge(graphics, targetRect, "Ignored", Color.Goldenrod, badgeFont);
+            DrawBadge(graphics, targetRect, "Discarded", Color.DimGray, badgeFont);
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        if (string.Equals(candidateState, "Unmatched", StringComparison.Ordinal))
         {
-            DrawBadge(graphics, targetRect, "Needs Review", Color.IndianRed, badgeFont);
+            DrawBadge(graphics, targetRect, "Unmatched", Color.IndianRed, badgeFont);
             return;
         }
 
-        string targetText = candidate.IsConflict
-            ? $"{candidate.CanonicalName ?? candidate.MatchedCardId!} [{candidate.SourcePackageName}]"
-            : candidate.CanonicalName ?? candidate.MatchedCardId!;
+        string targetText = candidateState switch
+        {
+            "Conflict" => GetDisplayCardName(candidate),
+            _ => GetDisplayCardName(candidate)
+        };
+
         TextRenderer.DrawText(
             graphics,
             targetText,
@@ -999,31 +819,22 @@ public sealed class MainForm : Form
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
     }
 
-    private static string GetCandidateStatusPrefix(MergedMappingCandidate candidate)
+    private string GetCandidateStatusPrefix(MergedMappingCandidate candidate)
     {
-        if (candidate.Ignored)
+        return GetCandidateStatusName(candidate) switch
         {
-            return "[Ignored]";
-        }
-
-        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
-        {
-            return "[Unmatched]";
-        }
-
-        if (candidate.Selected)
-        {
-            return candidate.IsConflict ? "[Winner]" : "[Selected]";
-        }
-
-        return "[Pending]";
+            "Discarded" => "[Discarded]",
+            "Unmatched" => "[Unmatched]",
+            "Conflict" => "[Conflict]",
+            _ => "[Included]"
+        };
     }
 
-    private static string GetCandidateStatusName(MergedMappingCandidate candidate)
+    private string GetCandidateStatusName(MergedMappingCandidate candidate)
     {
         if (candidate.Ignored)
         {
-            return "Ignored";
+            return "Discarded";
         }
 
         if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
@@ -1031,32 +842,53 @@ public sealed class MainForm : Form
             return "Unmatched";
         }
 
-        if (candidate.Selected)
+        if (!candidate.IsConflict)
         {
-            return candidate.IsConflict ? "Conflict winner" : "Selected";
+            return "Included";
         }
 
-        return "Pending";
+        CardConflictGroup? group = _session?.ConflictGroups.FirstOrDefault(conflictGroup =>
+            string.Equals(conflictGroup.CardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase));
+        if (group is null || string.Equals(group.ResolutionState, "Pending", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Conflict";
+        }
+
+        if (string.Equals(group.ResolutionState, "Discarded", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Discarded";
+        }
+
+        return candidate.Selected ? "Included" : "Discarded";
     }
 
-    private static Color GetCandidateStatusColor(MergedMappingCandidate candidate)
+    private Color GetCandidateStatusColor(MergedMappingCandidate candidate)
     {
-        if (candidate.Ignored)
+        return GetCandidateStatusName(candidate) switch
         {
-            return Color.Goldenrod;
-        }
+            "Discarded" => Color.DimGray,
+            "Unmatched" => Color.Firebrick,
+            "Conflict" => Color.DarkOrange,
+            _ => Color.ForestGreen
+        };
+    }
 
+    private int GetConflictCandidateCount(MergedMappingCandidate candidate)
+    {
         if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
         {
-            return Color.Firebrick;
+            return 0;
         }
 
-        if (candidate.Selected)
-        {
-            return candidate.IsConflict ? Color.MediumSeaGreen : Color.ForestGreen;
-        }
+        return _session?.ConflictGroups.FirstOrDefault(group =>
+            string.Equals(group.CardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase))?.CandidateIds.Count ?? 0;
+    }
 
-        return candidate.IsConflict ? Color.DarkOrange : Color.SteelBlue;
+    private static string GetDisplayCardName(MergedMappingCandidate candidate)
+    {
+        return candidate.CanonicalName
+               ?? candidate.MatchedCardId
+               ?? "(unknown)";
     }
 
     private void BindSelectedItem()
@@ -1071,8 +903,7 @@ public sealed class MainForm : Form
 
         try
         {
-            _selectedCheckBox.Enabled = candidate is not null;
-            _ignoredCheckBox.Enabled = candidate is not null;
+            _discardCheckBox.Enabled = candidate is not null;
             _groupComboBox.Enabled = candidate is not null;
             _cardComboBox.Enabled = candidate is not null;
             _updateMappingButton.Enabled = false;
@@ -1083,19 +914,19 @@ public sealed class MainForm : Form
                 _statusLabel.Text = string.Empty;
                 _pathLabel.Text = string.Empty;
                 _reasonLabel.Text = string.Empty;
-                _selectedCheckBox.Checked = false;
-                _ignoredCheckBox.Checked = false;
+                _discardCheckBox.Checked = false;
+                _discardCheckBox.Enabled = false;
                 _groupComboBox.SelectedIndex = -1;
                 _cardComboBox.SelectedIndex = -1;
                 _cardComboBox.Text = string.Empty;
                 return;
             }
 
-            _selectedCheckBox.Checked = candidate.Selected;
-            _ignoredCheckBox.Checked = candidate.Ignored;
-            _statusLabel.Text = $"Status: {GetCandidateStatusName(candidate)} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"} | Package: {candidate.SourcePackageName}";
+            string candidateStatus = GetCandidateStatusName(candidate);
+            _statusLabel.Text = $"Status: {candidateStatus} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"} | Package: {candidate.SourcePackageName}";
             _pathLabel.Text = $"Path: {candidate.SourceRelativePath}";
             _reasonLabel.Text = $"Reason: {candidate.MatchReason ?? candidate.IgnoredReason ?? "(none)"}";
+            _discardCheckBox.Checked = candidate.Ignored;
             BindCardSelection(candidate);
             LoadPreview(candidate.SourceAbsolutePath);
         }
@@ -1163,7 +994,7 @@ public sealed class MainForm : Form
         _previewBox.Image = new Bitmap(loadedImage);
     }
 
-    private void ApplySelectionState()
+    private void ApplyDiscardState()
     {
         if (_suppressEvents)
         {
@@ -1175,41 +1006,19 @@ public sealed class MainForm : Form
             return;
         }
 
-        candidate.Selected = _selectedCheckBox.Checked;
-        if (candidate.Selected)
-        {
-            candidate.Ignored = false;
-            candidate.IgnoredReason = null;
-            DeselectSiblingCandidates(candidate);
-            _ignoredCheckBox.Checked = false;
-        }
-
-        SynchronizeSession();
-        RefreshCurrentBindings();
-    }
-
-    private void ApplyIgnoredState()
-    {
-        if (_suppressEvents)
-        {
-            return;
-        }
-
-        if (_assetListBox.SelectedItem is not MergedMappingCandidate candidate)
-        {
-            return;
-        }
-
-        candidate.Ignored = _ignoredCheckBox.Checked;
+        candidate.Ignored = _discardCheckBox.Checked;
         if (candidate.Ignored)
         {
             candidate.Selected = false;
-            candidate.IgnoredReason ??= "Ignored during manual review.";
-            _selectedCheckBox.Checked = false;
+            candidate.IgnoredReason ??= "Discarded during manual review.";
         }
-        else if (candidate.IgnoredReason == "Ignored during manual review.")
+        else if (candidate.IgnoredReason == "Discarded during manual review.")
         {
             candidate.IgnoredReason = null;
+            if (!candidate.IsConflict && !string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+            {
+                candidate.Selected = true;
+            }
         }
 
         SynchronizeSession();
@@ -1248,12 +1057,15 @@ public sealed class MainForm : Form
         candidate.MatchedCardId = choice.Card.CardId;
         candidate.CanonicalName = choice.Card.CanonicalName;
         candidate.Group = choice.Card.Group;
-        candidate.Selected = true;
         candidate.Ignored = false;
         candidate.IgnoredReason = null;
         candidate.Confidence = 1.0;
         candidate.MatchReason = "Manually assigned in GUI.";
-        DeselectSiblingCandidates(candidate);
+        bool createsConflict = _session is not null && _session.Candidates.Any(other =>
+            !string.Equals(other.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase) &&
+            !other.Ignored &&
+            string.Equals(other.MatchedCardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase));
+        candidate.Selected = !createsConflict;
         SynchronizeSession();
         _updateMappingButton.Enabled = false;
         RefreshCurrentBindings();
@@ -1301,176 +1113,6 @@ public sealed class MainForm : Form
             {
                 _assetListBox.SelectedItem = updated;
             }
-        }
-    }
-
-    private void SaveSessionAs()
-    {
-        if (_session is null || string.IsNullOrWhiteSpace(_analysisPath))
-        {
-            return;
-        }
-
-        using SaveFileDialog dialog = new()
-        {
-            Title = "Save reviewed session",
-            Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-            FileName = Path.GetFileName(_analysisPath)
-        };
-
-        if (dialog.ShowDialog(this) != DialogResult.OK)
-        {
-            return;
-        }
-
-        _session.OutputJsonPath = dialog.FileName;
-        SynchronizeSession();
-        File.WriteAllText(dialog.FileName, JsonSerializer.Serialize(_session, JsonOptions));
-        _analysisPath = dialog.FileName;
-        _analysisPathLabel.Text = $"Session: {dialog.FileName}";
-        MessageBox.Show(this, $"Saved session file to:\n{dialog.FileName}", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void BrowseOutputDirectory()
-    {
-        using FolderBrowserDialog dialog = new();
-        if (!string.IsNullOrWhiteSpace(_outputDirectoryTextBox.Text) && Directory.Exists(_outputDirectoryTextBox.Text))
-        {
-            dialog.InitialDirectory = _outputDirectoryTextBox.Text;
-        }
-
-        if (dialog.ShowDialog(this) == DialogResult.OK)
-        {
-            _outputDirectoryTextBox.Text = dialog.SelectedPath;
-        }
-    }
-
-    private async Task GenerateModProjectAsync()
-    {
-        if (_session is null || string.IsNullOrWhiteSpace(_officialCardIndexPath))
-        {
-            MessageBox.Show(this, "Import and review portrait PCK packages first.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-
-        SynchronizeSession();
-        int pendingCount = _session.PendingAssets;
-        if (pendingCount > 0)
-        {
-            DialogResult pendingDecision = MessageBox.Show(
-                this,
-                $"There are {pendingCount} pending item(s) that will be skipped during generation.\n\nDo you want to continue anyway?",
-                "Pending mappings",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
-
-            if (pendingDecision != DialogResult.Yes)
-            {
-                _generationStatusLabel.Text = $"Generation cancelled. {pendingCount} pending item(s) still need review.";
-                return;
-            }
-        }
-
-        string modId = _modIdTextBox.Text.Trim();
-        string modName = _modNameTextBox.Text.Trim();
-        string author = _authorTextBox.Text.Trim();
-        string description = _descriptionTextBox.Text.Trim();
-        string artifactOutputParent = _outputDirectoryTextBox.Text.Trim();
-
-        if (string.IsNullOrWhiteSpace(modId))
-        {
-            MessageBox.Show(this, "Mod ID is required.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(artifactOutputParent))
-        {
-            MessageBox.Show(this, "Artifact output directory is required.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-
-        string templateDirectory = AppPaths.PortraitTemplateDirectory;
-        string sessionRoot = ResolveSessionRoot();
-        string sourceGenerationRoot = Path.Combine(sessionRoot, "generated_src", modId);
-        string artifactOutputDirectory = Path.Combine(Path.GetFullPath(artifactOutputParent), modId);
-        string reviewPath = Path.Combine(sessionRoot, "merged", $"{modId}.merged_review_session.json");
-        string buildLogPath = Path.Combine(sessionRoot, "build", modId, "publish.log");
-
-        try
-        {
-            UseWaitCursor = true;
-            TogglePrimaryActions(enabled: false);
-            SetBuildBusy(true, "Preparing mod build...");
-
-            Directory.CreateDirectory(Path.GetFullPath(artifactOutputParent));
-
-            IProgress<string> progress = new Progress<string>(status => _generationStatusLabel.Text = status);
-            ModBuildResult buildResult = await Task.Run(() =>
-            {
-                progress.Report("Generating cached source tree");
-                TemplateProjectGenerator templateGenerator = new();
-                TemplateGenerationResult generationResult = templateGenerator.Generate(new TemplateGenerationRequest
-                {
-                    TemplateDirectory = templateDirectory,
-                    OutputDirectory = sourceGenerationRoot,
-                    OverwriteExistingOutput = true,
-                    TokenValues = new Dictionary<string, string>(StringComparer.Ordinal)
-                    {
-                        ["__MOD_ID__"] = modId,
-                        ["__MOD_NAME__"] = string.IsNullOrWhiteSpace(modName) ? modId : modName,
-                        ["__AUTHOR__"] = string.IsNullOrWhiteSpace(author) ? "Unknown Author" : author,
-                        ["__DESCRIPTION__"] = string.IsNullOrWhiteSpace(description) ? "Generated portrait replacement mod" : description,
-                        ["__VERSION__"] = "v0.1.0"
-                    }
-                });
-
-                progress.Report("Writing reviewed mapping data");
-                _session.OfficialCardIndexPath = _officialCardIndexPath;
-                _session.OutputJsonPath = reviewPath;
-                SynchronizeSession();
-                File.WriteAllText(reviewPath, JsonSerializer.Serialize(_session, JsonOptions));
-
-                progress.Report("Materializing portraits and config");
-                MappingMaterializer materializer = new();
-                materializer.Materialize(new MaterializeMappingsRequest
-                {
-                    MappingAnalysisPath = reviewPath,
-                    ModProjectRoot = sourceGenerationRoot,
-                    ModId = modId
-                });
-
-                progress.Report("Building final mod artifacts");
-                ModBuildService buildService = new();
-                return buildService.Build(new ModBuildRequest
-                {
-                    ProjectFilePath = generationResult.EntryProjectPath,
-                    ArtifactOutputDirectory = artifactOutputDirectory,
-                    LogFilePath = buildLogPath,
-                    DotnetCliHome = AppPaths.DotnetCliHome
-                });
-            });
-
-            _generationStatusLabel.Text = $"Built mod to {artifactOutputDirectory}";
-            MessageBox.Show(
-                this,
-                $"Built mod output:\n{artifactOutputDirectory}\n\nBuild log:\n{buildResult.LogFilePath}",
-                "Build mod",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            string logMessage = File.Exists(buildLogPath)
-                ? $"\n\nBuild log:\n{buildLogPath}"
-                : string.Empty;
-            _generationStatusLabel.Text = $"Build failed. Log: {buildLogPath}";
-            MessageBox.Show(this, $"{ex.Message}{logMessage}", "Build mod failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        finally
-        {
-            SetBuildBusy(false);
-            TogglePrimaryActions(enabled: true);
-            UseWaitCursor = false;
         }
     }
 
@@ -1537,21 +1179,6 @@ public sealed class MainForm : Form
         return cleaned;
     }
 
-    private void DeselectSiblingCandidates(MergedMappingCandidate selectedCandidate)
-    {
-        if (_session is null || string.IsNullOrWhiteSpace(selectedCandidate.MatchedCardId))
-        {
-            return;
-        }
-
-        foreach (MergedMappingCandidate sibling in _session.Candidates.Where(candidate =>
-                     !string.Equals(candidate.CandidateId, selectedCandidate.CandidateId, StringComparison.OrdinalIgnoreCase) &&
-                     string.Equals(candidate.MatchedCardId, selectedCandidate.MatchedCardId, StringComparison.OrdinalIgnoreCase)))
-        {
-            sibling.Selected = false;
-        }
-    }
-
     private void SynchronizeSession()
     {
         if (_session is null)
@@ -1562,6 +1189,7 @@ public sealed class MainForm : Form
         _conflictResolutionService.Refresh(_session);
         BindPackageList();
         _openConflictsButton.Enabled = _session.ConflictGroups.Count > 0;
+        _openBuildModButton.Enabled = true;
         if (_conflictReviewForm is not null && !_conflictReviewForm.IsDisposed)
         {
             _conflictReviewForm.SetSession(_session);
@@ -1588,6 +1216,31 @@ public sealed class MainForm : Form
         _conflictReviewForm.Show(this);
     }
 
+    private void OpenBuildModWindow()
+    {
+        if (_session is null)
+        {
+            MessageBox.Show(this, "Import and review portrait PCK packages first.", "Build mod", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        if (_buildModForm is not null && !_buildModForm.IsDisposed)
+        {
+            _buildModForm.Focus();
+            return;
+        }
+
+        _buildModForm = new BuildModForm(
+            sessionAccessor: () => _session,
+            officialCardIndexPathAccessor: () => _officialCardIndexPath,
+            sessionRootAccessor: ResolveSessionRoot,
+            synchronizeSession: SynchronizeSession,
+            draft: _buildModDraft);
+        _buildModForm.FormClosed += (_, _) => _buildModForm = null;
+        _buildModForm.ApplySuggestedModId(_buildModDraft.ModId);
+        _buildModForm.Show(this);
+    }
+
     private void HandleConflictSessionChanged()
     {
         if (_session is null)
@@ -1597,54 +1250,6 @@ public sealed class MainForm : Form
 
         SynchronizeSession();
         RefreshCurrentBindings();
-    }
-
-    private MergedReviewSession ConvertLegacyAnalysis(string analysisPath, MappingAnalysisResult analysis)
-    {
-        string sessionRoot = Path.GetDirectoryName(analysisPath) ?? AppPaths.CacheRoot;
-        string sessionId = Path.GetFileName(sessionRoot);
-        string packageName = Path.GetFileNameWithoutExtension(analysisPath);
-        string mergedOutputPath = Path.Combine(sessionRoot, "merged", "merged_review_session.json");
-
-        ImportedPackage package = new()
-        {
-            PackageId = CreatePackageId(1, packageName),
-            DisplayName = packageName,
-            SourcePckPath = packageName,
-            RecoverRoot = ResolvePathRelativeToDocument(analysisPath, string.Empty, preferDirectory: true),
-            ScanResultPath = ResolvePathRelativeToDocument(analysisPath, analysis.ScanResultPath),
-            MappingAnalysisPath = analysisPath,
-            ImportedAt = DateTimeOffset.UtcNow,
-            ImportOrder = 1
-        };
-
-        MergeMappingsService mergeService = new();
-        return mergeService.Merge(new MergeMappingsRequest
-        {
-            SessionId = sessionId,
-            SessionRoot = sessionRoot,
-            OfficialCardIndexPath = ResolveOfficialCardIndexPath(analysisPath, analysis.OfficialCardIndexPath),
-            OutputJsonPath = mergedOutputPath,
-            Packages = [package]
-        });
-    }
-
-    private static string ResolvePathRelativeToDocument(string documentPath, string targetPath, bool preferDirectory = false)
-    {
-        if (string.IsNullOrWhiteSpace(targetPath))
-        {
-            return preferDirectory
-                ? Path.GetDirectoryName(documentPath) ?? Path.GetFullPath(documentPath)
-                : Path.GetFullPath(documentPath);
-        }
-
-        if (Path.IsPathRooted(targetPath))
-        {
-            return targetPath;
-        }
-
-        string documentDirectory = Path.GetDirectoryName(documentPath) ?? Directory.GetCurrentDirectory();
-        return Path.GetFullPath(Path.Combine(documentDirectory, targetPath));
     }
 
     private sealed class CardChoice
