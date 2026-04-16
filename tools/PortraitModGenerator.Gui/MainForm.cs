@@ -15,8 +15,10 @@ public sealed class MainForm : Form
     };
 
     private readonly Button _loadAnalysisButton;
+    private readonly Button _importPckButton;
     private readonly Button _saveAnalysisButton;
     private readonly Label _analysisPathLabel;
+    private readonly Label _importStatusLabel;
     private readonly ComboBox _filterComboBox;
     private readonly TextBox _searchTextBox;
     private readonly ListBox _assetListBox;
@@ -35,6 +37,7 @@ public sealed class MainForm : Form
     private readonly TextBox _descriptionTextBox;
     private readonly TextBox _outputDirectoryTextBox;
     private readonly Button _browseOutputButton;
+    private readonly Button _updateMappingButton;
     private readonly Button _generateModButton;
     private readonly Label _generationStatusLabel;
     private readonly Panel _detailsPanel;
@@ -48,7 +51,7 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Text = "Portrait Mod Generator - Mapping Review";
-        Width = 1590;
+        Width = 1850;
         Height = 1070;
         StartPosition = FormStartPosition.CenterScreen;
 
@@ -56,9 +59,10 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 3,
+            RowCount = 4,
             Padding = new Padding(12)
         };
+        rootLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -74,20 +78,28 @@ public sealed class MainForm : Form
 
         _loadAnalysisButton = new Button
         {
-            Text = "Load Analysis",
+            Text = "Import PCK",
             AutoSize = true
         };
-        _loadAnalysisButton.Click += (_, _) => LoadAnalysisFromDialog();
+        _loadAnalysisButton.Click += (_, _) => ImportPckFromDialog();
         toolbar.Controls.Add(_loadAnalysisButton);
+
+        _importPckButton = new Button
+        {
+            Text = "Load Analysis",
+            AutoSize = true,
+            Visible = false
+        };
+        _importPckButton.Click += (_, _) => LoadAnalysisFromDialog();
 
         _saveAnalysisButton = new Button
         {
             Text = "Save Review As",
             AutoSize = true,
-            Enabled = false
+            Enabled = false,
+            Visible = false
         };
         _saveAnalysisButton.Click += (_, _) => SaveAnalysisAs();
-        toolbar.Controls.Add(_saveAnalysisButton);
 
         _filterComboBox = new ComboBox
         {
@@ -122,12 +134,20 @@ public sealed class MainForm : Form
         };
         rootLayout.Controls.Add(_analysisPathLabel, 0, 1);
 
+        _importStatusLabel = new Label
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0, 0, 0, 8)
+        };
+        rootLayout.Controls.Add(_importStatusLabel, 0, 2);
+
         SplitContainer contentSplit = new()
         {
             Dock = DockStyle.Fill,
             SplitterDistance = 700
         };
-        rootLayout.Controls.Add(contentSplit, 0, 2);
+        rootLayout.Controls.Add(contentSplit, 0, 3);
         Shown += (_, _) =>
         {
             int availableWidth = contentSplit.ClientSize.Width;
@@ -140,9 +160,12 @@ public sealed class MainForm : Form
         _assetListBox = new ListBox
         {
             Dock = DockStyle.Fill,
-            HorizontalScrollbar = true
+            HorizontalScrollbar = true,
+            DrawMode = DrawMode.OwnerDrawFixed,
+            ItemHeight = 24
         };
         _assetListBox.SelectedIndexChanged += (_, _) => BindSelectedItem();
+        _assetListBox.DrawItem += DrawAssetListItem;
         contentSplit.Panel1.Controls.Add(_assetListBox);
 
         TableLayoutPanel detailLayout = new()
@@ -252,9 +275,19 @@ public sealed class MainForm : Form
             AutoCompleteSource = AutoCompleteSource.ListItems,
             DisplayMember = nameof(CardChoice.DisplayText)
         };
-        _cardComboBox.SelectedIndexChanged += (_, _) => ApplyManualCardSelection();
+        _cardComboBox.SelectedIndexChanged += (_, _) => OnPendingCardSelectionChanged();
         _cardComboBox.TextUpdate += (_, _) => { };
         cardPanel.Controls.Add(_cardComboBox);
+
+        _updateMappingButton = new Button
+        {
+            Text = "Update Mapping",
+            AutoSize = true,
+            Enabled = false,
+            Margin = new Padding(12, 3, 3, 3)
+        };
+        _updateMappingButton.Click += (_, _) => ApplyManualCardSelection();
+        cardPanel.Controls.Add(_updateMappingButton);
 
         Label helpLabel = CreateInfoLabel();
         helpLabel.Text = "Use the card dropdown to assign unmatched images, or mark them ignored.";
@@ -329,10 +362,11 @@ public sealed class MainForm : Form
         _generationStatusLabel.Text = "Load an analysis, review it, then generate a mod project here.";
         generatePanel.Controls.Add(_generationStatusLabel);
 
-        _analysisPathLabel.Text = "Load a mapping analysis JSON to begin review.";
+        _analysisPathLabel.Text = "Import a portrait PCK to begin review.";
+        _importStatusLabel.Text = $"GDRE: {AppPaths.GdreToolsPath} | Cache: {AppPaths.CacheRoot}";
         _authorTextBox.Text = "Unknown Author";
         _descriptionTextBox.Text = "Generated portrait replacement mod";
-        _outputDirectoryTextBox.Text = Path.Combine(Environment.CurrentDirectory, "generated");
+        _outputDirectoryTextBox.Text = AppPaths.GeneratedRoot;
     }
 
     private static Label CreateInfoLabel()
@@ -378,6 +412,95 @@ public sealed class MainForm : Form
         }
     }
 
+    private void ImportPckFromDialog()
+    {
+        using OpenFileDialog dialog = new()
+        {
+            Title = "Import portrait PCK",
+            Filter = "PCK files (*.pck)|*.pck|All files (*.*)|*.*"
+        };
+
+        if (dialog.ShowDialog(this) == DialogResult.OK)
+        {
+            ImportPck(dialog.FileName);
+        }
+    }
+
+    private void ImportPck(string pckPath)
+    {
+        string gdreToolsPath = AppPaths.GdreToolsPath;
+        if (!File.Exists(gdreToolsPath))
+        {
+            MessageBox.Show(
+                this,
+                $"GDRETools was not found.\nExpected at:\n{gdreToolsPath}",
+                "Import PCK",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            return;
+        }
+
+        string sourcePckPath = Path.GetFullPath(pckPath);
+        string sessionName = $"{DateTime.Now:yyyyMMdd_HHmmss}_{SanitizeSessionName(Path.GetFileNameWithoutExtension(sourcePckPath))}";
+        string sessionRoot = Path.Combine(AppPaths.CacheRoot, "sessions", sessionName);
+        string recoverRoot = Path.Combine(sessionRoot, "recover");
+        string scanJsonPath = Path.Combine(sessionRoot, "asset_scan_result.json");
+        string mappingJsonPath = Path.Combine(sessionRoot, "mapping_analysis_result.json");
+
+        try
+        {
+            UseWaitCursor = true;
+            TogglePrimaryActions(enabled: false);
+            _importStatusLabel.Text = $"Importing {Path.GetFileName(sourcePckPath)} into {sessionRoot}";
+
+            Directory.CreateDirectory(sessionRoot);
+
+            GdrePckImporter importer = new();
+            importer.Import(new PckImportRequest
+            {
+                SourcePckPath = sourcePckPath,
+                OutputDirectory = recoverRoot,
+                GdreToolsPath = gdreToolsPath,
+                OverwriteOutput = true
+            });
+
+            AssetScanner scanner = new();
+            scanner.Scan(new AssetScanRequest
+            {
+                InputDirectory = recoverRoot,
+                OutputJsonPath = scanJsonPath
+            });
+
+            MappingAnalyzer analyzer = new();
+            analyzer.Analyze(new MappingAnalysisRequest
+            {
+                ScanResultPath = scanJsonPath,
+                OfficialCardIndexPath = AppPaths.OfficialCardIndexPath,
+                OutputJsonPath = mappingJsonPath
+            });
+
+            LoadAnalysis(mappingJsonPath);
+            _importStatusLabel.Text = $"Imported {Path.GetFileName(sourcePckPath)} | Session: {sessionRoot}";
+
+            if (string.IsNullOrWhiteSpace(_modIdTextBox.Text) || string.Equals(_modIdTextBox.Text, "GeneratedPortraitMod", StringComparison.Ordinal))
+            {
+                string suggestedModId = SanitizeModId(Path.GetFileNameWithoutExtension(sourcePckPath));
+                _modIdTextBox.Text = suggestedModId;
+                _modNameTextBox.Text = suggestedModId;
+            }
+        }
+        catch (Exception ex)
+        {
+            _importStatusLabel.Text = $"Import failed: {ex.Message}";
+            MessageBox.Show(this, ex.Message, "Import PCK failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            TogglePrimaryActions(enabled: true);
+            UseWaitCursor = false;
+        }
+    }
+
     private void LoadAnalysis(string path)
     {
         string fullPath = Path.GetFullPath(path);
@@ -409,6 +532,13 @@ public sealed class MainForm : Form
         RefreshAssetList();
     }
 
+    private void TogglePrimaryActions(bool enabled)
+    {
+        _loadAnalysisButton.Enabled = enabled;
+        _generateModButton.Enabled = enabled;
+        _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is ReviewCandidate && _cardComboBox.SelectedItem is CardChoice;
+    }
+
     private void LoadOfficialCards(string officialCardIndexPath)
     {
         OfficialCardIndex index = new OfficialCardIndexLoader().Load(officialCardIndexPath);
@@ -418,15 +548,15 @@ public sealed class MainForm : Form
             .Select(card => new CardChoice(card))
             .ToList();
 
-        List<string> groups = ["All"];
-        groups.AddRange(index.Cards
+        List<string> groups = index.Cards
             .Select(card => card.Group)
             .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(group => group, StringComparer.OrdinalIgnoreCase));
+            .OrderBy(group => group, StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
         _suppressEvents = true;
         _groupComboBox.DataSource = groups;
-        _groupComboBox.SelectedIndex = 0;
+        _groupComboBox.SelectedIndex = -1;
         ApplyGroupFilterCore(keepText: false);
         _cardComboBox.SelectedIndex = -1;
         _suppressEvents = false;
@@ -444,6 +574,11 @@ public sealed class MainForm : Form
         if (File.Exists(combined))
         {
             return combined;
+        }
+
+        if (File.Exists(AppPaths.OfficialCardIndexPath))
+        {
+            return AppPaths.OfficialCardIndexPath;
         }
 
         return Path.GetFullPath(officialCardIndexPath);
@@ -497,6 +632,121 @@ public sealed class MainForm : Form
         }
     }
 
+    private void DrawAssetListItem(object? sender, DrawItemEventArgs eventArgs)
+    {
+        eventArgs.DrawBackground();
+
+        if (eventArgs.Index < 0 || eventArgs.Index >= _assetListBox.Items.Count)
+        {
+            return;
+        }
+
+        if (_assetListBox.Items[eventArgs.Index] is not ReviewCandidate candidate)
+        {
+            return;
+        }
+
+        Font font = eventArgs.Font ?? _assetListBox.Font;
+        Font badgeFont = new(font, FontStyle.Bold);
+
+        Color prefixColor = candidate.StatusColor;
+        Color remainderColor = (eventArgs.State & DrawItemState.Selected) == DrawItemState.Selected
+            ? SystemColors.HighlightText
+            : eventArgs.ForeColor;
+
+        Rectangle bounds = eventArgs.Bounds;
+        Rectangle contentBounds = Rectangle.Inflate(bounds, -4, 0);
+
+        int statusWidth = 96;
+        int arrowWidth = 26;
+        int gap = 8;
+        int availableWidth = Math.Max(120, contentBounds.Width - statusWidth - arrowWidth - (gap * 2));
+        int sourceWidth = availableWidth / 2;
+        int targetWidth = availableWidth - sourceWidth;
+
+        Rectangle statusRect = new(contentBounds.Left, contentBounds.Top, statusWidth, contentBounds.Height);
+        Rectangle sourceRect = new(statusRect.Right + gap, contentBounds.Top, sourceWidth, contentBounds.Height);
+        Rectangle arrowRect = new(sourceRect.Right + gap, contentBounds.Top, arrowWidth, contentBounds.Height);
+        Rectangle targetRect = new(arrowRect.Right + gap, contentBounds.Top, targetWidth, contentBounds.Height);
+
+        TextRenderer.DrawText(
+            eventArgs.Graphics,
+            candidate.StatusPrefix,
+            badgeFont,
+            statusRect,
+            prefixColor,
+            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+
+        TextRenderer.DrawText(
+            eventArgs.Graphics,
+            candidate.FileName,
+            font,
+            sourceRect,
+            remainderColor,
+            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+
+        TextRenderer.DrawText(
+            eventArgs.Graphics,
+            "->",
+            font,
+            arrowRect,
+            remainderColor,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+
+        DrawTargetCell(eventArgs.Graphics, font, badgeFont, targetRect, candidate, remainderColor);
+
+        badgeFont.Dispose();
+        eventArgs.DrawFocusRectangle();
+    }
+
+    private static void DrawTargetCell(Graphics graphics, Font font, Font badgeFont, Rectangle targetRect, ReviewCandidate candidate, Color defaultTextColor)
+    {
+        if (candidate.Ignored)
+        {
+            DrawBadge(graphics, targetRect, "Ignored", Color.Goldenrod, badgeFont);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            DrawBadge(graphics, targetRect, "Needs Review", Color.IndianRed, badgeFont);
+            return;
+        }
+
+        string targetText = candidate.CanonicalName ?? candidate.MatchedCardId!;
+        TextRenderer.DrawText(
+            graphics,
+            targetText,
+            font,
+            targetRect,
+            defaultTextColor,
+            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+    }
+
+    private static void DrawBadge(Graphics graphics, Rectangle bounds, string text, Color color, Font font)
+    {
+        Size textSize = TextRenderer.MeasureText(graphics, text, font, new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding);
+        Rectangle badgeRect = new(
+            bounds.Left,
+            bounds.Top + Math.Max(0, (bounds.Height - (textSize.Height + 6)) / 2),
+            Math.Min(bounds.Width, textSize.Width + 16),
+            textSize.Height + 6);
+
+        using SolidBrush backgroundBrush = new(Color.FromArgb(32, color));
+        using Pen borderPen = new(color);
+        using SolidBrush textBrush = new(color);
+
+        graphics.FillRectangle(backgroundBrush, badgeRect);
+        graphics.DrawRectangle(borderPen, badgeRect);
+        TextRenderer.DrawText(
+            graphics,
+            text,
+            font,
+            badgeRect,
+            color,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+    }
+
     private void BindSelectedItem()
     {
         if (_suppressEvents)
@@ -513,6 +763,7 @@ public sealed class MainForm : Form
             _ignoredCheckBox.Enabled = candidate is not null;
             _groupComboBox.Enabled = candidate is not null;
             _cardComboBox.Enabled = candidate is not null;
+            _updateMappingButton.Enabled = false;
 
             if (candidate is null)
             {
@@ -522,7 +773,7 @@ public sealed class MainForm : Form
                 _reasonLabel.Text = string.Empty;
                 _selectedCheckBox.Checked = false;
                 _ignoredCheckBox.Checked = false;
-                _groupComboBox.SelectedIndex = 0;
+                _groupComboBox.SelectedIndex = -1;
                 _cardComboBox.SelectedIndex = -1;
                 _cardComboBox.Text = string.Empty;
                 return;
@@ -530,7 +781,7 @@ public sealed class MainForm : Form
 
             _selectedCheckBox.Checked = candidate.Selected;
             _ignoredCheckBox.Checked = candidate.Ignored;
-            _statusLabel.Text = $"Status: {(candidate.Ignored ? "Ignored" : string.IsNullOrWhiteSpace(candidate.MatchedCardId) ? "Unmatched" : "Matched")} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"}";
+            _statusLabel.Text = $"Status: {candidate.StatusName} | Card: {candidate.CanonicalName ?? "(none)"} | Group: {candidate.Group ?? "(none)"}";
             _pathLabel.Text = $"Path: {candidate.RelativePath}";
             _reasonLabel.Text = $"Reason: {candidate.MatchReason ?? candidate.IgnoredReason ?? "(none)"}";
             BindCardSelection(candidate);
@@ -544,20 +795,29 @@ public sealed class MainForm : Form
 
     private void BindCardSelection(ReviewCandidate candidate)
     {
-        string targetGroup = candidate.Group ?? "All";
-        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        if (_groupComboBox.DataSource is not List<string> groups || groups.Count == 0)
         {
-            targetGroup = "All";
+            _groupComboBox.SelectedIndex = -1;
+            _cardComboBox.DataSource = null;
+            _cardComboBox.Text = string.Empty;
+            _updateMappingButton.Enabled = false;
+            return;
         }
 
-        int groupIndex = _groupComboBox.FindStringExact(targetGroup);
-        _groupComboBox.SelectedIndex = groupIndex >= 0 ? groupIndex : 0;
+        int groupIndex = -1;
+        if (!string.IsNullOrWhiteSpace(candidate.Group))
+        {
+            groupIndex = _groupComboBox.FindStringExact(candidate.Group);
+        }
+
+        _groupComboBox.SelectedIndex = groupIndex;
         ApplyGroupFilterCore(keepText: true);
 
         if (_cardComboBox.DataSource is not List<CardChoice> choices)
         {
             _cardComboBox.SelectedIndex = -1;
             _cardComboBox.Text = string.Empty;
+            _updateMappingButton.Enabled = false;
             return;
         }
 
@@ -568,10 +828,13 @@ public sealed class MainForm : Form
         {
             _cardComboBox.SelectedIndex = -1;
             _cardComboBox.Text = candidate.CanonicalName ?? string.Empty;
+            _updateMappingButton.Enabled = false;
             return;
         }
 
         _cardComboBox.SelectedItem = selectedChoice;
+        _cardComboBox.Text = selectedChoice.DisplayText;
+        _updateMappingButton.Enabled = false;
     }
 
     private void LoadPreview(string sourceAbsolutePath)
@@ -638,6 +901,18 @@ public sealed class MainForm : Form
         RefreshCurrentBindings();
     }
 
+    private void OnPendingCardSelectionChanged()
+    {
+        if (_suppressEvents)
+        {
+            return;
+        }
+
+        _updateMappingButton.Enabled =
+            _assetListBox.SelectedItem is ReviewCandidate &&
+            _cardComboBox.SelectedItem is CardChoice;
+    }
+
     private void ApplyManualCardSelection()
     {
         if (_suppressEvents)
@@ -663,6 +938,7 @@ public sealed class MainForm : Form
         candidate.IgnoredReason = null;
         candidate.Confidence = 1.0;
         candidate.MatchReason = "Manually assigned in GUI.";
+        _updateMappingButton.Enabled = false;
         RefreshCurrentBindings();
     }
 
@@ -678,9 +954,9 @@ public sealed class MainForm : Form
 
     private void ApplyGroupFilterCore(bool keepText)
     {
-        string selectedGroup = _groupComboBox.SelectedItem?.ToString() ?? "All";
-        List<CardChoice> filtered = string.Equals(selectedGroup, "All", StringComparison.OrdinalIgnoreCase)
-            ? _allCardChoices.ToList()
+        string? selectedGroup = _groupComboBox.SelectedItem?.ToString();
+        List<CardChoice> filtered = string.IsNullOrWhiteSpace(selectedGroup)
+            ? []
             : _allCardChoices
                 .Where(choice => string.Equals(choice.Card.Group, selectedGroup, StringComparison.OrdinalIgnoreCase))
                 .ToList();
@@ -764,6 +1040,25 @@ public sealed class MainForm : Form
             return;
         }
 
+        int pendingCount = _session.Candidates.Count(candidate =>
+            !candidate.Ignored &&
+            !candidate.Selected);
+        if (pendingCount > 0)
+        {
+            DialogResult pendingDecision = MessageBox.Show(
+                this,
+                $"There are {pendingCount} pending item(s) that will be skipped during generation.\n\nDo you want to continue anyway?",
+                "Pending mappings",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (pendingDecision != DialogResult.Yes)
+            {
+                _generationStatusLabel.Text = $"Generation cancelled. {pendingCount} pending item(s) still need review.";
+                return;
+            }
+        }
+
         string modId = _modIdTextBox.Text.Trim();
         string modName = _modNameTextBox.Text.Trim();
         string author = _authorTextBox.Text.Trim();
@@ -782,7 +1077,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        string templateDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "templates", "PortraitReplacementTemplate"));
+        string templateDirectory = AppPaths.PortraitTemplateDirectory;
         string generatedRoot = Path.Combine(Path.GetFullPath(outputParent), modId);
         string reviewPath = Path.Combine(generatedRoot, $"{modId}.mapping_review.json");
 
@@ -837,6 +1132,27 @@ public sealed class MainForm : Form
             _generationStatusLabel.Text = $"Generation failed: {ex.Message}";
             MessageBox.Show(this, ex.Message, "Generate mod failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private static string SanitizeSessionName(string value)
+    {
+        char[] invalid = Path.GetInvalidFileNameChars();
+        string sanitized = new(value
+            .Select(character => invalid.Contains(character) ? '_' : character)
+            .ToArray());
+
+        return string.IsNullOrWhiteSpace(sanitized) ? "session" : sanitized;
+    }
+
+    private static string SanitizeModId(string value)
+    {
+        string cleaned = new(value.Where(char.IsLetterOrDigit).ToArray());
+        if (string.IsNullOrWhiteSpace(cleaned))
+        {
+            return "GeneratedPortraitMod";
+        }
+
+        return cleaned;
     }
 
     private sealed class CardChoice
@@ -897,17 +1213,33 @@ public sealed class MainForm : Form
         {
             get
             {
-                string prefix = Ignored
-                    ? "[Ignored]"
-                    : string.IsNullOrWhiteSpace(MatchedCardId)
-                        ? "[Unmatched]"
-                        : Selected
-                            ? "[Selected]"
-                            : "[Matched]";
-
                 string target = CanonicalName ?? MatchedCardId ?? "(manual review needed)";
-                return $"{prefix} {FileName} -> {target}";
+                return $"{StatusPrefix} {FileName} -> {target}";
             }
         }
+
+        public string StatusPrefix => Ignored
+            ? "[Ignored]"
+            : string.IsNullOrWhiteSpace(MatchedCardId)
+                ? "[Unmatched]"
+                : Selected
+                    ? "[Selected]"
+                    : "[Pending]";
+
+        public string StatusName => Ignored
+            ? "Ignored"
+            : string.IsNullOrWhiteSpace(MatchedCardId)
+                ? "Unmatched"
+                : Selected
+                    ? "Selected"
+                    : "Pending";
+
+        public Color StatusColor => Ignored
+            ? Color.Goldenrod
+            : string.IsNullOrWhiteSpace(MatchedCardId)
+                ? Color.Firebrick
+                : Selected
+                    ? Color.ForestGreen
+                    : Color.SteelBlue;
     }
 }
