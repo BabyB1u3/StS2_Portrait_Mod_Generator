@@ -15,3 +15,5 @@ artifacts
 .idea/
 dist/
 ReleaseInput/
+tools/Create-BundledRelease.ps1
+config/

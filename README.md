@@ -1,86 +1,97 @@
 # StS2 Portrait Mod Generator
 
-A toolchain for assembling Slay the Spire 2 portrait replacement mods from one or more `.pck` source packages.
+一套用于把多个 `.pck` 资源包整合成一个 Slay the Spire 2 卡图替换 Mod 的工具链。
 
-The tool imports multiple packs, matches their images against the official card index, lets you resolve cross-pack conflicts in a GUI, and then builds a single integrated mod.
+工具会依次完成：导入多个 `.pck`、按官方卡牌索引做匹配、在图形界面里解决跨包冲突，最后构建出一个整合后的 Mod 产物。
 
-## Current capabilities
+## 当前能力
 
-- Import one or more `.pck` files into the same session (button or drag-and-drop).
-- Per-package GDRE recover, asset scan and mapping analysis against the bundled official card index.
-- Session-level merge: identical `cardId` candidates from different packages form a conflict group.
-- Mapping review window for inspecting, reassigning or discarding individual candidates.
-- Conflict review window for picking the winning source per contested `cardId`.
-- Build window that runs the template generation, copies portraits, writes `card_replacements.json` and invokes `dotnet build` to produce the final mod artifacts.
+- 在同一会话中导入一个或多个 `.pck` 文件（按钮点击或拖拽）。
+- 每个包独立完成 GDRE recover、资源扫描，以及与内置官方卡牌索引的映射分析。
+- 会话级合并：多个包中匹配到同一 `cardId` 的候选会自动归入冲突组。
+- 主映射界面用于查看候选、手动改派 `cardId`、或丢弃噪声资源。
+- 冲突界面用于在多个候选之间为每一个争议 `cardId` 选出最终来源。
+- 构建界面填写 Mod 元信息后，自动完成模板实例化、复制图片、写入 `card_replacements.json`，并调用 `dotnet build` 输出最终 Mod 产物。
 
-## Screenshots
+## 截图
 
-Mapping review (main window), used to inspect per-package candidates, manually reassign cards and discard noise:
+主映射界面（Mapping Review），用于审核每个包的候选、手动改派或丢弃：
 
 ![Mapping Review](docs/images/main_window.png)
 
-Conflict review, used to choose one source when several packages provide a portrait for the same `cardId`:
+冲突界面（Conflict Review），用于在多个包都提供同一 `cardId` 时挑选最终来源：
 
 ![Conflict Review](docs/images/conflict_window.png)
 
-Build window, used to fill in mod metadata and trigger the final build:
+构建界面（Build Mod），用于填写 Mod 元信息并触发最终构建：
 
 ![Build Mod](docs/images/build_window.png)
 
-## Typical workflow
+## 典型流程
 
-1. Launch [PortraitModGenerator.Gui](tools/PortraitModGenerator.Gui/).
-2. Click **Import PCK** (or drag a `.pck` onto the window) to add packages to the session. Each package is recovered, scanned and analyzed independently.
-3. In the main mapping review window, walk through candidates: confirm auto-matches, manually pick a card for unmatched assets, or mark noise as discarded.
-4. Click **Open Conflicts** to resolve any `cardId` that has multiple candidates across packages. Each conflict group offers a default selection that you can override.
-5. Click **Build Mod**, fill in mod metadata (id, name, author, description) and the artifact output directory, then **Build Mod** to produce the final `.dll` / `.json` / `.pck` set.
+1. 启动 [PortraitModGenerator.Gui](tools/PortraitModGenerator.Gui/)。
+2. 点击 **Import PCK**（或把 `.pck` 拖到窗口中）将包加入当前会话，每个包都会独立完成 recover、scan、analyze。
+3. 在主映射界面里逐项确认候选：保留自动匹配、为未匹配资源手动指定 `cardId`、把无关资源标记为 discarded。
+4. 点击 **Open Conflicts**，处理多个包对同一 `cardId` 都给出候选的情况；每组冲突有一个默认选中项，可手动改写。
+5. 点击 **Build Mod**，填写 Mod 元信息（id、name、author、description）和产物输出目录，再点 **Build Mod** 生成最终的 `.dll` / `.json` / `.pck`。
 
-## Repository layout
+## 仓库结构
 
-- [templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) — template mod project that the generator instantiates per build.
-- [tools/PortraitModGenerator.Core/](tools/PortraitModGenerator.Core/) — core services: PCK import, asset scan, mapping analysis, merge, conflict resolution, materialization, build.
-- [tools/PortraitModGenerator.Cli/](tools/PortraitModGenerator.Cli/) — CLI entry point for scripting individual stages.
-- [tools/PortraitModGenerator.Gui/](tools/PortraitModGenerator.Gui/) — WinForms UI that wraps the full pipeline.
-- [data/official_card_index.json](data/official_card_index.json) — bundled baseline of authoritative `cardId` values.
-- [gdre/](gdre/) — bundled GDRETools used for `.pck` recovery.
-- [docs/](docs/) — design notes and screenshots.
+- [templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) — 每次构建都会被实例化的模板 Mod 工程。
+- [tools/PortraitModGenerator.Core/](tools/PortraitModGenerator.Core/) — 核心服务：PCK 导入、资源扫描、映射分析、合并、冲突解析、materialize、构建。
+- [tools/PortraitModGenerator.Cli/](tools/PortraitModGenerator.Cli/) — 用于脚本化各阶段的 CLI 入口。
+- [tools/PortraitModGenerator.Gui/](tools/PortraitModGenerator.Gui/) — 串起整套流水线的 WinForms 界面。
+- [tools/Create-BundledRelease.ps1](tools/Create-BundledRelease.ps1) — 把工具、模板、数据、GDRE、`dotnet`、Godot、本地 NuGet feed 一起打包出可分发目录的发布脚本。
+- [data/official_card_index.json](data/official_card_index.json) — 内置的官方 `cardId` 基线。
+- [gdre/](gdre/) — 随仓库分发的 GDRETools，用于 `.pck` recover。
+- [packages/](packages/) — 模板工程构建所需的本地 NuGet feed。
+- [docs/](docs/) — 设计说明与截图。
 
-The GUI persists work under `cache/sessions/<timestamp>_<label>/`, with one subdirectory per imported package and a merged session JSON. Final mod artifacts are written under `artifacts/<ModId>/` by default.
+GUI 会把工作内容写到 `cache/sessions/<时间戳>_<标签>/` 下，每个导入的包占一个子目录，外加一份合并后的会话 JSON。最终 Mod 产物默认输出到 `artifacts/<ModId>/`。
 
 ## CLI
 
-The CLI mirrors the underlying pipeline stages, useful for scripting or debugging:
+CLI 暴露了流水线的各个阶段，便于脚本化或调试：
 
-- `generate-template` — instantiate the template into a target directory with `--mod-id` and other metadata tokens.
-- `import-pck` — extract a single `.pck` via GDRETools.
-- `scan-assets` — scan a recovered directory for image assets and emit `asset_scan_result.json`.
-- `analyze-mappings` — match scanned assets against the official card index and emit `mapping_analysis_result.json`.
-- `materialize-mappings` — copy selected portraits and write `card_replacements.json` into a generated mod project.
+- `generate-template` — 用 `--mod-id` 等元信息把模板实例化到目标目录。
+- `import-pck` — 通过 GDRETools 解包单个 `.pck`。
+- `scan-assets` — 扫描 recover 目录里的图片资源，输出 `asset_scan_result.json`。
+- `analyze-mappings` — 把扫描结果与官方卡牌索引比对，输出 `mapping_analysis_result.json`。
+- `materialize-mappings` — 把选中的图片复制到生成的 Mod 工程，并写入 `card_replacements.json`。
 
-Run any command with `--help` for argument details.
+任意命令加 `--help` 可查看完整参数说明。
 
-## Build notes
+## 构建说明
 
-- All projects target `net10.0`.
-- The GUI is a Windows-only WinForms app.
-- The template mod project depends on the user's local Slay the Spire 2 install for `sts2.dll` and Godot data — see [Sts2PathDiscovery.props](templates/PortraitReplacementTemplate/src/Sts2PathDiscovery.props).
-- For an outline of what should and should not be bundled when shipping the tool to end users, see [docs/DEPENDENCY_BUNDLING.md](docs/DEPENDENCY_BUNDLING.md).
+- 所有项目目标框架为 `net10.0`。
+- GUI 是 Windows 专属的 WinForms 程序。
+- 模板 Mod 工程依赖用户本地安装的 Slay the Spire 2，用于发现 `sts2.dll` 和 Godot 数据，详见 [Sts2PathDiscovery.props](templates/PortraitReplacementTemplate/src/Sts2PathDiscovery.props)。
+- 仓库根的 `nuget.config` 把 `globalPackagesFolder` 指向 `packages/`，模板工程默认走仓库内置 feed。
 
-## Documentation
+### 打离线发布包
 
-- [docs/MOD_GENERATOR_DESIGN.md](docs/MOD_GENERATOR_DESIGN.md) — original generator architecture design (template/generator split).
-- [docs/MULTI_PCK_INTEGRATION_DESIGN.md](docs/MULTI_PCK_INTEGRATION_DESIGN.md) — multi-pack session, merge and conflict-resolution design (now implemented).
-- [docs/OFFICIAL_CARD_INDEX.md](docs/OFFICIAL_CARD_INDEX.md) — notes on the bundled official card index dataset.
-- [docs/DEPENDENCY_BUNDLING.md](docs/DEPENDENCY_BUNDLING.md) — what to include when packaging the tool for distribution.
+`tools/Create-BundledRelease.ps1` 会构建 GUI 与 CLI，并把模板、数据、GDRE、本地 NuGet feed、内置 `dotnet` SDK 与 Godot 一并复制到一个独立的发布目录里，附带 `Start-PortraitModGenerator.cmd` / `Run-PortraitModGeneratorCli.cmd` 启动脚本。需要传入预先准备好的 `dotnet` 与 Godot 目录：
 
-## Repository hygiene
+```powershell
+pwsh tools/Create-BundledRelease.ps1 `
+    -BundledDotnetDir "C:\path\to\dotnet" `
+    -BundledGodotDir  "C:\path\to\godot"
+```
 
-Generated and local-only content is not committed:
+发布目录里会预创建 `cache/`、`artifacts/`、`logs/` 三个工作目录；`Slay the Spire 2` 游戏本体及其安装目录中的 dll、数据文件不会被打包，仍由用户本地安装提供。
+
+## 文档
+
+- [docs/OFFICIAL_CARD_INDEX.md](docs/OFFICIAL_CARD_INDEX.md) — 内置官方卡牌索引数据集的格式与用途说明。
+
+## 仓库整洁规范
+
+下列内容不会被提交：
 
 - `cache/`
 - `artifacts/`
-- `generated/`
-- `bin/`, `obj/`
-- IDE caches
+- `dist/`
+- `bin/`、`obj/`
+- IDE 缓存
 
-The template under [templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) stays clean and minimal — it is the source of truth for what every generated mod looks like.
+[templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) 模板目录保持干净简洁——它定义了所有生成出来的 Mod 长什么样。
