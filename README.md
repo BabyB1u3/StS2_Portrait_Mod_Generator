@@ -1,65 +1,86 @@
 # StS2 Portrait Mod Generator
 
-This repository contains a reusable toolchain for generating new Slay the Spire 2 portrait replacement mods.
+A toolchain for assembling Slay the Spire 2 portrait replacement mods from one or more `.pck` source packages.
 
-## What is in the repo
+The tool imports multiple packs, matches their images against the official card index, lets you resolve cross-pack conflicts in a GUI, and then builds a single integrated mod.
 
-- `templates/PortraitReplacementTemplate/`
-  Clean reusable template for generated mods.
-- `data/official_card_index.json`
-  Pre-generated official release-card index used as baseline matching data.
-- `tools/PortraitModGenerator.Core/`
-  Core library for template-based mod generation.
-- `tools/PortraitModGenerator.Cli/`
-  CLI entry point for import, scan, and generation workflows.
-- `docs/MOD_GENERATOR_DESIGN.md`
-  Detailed design document for the generator architecture.
-- `docs/OFFICIAL_CARD_INDEX.md`
-  Notes about the built-in official card index dataset.
+## Current capabilities
 
-## Current direction
+- Import one or more `.pck` files into the same session (button or drag-and-drop).
+- Per-package GDRE recover, asset scan and mapping analysis against the bundled official card index.
+- Session-level merge: identical `cardId` candidates from different packages form a conflict group.
+- Mapping review window for inspecting, reassigning or discarding individual candidates.
+- Conflict review window for picking the winning source per contested `cardId`.
+- Build window that runs the template generation, copies portraits, writes `card_replacements.json` and invokes `dotnet build` to produce the final mod artifacts.
 
-The long-term goal is:
+## Screenshots
 
-1. Import one or more `.pck` files with GDRETools headless CLI.
-2. Extract and scan image assets.
-3. Normalize names and let the user confirm mappings.
-4. Generate a new mod project from the template.
-5. Fill `card_replacements.json` and copy selected portraits.
-6. Build the generated mod.
+Mapping review (main window), used to inspect per-package candidates, manually reassign cards and discard noise:
 
-## Current status
+![Mapping Review](docs/images/main_window.png)
 
-Already done:
+Conflict review, used to choose one source when several packages provide a portrait for the same `cardId`:
 
-- Extracted a reusable `PortraitReplacementTemplate`.
-- Removed the old reference project after extracting the reusable template pieces it was providing.
-- Added `PortraitModGenerator.Core` with template generation, GDRE recover import, and asset scanning.
-- Added `PortraitModGenerator.Cli` with `generate-template`, `import-pck`, `scan-assets`, and `analyze-mappings`.
-- Added a pre-generated `official_card_index.json` baseline for authoritative card ids.
-- Added deterministic asset-to-card matching against the built-in official card index.
+![Conflict Review](docs/images/conflict_window.png)
 
-Not done yet:
+Build window, used to fill in mod metadata and trigger the final build:
 
-- `card_replacements.json` generation from approved mappings
-- Portrait copying into the generated mod project
-- Candidate mapping review/edit flow
-- Mapping editor UI
-- End-to-end build pipeline for generated mods
+![Build Mod](docs/images/build_window.png)
+
+## Typical workflow
+
+1. Launch [PortraitModGenerator.Gui](tools/PortraitModGenerator.Gui/).
+2. Click **Import PCK** (or drag a `.pck` onto the window) to add packages to the session. Each package is recovered, scanned and analyzed independently.
+3. In the main mapping review window, walk through candidates: confirm auto-matches, manually pick a card for unmatched assets, or mark noise as discarded.
+4. Click **Open Conflicts** to resolve any `cardId` that has multiple candidates across packages. Each conflict group offers a default selection that you can override.
+5. Click **Build Mod**, fill in mod metadata (id, name, author, description) and the artifact output directory, then **Build Mod** to produce the final `.dll` / `.json` / `.pck` set.
+
+## Repository layout
+
+- [templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) — template mod project that the generator instantiates per build.
+- [tools/PortraitModGenerator.Core/](tools/PortraitModGenerator.Core/) — core services: PCK import, asset scan, mapping analysis, merge, conflict resolution, materialization, build.
+- [tools/PortraitModGenerator.Cli/](tools/PortraitModGenerator.Cli/) — CLI entry point for scripting individual stages.
+- [tools/PortraitModGenerator.Gui/](tools/PortraitModGenerator.Gui/) — WinForms UI that wraps the full pipeline.
+- [data/official_card_index.json](data/official_card_index.json) — bundled baseline of authoritative `cardId` values.
+- [gdre/](gdre/) — bundled GDRETools used for `.pck` recovery.
+- [docs/](docs/) — design notes and screenshots.
+
+The GUI persists work under `cache/sessions/<timestamp>_<label>/`, with one subdirectory per imported package and a merged session JSON. Final mod artifacts are written under `artifacts/<ModId>/` by default.
+
+## CLI
+
+The CLI mirrors the underlying pipeline stages, useful for scripting or debugging:
+
+- `generate-template` — instantiate the template into a target directory with `--mod-id` and other metadata tokens.
+- `import-pck` — extract a single `.pck` via GDRETools.
+- `scan-assets` — scan a recovered directory for image assets and emit `asset_scan_result.json`.
+- `analyze-mappings` — match scanned assets against the official card index and emit `mapping_analysis_result.json`.
+- `materialize-mappings` — copy selected portraits and write `card_replacements.json` into a generated mod project.
+
+Run any command with `--help` for argument details.
 
 ## Build notes
 
-The generator core is a standalone tooling project, while the generated mod template is tied to the Slay the Spire 2 / Godot mod environment.
+- All projects target `net10.0`.
+- The GUI is a Windows-only WinForms app.
+- The template mod project depends on the user's local Slay the Spire 2 install for `sts2.dll` and Godot data — see [Sts2PathDiscovery.props](templates/PortraitReplacementTemplate/src/Sts2PathDiscovery.props).
+- For an outline of what should and should not be bundled when shipping the tool to end users, see [docs/DEPENDENCY_BUNDLING.md](docs/DEPENDENCY_BUNDLING.md).
 
-In the current environment, `PortraitModGenerator.Core` targets `net10.0` so it can build with the locally available SDK/reference packs.
+## Documentation
+
+- [docs/MOD_GENERATOR_DESIGN.md](docs/MOD_GENERATOR_DESIGN.md) — original generator architecture design (template/generator split).
+- [docs/MULTI_PCK_INTEGRATION_DESIGN.md](docs/MULTI_PCK_INTEGRATION_DESIGN.md) — multi-pack session, merge and conflict-resolution design (now implemented).
+- [docs/OFFICIAL_CARD_INDEX.md](docs/OFFICIAL_CARD_INDEX.md) — notes on the bundled official card index dataset.
+- [docs/DEPENDENCY_BUNDLING.md](docs/DEPENDENCY_BUNDLING.md) — what to include when packaging the tool for distribution.
 
 ## Repository hygiene
 
-Generated and local-only content should not be committed:
+Generated and local-only content is not committed:
 
-- `.dotnet_cli/`
-- `bin/`
-- `obj/`
+- `cache/`
+- `artifacts/`
+- `generated/`
+- `bin/`, `obj/`
 - IDE caches
 
-The template under `templates/PortraitReplacementTemplate/` is intended to stay clean and minimal.
+The template under [templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) stays clean and minimal — it is the source of truth for what every generated mod looks like.
