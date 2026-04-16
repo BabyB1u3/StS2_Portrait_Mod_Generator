@@ -41,7 +41,6 @@
 - [tools/PortraitModGenerator.Core/](tools/PortraitModGenerator.Core/) — 核心服务：PCK 导入、资源扫描、映射分析、合并、冲突解析、materialize、构建。
 - [tools/PortraitModGenerator.Cli/](tools/PortraitModGenerator.Cli/) — 用于脚本化各阶段的 CLI 入口。
 - [tools/PortraitModGenerator.Gui/](tools/PortraitModGenerator.Gui/) — 串起整套流水线的 WinForms 界面。
-- [tools/Create-BundledRelease.ps1](tools/Create-BundledRelease.ps1) — 把工具、模板、数据、GDRE、`dotnet`、Godot、本地 NuGet feed 一起打包出可分发目录的发布脚本。
 - [data/official_card_index.json](data/official_card_index.json) — 内置的官方 `cardId` 基线。
 - [gdre/](gdre/) — 随仓库分发的 GDRETools，用于 `.pck` recover。
 - [packages/](packages/) — 模板工程构建所需的本地 NuGet feed。
@@ -68,30 +67,8 @@ CLI 暴露了流水线的各个阶段，便于脚本化或调试：
 - 模板 Mod 工程依赖用户本地安装的 Slay the Spire 2，用于发现 `sts2.dll` 和 Godot 数据，详见 [Sts2PathDiscovery.props](templates/PortraitReplacementTemplate/src/Sts2PathDiscovery.props)。
 - 仓库根的 `nuget.config` 把 `globalPackagesFolder` 指向 `packages/`，模板工程默认走仓库内置 feed。
 
-### 打离线发布包
-
-`tools/Create-BundledRelease.ps1` 会构建 GUI 与 CLI，并把模板、数据、GDRE、本地 NuGet feed、内置 `dotnet` SDK 与 Godot 一并复制到一个独立的发布目录里，附带 `Start-PortraitModGenerator.cmd` / `Run-PortraitModGeneratorCli.cmd` 启动脚本。需要传入预先准备好的 `dotnet` 与 Godot 目录：
-
-```powershell
-pwsh tools/Create-BundledRelease.ps1 `
-    -BundledDotnetDir "C:\path\to\dotnet" `
-    -BundledGodotDir  "C:\path\to\godot"
-```
-
 发布目录里会预创建 `cache/`、`artifacts/`、`logs/` 三个工作目录；`Slay the Spire 2` 游戏本体及其安装目录中的 dll、数据文件不会被打包，仍由用户本地安装提供。
 
 ## 文档
 
 - [docs/OFFICIAL_CARD_INDEX.md](docs/OFFICIAL_CARD_INDEX.md) — 内置官方卡牌索引数据集的格式与用途说明。
-
-## 仓库整洁规范
-
-下列内容不会被提交：
-
-- `cache/`
-- `artifacts/`
-- `dist/`
-- `bin/`、`obj/`
-- IDE 缓存
-
-[templates/PortraitReplacementTemplate/](templates/PortraitReplacementTemplate/) 模板目录保持干净简洁——它定义了所有生成出来的 Mod 长什么样。
