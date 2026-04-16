@@ -1,0 +1,45 @@
+{
+  "templateId": "portrait-replacement",
+  "templateName": "Portrait Replacement Template",
+  "templateVersion": "1.0.0",
+  "description": "Template for generating Slay the Spire 2 portrait replacement mods.",
+  "entryProject": "src/__MOD_ID__.csproj",
+  "manifestFile": "src/__MOD_ID__.json",
+  "sourceRoot": "src",
+  "tokens": [
+    "__MOD_ID__",
+    "__MOD_NAME__",
+    "__AUTHOR__",
+    "__DESCRIPTION__",
+    "__VERSION__"
+  ],
+  "renameTokens": [
+    "__MOD_ID__"
+  ],
+  "defaultValues": {
+    "__MOD_NAME__": "__MOD_ID__",
+    "__AUTHOR__": "Unknown Author",
+    "__DESCRIPTION__": "Generated portrait replacement mod",
+    "__VERSION__": "v0.1.0"
+  },
+  "output": {
+    "configPath": "__MOD_ID__/config/card_replacements.json",
+    "portraitRoot": "__MOD_ID__/CardPortraits"
+  },
+  "supportedFields": [
+    "cardId",
+    "portrait",
+    "uiMode",
+    "frame",
+    "frameMaterial",
+    "bannerTexture",
+    "bannerMaterial",
+    "portraitBorder",
+    "portraitBorderMaterial",
+    "ancientTextBg",
+    "textBackgroundMaterial",
+    "energyIcon",
+    "highlight",
+    "highlightMaterial"
+  ]
+}
