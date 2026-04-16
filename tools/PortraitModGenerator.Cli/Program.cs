@@ -45,6 +45,9 @@ try
         case "analyze-mappings":
             RunMappingAnalysis(arguments);
             return 0;
+        case "materialize-mappings":
+            RunMaterializeMappings(arguments);
+            return 0;
         default:
             throw new ArgumentException($"Unknown command '{command}'.");
     }
@@ -145,6 +148,27 @@ static void RunMappingAnalysis(IReadOnlyDictionary<string, string> arguments)
     Console.WriteLine($"MatchedAssets: {result.MatchedAssets}");
     Console.WriteLine($"IgnoredAssets: {result.IgnoredAssets}");
     Console.WriteLine($"OutputJson: {result.OutputJsonPath}");
+}
+
+static void RunMaterializeMappings(IReadOnlyDictionary<string, string> arguments)
+{
+    MappingMaterializer materializer = new();
+    MaterializeMappingsRequest request = new()
+    {
+        MappingAnalysisPath = GetRequired(arguments, "--analysis"),
+        ModProjectRoot = GetRequired(arguments, "--mod-root"),
+        ModId = GetRequired(arguments, "--mod-id")
+    };
+
+    MaterializeMappingsResult result = materializer.Materialize(request);
+
+    Console.WriteLine("Mapping materialization completed.");
+    Console.WriteLine($"Analysis: {result.MappingAnalysisPath}");
+    Console.WriteLine($"ModRoot: {result.ModProjectRoot}");
+    Console.WriteLine($"Config: {result.ConfigPath}");
+    Console.WriteLine($"PortraitRoot: {result.PortraitRoot}");
+    Console.WriteLine($"EntriesWritten: {result.EntriesWritten}");
+    Console.WriteLine($"PortraitsCopied: {result.PortraitsCopied}");
 }
 
 static Dictionary<string, string> ParseArguments(string[] args)
@@ -268,6 +292,21 @@ static void PrintUsage(string? command)
             Console.WriteLine("  --output-json    Explicit output JSON path");
             Console.WriteLine("  --help           Show this help");
             break;
+        case "materialize-mappings":
+            Console.WriteLine("Usage:");
+            Console.WriteLine("  dotnet run --project tools/PortraitModGenerator.Cli -- materialize-mappings \\");
+            Console.WriteLine("    --analysis <mappingAnalysisResult.json> \\");
+            Console.WriteLine("    --mod-root <generatedModRoot> \\");
+            Console.WriteLine("    --mod-id <modId>");
+            Console.WriteLine();
+            Console.WriteLine("Required:");
+            Console.WriteLine("  --analysis       Path to mapping_analysis_result.json");
+            Console.WriteLine("  --mod-root       Path to the generated mod project root");
+            Console.WriteLine("  --mod-id         Mod identifier used in res:// paths");
+            Console.WriteLine();
+            Console.WriteLine("Optional:");
+            Console.WriteLine("  --help           Show this help");
+            break;
         case null:
         case "generate-template":
             Console.WriteLine("Usage:");
@@ -294,10 +333,11 @@ static void PrintUsage(string? command)
             Console.WriteLine("  import-pck          Extract a PCK with GDRETools");
             Console.WriteLine("  scan-assets         Scan a recovered directory for image assets");
             Console.WriteLine("  analyze-mappings    Match scanned assets against the official card index");
+            Console.WriteLine("  materialize-mappings Copy selected portraits and write card_replacements.json");
             break;
         default:
             Console.WriteLine($"Unknown command '{command}'.");
-            Console.WriteLine("Available commands: generate-template, import-pck, scan-assets, analyze-mappings");
+            Console.WriteLine("Available commands: generate-template, import-pck, scan-assets, analyze-mappings, materialize-mappings");
             break;
     }
 }

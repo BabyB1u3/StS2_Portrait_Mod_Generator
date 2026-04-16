@@ -2,6 +2,8 @@ namespace PortraitModGenerator.Core.Abstractions;
 
 public sealed class MappingCandidate
 {
+    public required string SourceAbsolutePath { get; init; }
+
     public required string RelativePath { get; init; }
 
     public required string FileName { get; init; }

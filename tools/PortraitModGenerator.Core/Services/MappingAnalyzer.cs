@@ -50,6 +50,7 @@ public sealed class MappingAnalyzer
             {
                 candidates.Add(new MappingCandidate
                 {
+                    SourceAbsolutePath = asset.AbsolutePath,
                     RelativePath = asset.RelativePath,
                     FileName = asset.FileName,
                     Selected = false,
@@ -118,6 +119,7 @@ public sealed class MappingAnalyzer
 
         return new MappingCandidate
         {
+            SourceAbsolutePath = asset.AbsolutePath,
             RelativePath = asset.RelativePath,
             FileName = asset.FileName,
             Selected = false,
@@ -157,6 +159,7 @@ public sealed class MappingAnalyzer
 
         return new MappingCandidate
         {
+            SourceAbsolutePath = asset.AbsolutePath,
             RelativePath = asset.RelativePath,
             FileName = asset.FileName,
             Selected = false,
@@ -174,6 +177,7 @@ public sealed class MappingAnalyzer
     {
         return new MappingCandidate
         {
+            SourceAbsolutePath = asset.AbsolutePath,
             RelativePath = asset.RelativePath,
             FileName = asset.FileName,
             Selected = true,
