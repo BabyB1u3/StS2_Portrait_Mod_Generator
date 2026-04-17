@@ -123,31 +123,46 @@ internal static class AppPaths
 
     private static string? ResolveBundledGodotExecutablePath()
     {
-        string godotRoot = Path.Combine(ToolsRoot, "godot");
-        if (!Directory.Exists(godotRoot))
-        {
-            return null;
-        }
-
-        string[] preferredCandidates =
+        string[] godotRoots =
         [
-            Path.Combine(godotRoot, "MegaDot_v4.5.1-stable_mono_win64.exe"),
-            Path.Combine(godotRoot, "Godot_v4.5.1-stable_mono_win64.exe"),
-            Path.Combine(godotRoot, "godot.exe")
+            Path.Combine(ToolsRoot, "godot"),
+            Path.Combine(AppRoot, "ReleaseInput", "godot")
         ];
 
-        foreach (string candidate in preferredCandidates)
+        foreach (string godotRoot in godotRoots)
         {
-            if (File.Exists(candidate))
+            if (!Directory.Exists(godotRoot))
             {
-                return candidate;
+                continue;
+            }
+
+            string[] preferredCandidates =
+            [
+                Path.Combine(godotRoot, "MegaDot_v4.5.1-stable_mono_win64.exe"),
+                Path.Combine(godotRoot, "Godot_v4.5.1-stable_mono_win64.exe"),
+                Path.Combine(godotRoot, "godot.exe")
+            ];
+
+            foreach (string candidate in preferredCandidates)
+            {
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            string? fallback = Directory.EnumerateFiles(godotRoot, "*.exe", SearchOption.AllDirectories)
+                .OrderBy(path => GetGodotCandidateOrder(Path.GetFileName(path)))
+                .ThenBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .FirstOrDefault();
+
+            if (fallback is not null)
+            {
+                return fallback;
             }
         }
 
-        return Directory.EnumerateFiles(godotRoot, "*.exe", SearchOption.AllDirectories)
-            .OrderBy(path => GetGodotCandidateOrder(Path.GetFileName(path)))
-            .ThenBy(path => path, StringComparer.OrdinalIgnoreCase)
-            .FirstOrDefault();
+        return null;
     }
 
     private static int GetGodotCandidateOrder(string fileName)

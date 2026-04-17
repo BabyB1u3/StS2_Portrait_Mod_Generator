@@ -9,8 +9,25 @@ public sealed class MappingMaterializer
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        WriteIndented = true
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
+
+    public static IReadOnlyList<string> AdvancedFieldKeys { get; } =
+    [
+        "uiMode",
+        "frame",
+        "frameMaterial",
+        "bannerTexture",
+        "bannerMaterial",
+        "portraitBorder",
+        "portraitBorderMaterial",
+        "ancientTextBg",
+        "textBackgroundMaterial",
+        "energyIcon",
+        "highlight",
+        "highlightMaterial"
+    ];
 
     public MaterializeMappingsResult Materialize(MaterializeMappingsRequest request)
     {
@@ -82,11 +99,13 @@ public sealed class MappingMaterializer
             }
 
             portraitsCopied++;
-            entries.Add(new ReplacementEntry
+            ReplacementEntry entry = new()
             {
                 CardId = mapping.CanonicalName,
                 Portrait = portraitPath!
-            });
+            };
+            ApplyAdvancedFields(entry, mapping.AdvancedFields);
+            entries.Add(entry);
         }
 
         return (entries, portraitsCopied);
@@ -197,6 +216,38 @@ public sealed class MappingMaterializer
         public List<ReplacementEntry> Entries { get; set; } = [];
     }
 
+    private static void ApplyAdvancedFields(ReplacementEntry entry, IReadOnlyDictionary<string, string>? advancedFields)
+    {
+        if (advancedFields is null || advancedFields.Count == 0)
+        {
+            return;
+        }
+
+        foreach ((string key, string value) in advancedFields)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                continue;
+            }
+
+            switch (key)
+            {
+                case "uiMode": entry.UiMode = value; break;
+                case "frame": entry.Frame = value; break;
+                case "frameMaterial": entry.FrameMaterial = value; break;
+                case "bannerTexture": entry.BannerTexture = value; break;
+                case "bannerMaterial": entry.BannerMaterial = value; break;
+                case "portraitBorder": entry.PortraitBorder = value; break;
+                case "portraitBorderMaterial": entry.PortraitBorderMaterial = value; break;
+                case "ancientTextBg": entry.AncientTextBackground = value; break;
+                case "textBackgroundMaterial": entry.TextBackgroundMaterial = value; break;
+                case "energyIcon": entry.EnergyIcon = value; break;
+                case "highlight": entry.Highlight = value; break;
+                case "highlightMaterial": entry.HighlightMaterial = value; break;
+            }
+        }
+    }
+
     private sealed class ReplacementEntry
     {
         [JsonPropertyName("cardId")]
@@ -204,5 +255,41 @@ public sealed class MappingMaterializer
 
         [JsonPropertyName("portrait")]
         public string Portrait { get; set; } = string.Empty;
+
+        [JsonPropertyName("uiMode")]
+        public string? UiMode { get; set; }
+
+        [JsonPropertyName("frame")]
+        public string? Frame { get; set; }
+
+        [JsonPropertyName("frameMaterial")]
+        public string? FrameMaterial { get; set; }
+
+        [JsonPropertyName("bannerTexture")]
+        public string? BannerTexture { get; set; }
+
+        [JsonPropertyName("bannerMaterial")]
+        public string? BannerMaterial { get; set; }
+
+        [JsonPropertyName("portraitBorder")]
+        public string? PortraitBorder { get; set; }
+
+        [JsonPropertyName("portraitBorderMaterial")]
+        public string? PortraitBorderMaterial { get; set; }
+
+        [JsonPropertyName("ancientTextBg")]
+        public string? AncientTextBackground { get; set; }
+
+        [JsonPropertyName("textBackgroundMaterial")]
+        public string? TextBackgroundMaterial { get; set; }
+
+        [JsonPropertyName("energyIcon")]
+        public string? EnergyIcon { get; set; }
+
+        [JsonPropertyName("highlight")]
+        public string? Highlight { get; set; }
+
+        [JsonPropertyName("highlightMaterial")]
+        public string? HighlightMaterial { get; set; }
     }
 }

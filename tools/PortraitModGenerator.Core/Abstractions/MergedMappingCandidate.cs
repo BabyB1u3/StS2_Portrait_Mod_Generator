@@ -33,4 +33,6 @@ public sealed class MergedMappingCandidate
     public bool IsConflict { get; set; }
 
     public bool IsAutoSelected { get; set; }
+
+    public Dictionary<string, string>? AdvancedFields { get; set; }
 }

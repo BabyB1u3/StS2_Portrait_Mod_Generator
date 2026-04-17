@@ -79,7 +79,10 @@ public sealed class ConflictResolutionService
                     SourceAbsolutePath = selected.SourceAbsolutePath,
                     SourceRelativePath = selected.SourceRelativePath,
                     FileName = selected.FileName,
-                    Confidence = selected.Confidence
+                    Confidence = selected.Confidence,
+                    AdvancedFields = selected.AdvancedFields is { Count: > 0 }
+                        ? new Dictionary<string, string>(selected.AdvancedFields, StringComparer.Ordinal)
+                        : null
                 });
             }
         }

@@ -21,4 +21,6 @@ public sealed class ResolvedMapping
     public string FileName { get; set; } = string.Empty;
 
     public double Confidence { get; set; }
+
+    public Dictionary<string, string>? AdvancedFields { get; set; }
 }

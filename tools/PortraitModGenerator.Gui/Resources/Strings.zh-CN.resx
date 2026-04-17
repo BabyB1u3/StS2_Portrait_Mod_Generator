@@ -386,4 +386,55 @@
   <data name="Menu_View_Language" xml:space="preserve">
     <value>语言</value>
   </data>
+  <data name="Button_AdvancedSettings" xml:space="preserve">
+    <value>高级设置...</value>
+  </data>
+  <data name="AdvancedSettingsForm_Title" xml:space="preserve">
+    <value>高级设置 - {0}</value>
+  </data>
+  <data name="AdvancedSettingsForm_Help" xml:space="preserve">
+    <value>字段留空则不写入。填写的内容会原样写入 card_replacements.json。</value>
+  </data>
+  <data name="AdvancedSettingsForm_OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="AdvancedSettingsForm_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AdvField_uiMode" xml:space="preserve">
+    <value>uiMode</value>
+  </data>
+  <data name="AdvField_frame" xml:space="preserve">
+    <value>frame</value>
+  </data>
+  <data name="AdvField_frameMaterial" xml:space="preserve">
+    <value>frameMaterial</value>
+  </data>
+  <data name="AdvField_bannerTexture" xml:space="preserve">
+    <value>bannerTexture</value>
+  </data>
+  <data name="AdvField_bannerMaterial" xml:space="preserve">
+    <value>bannerMaterial</value>
+  </data>
+  <data name="AdvField_portraitBorder" xml:space="preserve">
+    <value>portraitBorder</value>
+  </data>
+  <data name="AdvField_portraitBorderMaterial" xml:space="preserve">
+    <value>portraitBorderMaterial</value>
+  </data>
+  <data name="AdvField_ancientTextBg" xml:space="preserve">
+    <value>ancientTextBg</value>
+  </data>
+  <data name="AdvField_textBackgroundMaterial" xml:space="preserve">
+    <value>textBackgroundMaterial</value>
+  </data>
+  <data name="AdvField_energyIcon" xml:space="preserve">
+    <value>energyIcon</value>
+  </data>
+  <data name="AdvField_highlight" xml:space="preserve">
+    <value>highlight</value>
+  </data>
+  <data name="AdvField_highlightMaterial" xml:space="preserve">
+    <value>highlightMaterial</value>
+  </data>
 </root>

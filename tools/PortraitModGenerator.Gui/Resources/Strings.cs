@@ -133,6 +133,15 @@ internal static class Strings
     public static string Menu_Build_BuildMod => Get();
     public static string Menu_View_Language => Get();
 
+    public static string Button_AdvancedSettings => Get();
+    public static string AdvancedSettingsForm_Title => Get();
+    public static string AdvancedSettingsForm_Help => Get();
+    public static string AdvancedSettingsForm_OK => Get();
+    public static string AdvancedSettingsForm_Cancel => Get();
+
+    public static string GetAdvancedFieldLabel(string key) =>
+        Manager.GetString($"AdvField_{key}", CultureInfo.CurrentUICulture) ?? key;
+
     private static string Get([CallerMemberName] string? key = null) =>
         Manager.GetString(key!, CultureInfo.CurrentUICulture) ?? key!;
 }

@@ -27,6 +27,7 @@ public sealed class MainForm : Form
     private readonly ComboBox _cardComboBox;
     private readonly Label _summaryLabel;
     private readonly Button _updateMappingButton;
+    private readonly Button _advancedSettingsButton;
     private readonly Panel _detailsPanel;
     private readonly Label _groupLabel;
     private readonly Label _manualCardLabel;
@@ -242,7 +243,7 @@ public sealed class MainForm : Form
             Dock = DockStyle.Top,
             AutoSize = true,
             ColumnCount = 1,
-            RowCount = 6
+            RowCount = 7
         };
         _detailsPanel.Controls.Add(detailsContentLayout);
 
@@ -324,9 +325,26 @@ public sealed class MainForm : Form
         _updateMappingButton.Click += (_, _) => ApplyManualCardSelection();
         cardPanel.Controls.Add(_updateMappingButton);
 
+        FlowLayoutPanel advancedPanel = new()
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill
+        };
+        detailsContentLayout.Controls.Add(advancedPanel, 0, 5);
+
+        _advancedSettingsButton = new Button
+        {
+            Text = Strings.Button_AdvancedSettings,
+            AutoSize = true,
+            Enabled = false,
+            Margin = new Padding(0, 3, 3, 3)
+        };
+        _advancedSettingsButton.Click += (_, _) => OpenAdvancedSettings();
+        advancedPanel.Controls.Add(_advancedSettingsButton);
+
         _helpLabel = CreateInfoLabel();
         _helpLabel.Text = Strings.Help_MappingReview;
-        detailsContentLayout.Controls.Add(_helpLabel, 0, 5);
+        detailsContentLayout.Controls.Add(_helpLabel, 0, 6);
 
         _analysisPathLabel.Text = Strings.Help_ImportToBegin;
         _importStatusLabel.Text = string.Format(Strings.Info_GdreCache, AppPaths.GdreToolsPath, AppPaths.CacheRoot);
@@ -401,6 +419,7 @@ public sealed class MainForm : Form
         _openConflictsButton.Text = Strings.Button_OpenConflicts;
         _openBuildModButton.Text = Strings.Button_BuildMod;
         _updateMappingButton.Text = Strings.Button_UpdateMapping;
+        _advancedSettingsButton.Text = Strings.Button_AdvancedSettings;
 
         _searchTextBox.PlaceholderText = Strings.Placeholder_SearchAssets;
 
@@ -457,6 +476,30 @@ public sealed class MainForm : Form
     private void HandleFilterChanged(object? sender, EventArgs e)
     {
         RefreshAssetList();
+    }
+
+    private void OpenAdvancedSettings()
+    {
+        if (_assetListBox.SelectedItem is not MergedMappingCandidate candidate)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+        {
+            return;
+        }
+
+        string cardDisplayName = candidate.CanonicalName ?? candidate.MatchedCardId!;
+        using AdvancedSettingsForm dialog = new(cardDisplayName, candidate.AdvancedFields);
+        if (dialog.ShowDialog(this) != DialogResult.OK)
+        {
+            return;
+        }
+
+        Dictionary<string, string> values = dialog.GetResult();
+        candidate.AdvancedFields = values.Count == 0 ? null : values;
+        SynchronizeSession();
     }
 
     private static Label CreateInfoLabel()
@@ -722,6 +765,9 @@ public sealed class MainForm : Form
         _openConflictsButton.Enabled = enabled && _session is not null && _session.ConflictGroups.Count > 0;
         _openBuildModButton.Enabled = enabled && _session is not null;
         _updateMappingButton.Enabled = enabled && _assetListBox.SelectedItem is MergedMappingCandidate && _cardComboBox.SelectedItem is CardChoice;
+        _advancedSettingsButton.Enabled = enabled
+            && _assetListBox.SelectedItem is MergedMappingCandidate selected
+            && !string.IsNullOrWhiteSpace(selected.MatchedCardId);
     }
 
     private void SetImportBusy(bool busy, string? statusText = null)
@@ -1078,6 +1124,7 @@ public sealed class MainForm : Form
             _groupComboBox.Enabled = candidate is not null;
             _cardComboBox.Enabled = candidate is not null;
             _updateMappingButton.Enabled = false;
+            _advancedSettingsButton.Enabled = candidate is not null && !string.IsNullOrWhiteSpace(candidate.MatchedCardId);
 
             if (candidate is null)
             {
