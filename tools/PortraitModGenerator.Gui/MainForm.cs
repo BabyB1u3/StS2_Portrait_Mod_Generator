@@ -1320,10 +1320,25 @@ public sealed class MainForm : Form
             candidate.Selected = false;
             candidate.IgnoredReason ??= "Discarded during manual review.";
         }
-        else if (candidate.IgnoredReason == "Discarded during manual review.")
+        else
         {
-            candidate.IgnoredReason = null;
-            if (!candidate.IsConflict && !string.IsNullOrWhiteSpace(candidate.MatchedCardId))
+            if (candidate.IgnoredReason == "Discarded during manual review." ||
+                candidate.IgnoredReason == "Discarded in conflicts review.")
+            {
+                candidate.IgnoredReason = null;
+            }
+
+            if (candidate.IsConflict && _session is not null)
+            {
+                foreach (MergedMappingCandidate competitor in _session.Candidates.Where(other =>
+                             !string.Equals(other.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase) &&
+                             string.Equals(other.MatchedCardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase)))
+                {
+                    competitor.Selected = false;
+                }
+                candidate.Selected = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(candidate.MatchedCardId))
             {
                 candidate.Selected = true;
             }
@@ -1376,6 +1391,16 @@ public sealed class MainForm : Form
             !other.Ignored &&
             string.Equals(other.MatchedCardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase));
         candidate.Selected = !createsConflict;
+        if (createsConflict && _session is not null)
+        {
+            foreach (MergedMappingCandidate competitor in _session.Candidates.Where(other =>
+                         !string.Equals(other.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase) &&
+                         !other.Ignored &&
+                         string.Equals(other.MatchedCardId, candidate.MatchedCardId, StringComparison.OrdinalIgnoreCase)))
+            {
+                competitor.Selected = false;
+            }
+        }
         SynchronizeSession();
         _updateMappingButton.Enabled = false;
         RefreshCurrentBindings();

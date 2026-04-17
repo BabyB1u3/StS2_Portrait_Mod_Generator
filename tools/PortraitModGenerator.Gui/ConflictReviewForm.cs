@@ -500,9 +500,21 @@ internal sealed class ConflictReviewForm : Form
         foreach (MergedMappingCandidate groupCandidate in _session.Candidates.Where(item =>
                      string.Equals(item.MatchedCardId, group.CardId, StringComparison.OrdinalIgnoreCase)))
         {
-            groupCandidate.Selected = isChecked &&
-                                      string.Equals(groupCandidate.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase);
-            if (groupCandidate.Selected)
+            bool isWinner = isChecked &&
+                            string.Equals(groupCandidate.CandidateId, candidate.CandidateId, StringComparison.OrdinalIgnoreCase);
+            groupCandidate.Selected = isWinner;
+
+            if (isWinner)
+            {
+                groupCandidate.Ignored = false;
+                groupCandidate.IgnoredReason = null;
+            }
+            else if (isChecked)
+            {
+                groupCandidate.Ignored = true;
+                groupCandidate.IgnoredReason = "Discarded in conflicts review.";
+            }
+            else if (string.Equals(groupCandidate.IgnoredReason, "Discarded in conflicts review.", StringComparison.Ordinal))
             {
                 groupCandidate.Ignored = false;
                 groupCandidate.IgnoredReason = null;
