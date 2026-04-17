@@ -1,2885 +1,3080 @@
-{
-    "version":  "sts2-official-card-index-v1",
-    "cards":  [
-                  {
-                      "cardId":  "alchemize",
-                      "canonicalName":  "Alchemize",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "anointed",
-                      "canonicalName":  "Anointed",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "automation",
-                      "canonicalName":  "Automation",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "bandage_up",
-                      "canonicalName":  "BandageUp",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "beacon_of_hope",
-                      "canonicalName":  "BeaconOfHope",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "beat_down",
-                      "canonicalName":  "BeatDown",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "believe_in_you",
-                      "canonicalName":  "BelieveInYou",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "beta",
-                      "canonicalName":  "Beta",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "bite",
-                      "canonicalName":  "Bite",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "bolas",
-                      "canonicalName":  "Bolas",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "calamity",
-                      "canonicalName":  "Calamity",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "calm",
-                      "canonicalName":  "Calm",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "catastrophe",
-                      "canonicalName":  "Catastrophe",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "coordinate",
-                      "canonicalName":  "Coordinate",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "dark_shackles",
-                      "canonicalName":  "DarkShackles",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "deep_breath",
-                      "canonicalName":  "DeepBreath",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "discovery",
-                      "canonicalName":  "Discovery",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "dramatic_entrance",
-                      "canonicalName":  "DramaticEntrance",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "entropy",
-                      "canonicalName":  "Entropy",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "equilibrium",
-                      "canonicalName":  "Equilibrium",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "eternal_armor",
-                      "canonicalName":  "EternalArmor",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "expunger",
-                      "canonicalName":  "Expunger",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "fame_and_fortune",
-                      "canonicalName":  "FameAndFortune",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "fasten",
-                      "canonicalName":  "Fasten",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "finesse",
-                      "canonicalName":  "Finesse",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "fisticuffs",
-                      "canonicalName":  "Fisticuffs",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "flash_of_steel",
-                      "canonicalName":  "FlashOfSteel",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "forethought",
-                      "canonicalName":  "Forethought",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "gold_axe",
-                      "canonicalName":  "GoldAxe",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "golden_axe",
-                      "canonicalName":  "GoldenAxe",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "hand_of_greed",
-                      "canonicalName":  "HandOfGreed",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "hidden_gem",
-                      "canonicalName":  "HiddenGem",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "huddle_up",
-                      "canonicalName":  "HuddleUp",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "impatience",
-                      "canonicalName":  "Impatience",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "insight",
-                      "canonicalName":  "Insight",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "intercept",
-                      "canonicalName":  "Intercept",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "jack_of_all_trades",
-                      "canonicalName":  "JackOfAllTrades",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "jackpot",
-                      "canonicalName":  "Jackpot",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "jax",
-                      "canonicalName":  "Jax",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "master_of_strategy",
-                      "canonicalName":  "MasterOfStrategy",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "mayhem",
-                      "canonicalName":  "Mayhem",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "mimic",
-                      "canonicalName":  "Mimic",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "mind_blast",
-                      "canonicalName":  "MindBlast",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "nostalgia",
-                      "canonicalName":  "Nostalgia",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "omnislice",
-                      "canonicalName":  "Omnislice",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "panache",
-                      "canonicalName":  "Panache",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "panic_button",
-                      "canonicalName":  "PanicButton",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "prep_time",
-                      "canonicalName":  "PrepTime",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "production",
-                      "canonicalName":  "Production",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "prolong",
-                      "canonicalName":  "Prolong",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "prowess",
-                      "canonicalName":  "Prowess",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "purity",
-                      "canonicalName":  "Purity",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "rally",
-                      "canonicalName":  "Rally",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "rend",
-                      "canonicalName":  "Rend",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "restlessness",
-                      "canonicalName":  "Restlessness",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "ritual_dagger",
-                      "canonicalName":  "RitualDagger",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "rolling_boulder",
-                      "canonicalName":  "RollingBoulder",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "safety",
-                      "canonicalName":  "Safety",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "salvo",
-                      "canonicalName":  "Salvo",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "scrawl",
-                      "canonicalName":  "Scrawl",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "secret_technique",
-                      "canonicalName":  "SecretTechnique",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "secret_weapon",
-                      "canonicalName":  "SecretWeapon",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "shockwave",
-                      "canonicalName":  "Shockwave",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "smite",
-                      "canonicalName":  "Smite",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "splash",
-                      "canonicalName":  "Splash",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "stratagem",
-                      "canonicalName":  "Stratagem",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "tag_team",
-                      "canonicalName":  "TagTeam",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "the_bomb",
-                      "canonicalName":  "TheBomb",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "the_gambit",
-                      "canonicalName":  "TheGambit",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "thinking_ahead",
-                      "canonicalName":  "ThinkingAhead",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "through_violence",
-                      "canonicalName":  "ThroughViolence",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "thrumming_hatchet",
-                      "canonicalName":  "ThrummingHatchet",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "transmutation",
-                      "canonicalName":  "Transmutation",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "trip",
-                      "canonicalName":  "Trip",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "ultimate_defend",
-                      "canonicalName":  "UltimateDefend",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "ultimate_strike",
-                      "canonicalName":  "UltimateStrike",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "violence",
-                      "canonicalName":  "Violence",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "wrath",
-                      "canonicalName":  "Wrath",
-                      "group":  "colorless"
-                  },
-                  {
-                      "cardId":  "ascenders_bane",
-                      "canonicalName":  "AscendersBane",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "clumsy",
-                      "canonicalName":  "Clumsy",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "curse_of_the_bell",
-                      "canonicalName":  "CurseOfTheBell",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "debt",
-                      "canonicalName":  "Debt",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "decay",
-                      "canonicalName":  "Decay",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "doubt",
-                      "canonicalName":  "Doubt",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "enthralled",
-                      "canonicalName":  "Enthralled",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "folly",
-                      "canonicalName":  "Folly",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "greed",
-                      "canonicalName":  "Greed",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "guilty",
-                      "canonicalName":  "Guilty",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "injury",
-                      "canonicalName":  "Injury",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "normality",
-                      "canonicalName":  "Normality",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "poor_sleep",
-                      "canonicalName":  "PoorSleep",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "regret",
-                      "canonicalName":  "Regret",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "shame",
-                      "canonicalName":  "Shame",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "spore_mind",
-                      "canonicalName":  "SporeMind",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "writhe",
-                      "canonicalName":  "Writhe",
-                      "group":  "curse"
-                  },
-                  {
-                      "cardId":  "all_for_one",
-                      "canonicalName":  "AllForOne",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "ball_lightning",
-                      "canonicalName":  "BallLightning",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "barrage",
-                      "canonicalName":  "Barrage",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "beam_cell",
-                      "canonicalName":  "BeamCell",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "biased_cognition",
-                      "canonicalName":  "BiasedCognition",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "boost_away",
-                      "canonicalName":  "BoostAway",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "boot_sequence",
-                      "canonicalName":  "BootSequence",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "buffer",
-                      "canonicalName":  "Buffer",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "bulk_up",
-                      "canonicalName":  "BulkUp",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "capacitor",
-                      "canonicalName":  "Capacitor",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "chaos",
-                      "canonicalName":  "Chaos",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "charge_battery",
-                      "canonicalName":  "ChargeBattery",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "chill",
-                      "canonicalName":  "Chill",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "claw",
-                      "canonicalName":  "Claw",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "cold_snap",
-                      "canonicalName":  "ColdSnap",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "compile_driver",
-                      "canonicalName":  "CompileDriver",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "consume",
-                      "canonicalName":  "Consume",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "coolant",
-                      "canonicalName":  "Coolant",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "coolheaded",
-                      "canonicalName":  "Coolheaded",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "creative_ai",
-                      "canonicalName":  "CreativeAi",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "darkness",
-                      "canonicalName":  "Darkness",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "defend_defect",
-                      "canonicalName":  "DefendDefect",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "defragment",
-                      "canonicalName":  "Defragment",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "double_energy",
-                      "canonicalName":  "DoubleEnergy",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "dualcast",
-                      "canonicalName":  "Dualcast",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "echo_form",
-                      "canonicalName":  "EchoForm",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "energy_surge",
-                      "canonicalName":  "EnergySurge",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "fission",
-                      "canonicalName":  "Fission",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "flak_cannon",
-                      "canonicalName":  "FlakCannon",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "focused_strike",
-                      "canonicalName":  "FocusedStrike",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "ftl",
-                      "canonicalName":  "Ftl",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "fusion",
-                      "canonicalName":  "Fusion",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "genetic_algorithm",
-                      "canonicalName":  "GeneticAlgorithm",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "glacier",
-                      "canonicalName":  "Glacier",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "glasswork",
-                      "canonicalName":  "Glasswork",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "go_for_the_eyes",
-                      "canonicalName":  "GoForTheEyes",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "gunk_up",
-                      "canonicalName":  "GunkUp",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "helix_drill",
-                      "canonicalName":  "HelixDrill",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "hologram",
-                      "canonicalName":  "Hologram",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "hyperbeam",
-                      "canonicalName":  "Hyperbeam",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "ice_lance",
-                      "canonicalName":  "IceLance",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "ignition",
-                      "canonicalName":  "Ignition",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "leap",
-                      "canonicalName":  "Leap",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "lightning_mastery",
-                      "canonicalName":  "LightningMastery",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "lightning_rod",
-                      "canonicalName":  "LightningRod",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "lock_on",
-                      "canonicalName":  "LockOn",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "loop",
-                      "canonicalName":  "Loop",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "machine_learning",
-                      "canonicalName":  "MachineLearning",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "meteor_strike",
-                      "canonicalName":  "MeteorStrike",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "momentum_strike",
-                      "canonicalName":  "MomentumStrike",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "multi_cast",
-                      "canonicalName":  "MultiCast",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "null",
-                      "canonicalName":  "Null",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "overclock",
-                      "canonicalName":  "Overclock",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "quadcast",
-                      "canonicalName":  "Quadcast",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "rainbow",
-                      "canonicalName":  "Rainbow",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "reboot",
-                      "canonicalName":  "Reboot",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "refract",
-                      "canonicalName":  "Refract",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "rocket_punch",
-                      "canonicalName":  "RocketPunch",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "scavenge",
-                      "canonicalName":  "Scavenge",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "scrape",
-                      "canonicalName":  "Scrape",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "seek",
-                      "canonicalName":  "Seek",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "self_repair",
-                      "canonicalName":  "SelfRepair",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "signal_boost",
-                      "canonicalName":  "SignalBoost",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "skim",
-                      "canonicalName":  "Skim",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "storm",
-                      "canonicalName":  "Storm",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "strike_defect",
-                      "canonicalName":  "StrikeDefect",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "sunder",
-                      "canonicalName":  "Sunder",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "supercritical",
-                      "canonicalName":  "Supercritical",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "sweeping_beam",
-                      "canonicalName":  "SweepingBeam",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "tempest",
-                      "canonicalName":  "Tempest",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "tesla_coil",
-                      "canonicalName":  "TeslaCoil",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "thunder",
-                      "canonicalName":  "Thunder",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "thunder_strike",
-                      "canonicalName":  "ThunderStrike",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "turbo",
-                      "canonicalName":  "Turbo",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "uproar",
-                      "canonicalName":  "Uproar",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "white_noise",
-                      "canonicalName":  "WhiteNoise",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "zap",
-                      "canonicalName":  "Zap",
-                      "group":  "defect"
-                  },
-                  {
-                      "cardId":  "apotheosis",
-                      "canonicalName":  "Apotheosis",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "brightest_flame",
-                      "canonicalName":  "BrightestFlame",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "byrd_swoop",
-                      "canonicalName":  "ByrdSwoop",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "caltrops",
-                      "canonicalName":  "Caltrops",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "enlightenment",
-                      "canonicalName":  "Enlightenment",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "exterminate",
-                      "canonicalName":  "Exterminate",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "feeding_frenzy",
-                      "canonicalName":  "FeedingFrenzy",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "hello_world",
-                      "canonicalName":  "HelloWorld",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "mad_science_attack",
-                      "canonicalName":  "MadScienceAttack",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "mad_science_power",
-                      "canonicalName":  "MadSciencePower",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "mad_science_skill",
-                      "canonicalName":  "MadScienceSkill",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "maul",
-                      "canonicalName":  "Maul",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "metamorphosis",
-                      "canonicalName":  "Metamorphosis",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "neows_fury",
-                      "canonicalName":  "NeowsFury",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "peck",
-                      "canonicalName":  "Peck",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "relax",
-                      "canonicalName":  "Relax",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "rip_and_tear",
-                      "canonicalName":  "RipAndTear",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "squash",
-                      "canonicalName":  "Squash",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "toric_toughness",
-                      "canonicalName":  "ToricToughness",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "whistle",
-                      "canonicalName":  "Whistle",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "wish",
-                      "canonicalName":  "Wish",
-                      "group":  "event"
-                  },
-                  {
-                      "cardId":  "aggression",
-                      "canonicalName":  "Aggression",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "anger",
-                      "canonicalName":  "Anger",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "armaments",
-                      "canonicalName":  "Armaments",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "ashen_strike",
-                      "canonicalName":  "AshenStrike",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "barricade",
-                      "canonicalName":  "Barricade",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "bash",
-                      "canonicalName":  "Bash",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "battle_trance",
-                      "canonicalName":  "BattleTrance",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "blood_wall",
-                      "canonicalName":  "BloodWall",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "bloodletting",
-                      "canonicalName":  "Bloodletting",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "bludgeon",
-                      "canonicalName":  "Bludgeon",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "body_slam",
-                      "canonicalName":  "BodySlam",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "brand",
-                      "canonicalName":  "Brand",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "break",
-                      "canonicalName":  "Break",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "breakthrough",
-                      "canonicalName":  "Breakthrough",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "bully",
-                      "canonicalName":  "Bully",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "burning_pact",
-                      "canonicalName":  "BurningPact",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "cascade",
-                      "canonicalName":  "Cascade",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "cinder",
-                      "canonicalName":  "Cinder",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "colossus",
-                      "canonicalName":  "Colossus",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "conflagration",
-                      "canonicalName":  "Conflagration",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "corruption",
-                      "canonicalName":  "Corruption",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "crimson_mantle",
-                      "canonicalName":  "CrimsonMantle",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "cruelty",
-                      "canonicalName":  "Cruelty",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "dark_embrace",
-                      "canonicalName":  "DarkEmbrace",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "defend_ironclad",
-                      "canonicalName":  "DefendIronclad",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "demon_form",
-                      "canonicalName":  "DemonForm",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "demonic_shield",
-                      "canonicalName":  "DemonicShield",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "dismantle",
-                      "canonicalName":  "Dismantle",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "dominate",
-                      "canonicalName":  "Dominate",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "drum_of_battle",
-                      "canonicalName":  "DrumOfBattle",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "evil_eye",
-                      "canonicalName":  "EvilEye",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "expect_a_fight",
-                      "canonicalName":  "ExpectAFight",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "feed",
-                      "canonicalName":  "Feed",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "feel_no_pain",
-                      "canonicalName":  "FeelNoPain",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "fiend_fire",
-                      "canonicalName":  "FiendFire",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "fight_me",
-                      "canonicalName":  "FightMe",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "flame_barrier",
-                      "canonicalName":  "FlameBarrier",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "forgotten_ritual",
-                      "canonicalName":  "ForgottenRitual",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "grapple",
-                      "canonicalName":  "Grapple",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "havoc",
-                      "canonicalName":  "Havoc",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "headbutt",
-                      "canonicalName":  "Headbutt",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "hellraiser",
-                      "canonicalName":  "Hellraiser",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "hemokinesis",
-                      "canonicalName":  "Hemokinesis",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "howl_from_beyond",
-                      "canonicalName":  "HowlFromBeyond",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "impervious",
-                      "canonicalName":  "Impervious",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "infernal_blade",
-                      "canonicalName":  "InfernalBlade",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "inferno",
-                      "canonicalName":  "Inferno",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "inflame",
-                      "canonicalName":  "Inflame",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "iron_wave",
-                      "canonicalName":  "IronWave",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "juggernaut",
-                      "canonicalName":  "Juggernaut",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "juggling",
-                      "canonicalName":  "Juggling",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "limit_break",
-                      "canonicalName":  "LimitBreak",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "mangle",
-                      "canonicalName":  "Mangle",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "molten_fist",
-                      "canonicalName":  "MoltenFist",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "offering",
-                      "canonicalName":  "Offering",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "one_two_punch",
-                      "canonicalName":  "OneTwoPunch",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "pacts_end",
-                      "canonicalName":  "PactsEnd",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "perfected_strike",
-                      "canonicalName":  "PerfectedStrike",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "pillage",
-                      "canonicalName":  "Pillage",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "pommel_strike",
-                      "canonicalName":  "PommelStrike",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "primal_force",
-                      "canonicalName":  "PrimalForce",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "pyre",
-                      "canonicalName":  "Pyre",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "rage",
-                      "canonicalName":  "Rage",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "rampage",
-                      "canonicalName":  "Rampage",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "rupture",
-                      "canonicalName":  "Rupture",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "second_wind",
-                      "canonicalName":  "SecondWind",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "setup_strike",
-                      "canonicalName":  "SetupStrike",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "shrug_it_off",
-                      "canonicalName":  "ShrugItOff",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "stampede",
-                      "canonicalName":  "Stampede",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "stoke",
-                      "canonicalName":  "Stoke",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "stomp",
-                      "canonicalName":  "Stomp",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "stone_armor",
-                      "canonicalName":  "StoneArmor",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "strike_ironclad",
-                      "canonicalName":  "StrikeIronclad",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "sword_boomerang",
-                      "canonicalName":  "SwordBoomerang",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "tank",
-                      "canonicalName":  "Tank",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "taunt",
-                      "canonicalName":  "Taunt",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "tear_asunder",
-                      "canonicalName":  "TearAsunder",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "thrash",
-                      "canonicalName":  "Thrash",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "thunderclap",
-                      "canonicalName":  "Thunderclap",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "tremble",
-                      "canonicalName":  "Tremble",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "true_grit",
-                      "canonicalName":  "TrueGrit",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "twin_strike",
-                      "canonicalName":  "TwinStrike",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "unmovable",
-                      "canonicalName":  "Unmovable",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "unrelenting",
-                      "canonicalName":  "Unrelenting",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "uppercut",
-                      "canonicalName":  "Uppercut",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "vicious",
-                      "canonicalName":  "Vicious",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "whirlwind",
-                      "canonicalName":  "Whirlwind",
-                      "group":  "ironclad"
-                  },
-                  {
-                      "cardId":  "afterlife",
-                      "canonicalName":  "Afterlife",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "banshees_cry",
-                      "canonicalName":  "BansheesCry",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "blight_strike",
-                      "canonicalName":  "BlightStrike",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "bodyguard",
-                      "canonicalName":  "Bodyguard",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "bone_shards",
-                      "canonicalName":  "BoneShards",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "borrowed_time",
-                      "canonicalName":  "BorrowedTime",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "bury",
-                      "canonicalName":  "Bury",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "calcify",
-                      "canonicalName":  "Calcify",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "call_of_the_void",
-                      "canonicalName":  "CallOfTheVoid",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "capture_spirit",
-                      "canonicalName":  "CaptureSpirit",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "cleanse",
-                      "canonicalName":  "Cleanse",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "countdown",
-                      "canonicalName":  "Countdown",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "danse_macabre",
-                      "canonicalName":  "DanseMacabre",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "death_march",
-                      "canonicalName":  "DeathMarch",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "deathbringer",
-                      "canonicalName":  "Deathbringer",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "deaths_door",
-                      "canonicalName":  "DeathsDoor",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "debilitate",
-                      "canonicalName":  "Debilitate",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "defend_necrobinder",
-                      "canonicalName":  "DefendNecrobinder",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "defile",
-                      "canonicalName":  "Defile",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "defy",
-                      "canonicalName":  "Defy",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "delay",
-                      "canonicalName":  "Delay",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "demesne",
-                      "canonicalName":  "Demesne",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "devour_life",
-                      "canonicalName":  "DevourLife",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "dirge",
-                      "canonicalName":  "Dirge",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "drain_power",
-                      "canonicalName":  "DrainPower",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "dredge",
-                      "canonicalName":  "Dredge",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "eidolon",
-                      "canonicalName":  "Eidolon",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "end_of_days",
-                      "canonicalName":  "EndOfDays",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "enfeebling_touch",
-                      "canonicalName":  "EnfeeblingTouch",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "eradicate",
-                      "canonicalName":  "Eradicate",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "fear",
-                      "canonicalName":  "Fear",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "fetch",
-                      "canonicalName":  "Fetch",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "flatten",
-                      "canonicalName":  "Flatten",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "forbidden_grimoire",
-                      "canonicalName":  "ForbiddenGrimoire",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "friendship",
-                      "canonicalName":  "Friendship",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "glimpse_beyond",
-                      "canonicalName":  "GlimpseBeyond",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "grave_warden",
-                      "canonicalName":  "GraveWarden",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "graveblast",
-                      "canonicalName":  "Graveblast",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "hang",
-                      "canonicalName":  "Hang",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "haunt",
-                      "canonicalName":  "Haunt",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "high_five",
-                      "canonicalName":  "HighFive",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "invoke",
-                      "canonicalName":  "Invoke",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "legion_of_bone",
-                      "canonicalName":  "LegionOfBone",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "lethality",
-                      "canonicalName":  "Lethality",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "melancholy",
-                      "canonicalName":  "Melancholy",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "misery",
-                      "canonicalName":  "Misery",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "necro_mastery",
-                      "canonicalName":  "NecroMastery",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "negative_pulse",
-                      "canonicalName":  "NegativePulse",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "neurosurge",
-                      "canonicalName":  "Neurosurge",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "no_escape",
-                      "canonicalName":  "NoEscape",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "oblivion",
-                      "canonicalName":  "Oblivion",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "pagestorm",
-                      "canonicalName":  "Pagestorm",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "parse",
-                      "canonicalName":  "Parse",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "poke",
-                      "canonicalName":  "Poke",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "protector",
-                      "canonicalName":  "Protector",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "pull_aggro",
-                      "canonicalName":  "PullAggro",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "pull_from_below",
-                      "canonicalName":  "PullFromBelow",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "putrefy",
-                      "canonicalName":  "Putrefy",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "rabid",
-                      "canonicalName":  "Rabid",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "rattle",
-                      "canonicalName":  "Rattle",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "reanimate",
-                      "canonicalName":  "Reanimate",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "reap",
-                      "canonicalName":  "Reap",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "reaper_form",
-                      "canonicalName":  "ReaperForm",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "reave",
-                      "canonicalName":  "Reave",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "right_hand_hand",
-                      "canonicalName":  "RightHandHand",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sacrifice",
-                      "canonicalName":  "Sacrifice",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "scavenge",
-                      "canonicalName":  "Scavenge",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "scourge",
-                      "canonicalName":  "Scourge",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sculpting_strike",
-                      "canonicalName":  "SculptingStrike",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "seance",
-                      "canonicalName":  "Seance",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sentry_mode",
-                      "canonicalName":  "SentryMode",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "severance",
-                      "canonicalName":  "Severance",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "shared_fate",
-                      "canonicalName":  "SharedFate",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "shroud",
-                      "canonicalName":  "Shroud",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sic_em",
-                      "canonicalName":  "SicEm",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sleight_of_flesh",
-                      "canonicalName":  "SleightOfFlesh",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "snap",
-                      "canonicalName":  "Snap",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "soul_storm",
-                      "canonicalName":  "SoulStorm",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "sow",
-                      "canonicalName":  "Sow",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "spirit_of_ash",
-                      "canonicalName":  "SpiritOfAsh",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "spur",
-                      "canonicalName":  "Spur",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "squeeze",
-                      "canonicalName":  "Squeeze",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "strike_necrobinder",
-                      "canonicalName":  "StrikeNecrobinder",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "the_scythe",
-                      "canonicalName":  "TheScythe",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "times_up",
-                      "canonicalName":  "TimesUp",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "transfigure",
-                      "canonicalName":  "Transfigure",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "undeath",
-                      "canonicalName":  "Undeath",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "unleash",
-                      "canonicalName":  "Unleash",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "veilpiercer",
-                      "canonicalName":  "Veilpiercer",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "wisp",
-                      "canonicalName":  "Wisp",
-                      "group":  "necrobinder"
-                  },
-                  {
-                      "cardId":  "byrdonis_egg",
-                      "canonicalName":  "ByrdonisEgg",
-                      "group":  "quest"
-                  },
-                  {
-                      "cardId":  "lantern_key",
-                      "canonicalName":  "LanternKey",
-                      "group":  "quest"
-                  },
-                  {
-                      "cardId":  "spoils_map",
-                      "canonicalName":  "SpoilsMap",
-                      "group":  "quest"
-                  },
-                  {
-                      "cardId":  "alignment",
-                      "canonicalName":  "Alignment",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "arsenal",
-                      "canonicalName":  "Arsenal",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "astral_pulse",
-                      "canonicalName":  "AstralPulse",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "beat_into_shape",
-                      "canonicalName":  "BeatIntoShape",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "begone",
-                      "canonicalName":  "Begone",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "big_bang",
-                      "canonicalName":  "BigBang",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "black_hole",
-                      "canonicalName":  "BlackHole",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "bombardment",
-                      "canonicalName":  "Bombardment",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "bulwark",
-                      "canonicalName":  "Bulwark",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "bundle_of_joy",
-                      "canonicalName":  "BundleOfJoy",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "celestial_might",
-                      "canonicalName":  "CelestialMight",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "charge",
-                      "canonicalName":  "Charge",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "child_of_the_stars",
-                      "canonicalName":  "ChildOfTheStars",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "cloak_of_stars",
-                      "canonicalName":  "CloakOfStars",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "collision_course",
-                      "canonicalName":  "CollisionCourse",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "comet",
-                      "canonicalName":  "Comet",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "conqueror",
-                      "canonicalName":  "Conqueror",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "convergence",
-                      "canonicalName":  "Convergence",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "cosmic_indifference",
-                      "canonicalName":  "CosmicIndifference",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "crash_landing",
-                      "canonicalName":  "CrashLanding",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "crescent_spear",
-                      "canonicalName":  "CrescentSpear",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "crush_under",
-                      "canonicalName":  "CrushUnder",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "decisions_decisions",
-                      "canonicalName":  "DecisionsDecisions",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "defend_regent",
-                      "canonicalName":  "DefendRegent",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "devastate",
-                      "canonicalName":  "Devastate",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "dying_star",
-                      "canonicalName":  "DyingStar",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "falling_star",
-                      "canonicalName":  "FallingStar",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "foregone_conclusion",
-                      "canonicalName":  "ForegoneConclusion",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "furnace",
-                      "canonicalName":  "Furnace",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "gamma_blast",
-                      "canonicalName":  "GammaBlast",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "gather_light",
-                      "canonicalName":  "GatherLight",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "genesis",
-                      "canonicalName":  "Genesis",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "glimmer",
-                      "canonicalName":  "Glimmer",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "glitterstream",
-                      "canonicalName":  "Glitterstream",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "glow",
-                      "canonicalName":  "Glow",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "guards",
-                      "canonicalName":  "Guards",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "guiding_star",
-                      "canonicalName":  "GuidingStar",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "hammer_time",
-                      "canonicalName":  "HammerTime",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "heavenly_drill",
-                      "canonicalName":  "HeavenlyDrill",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "hegemony",
-                      "canonicalName":  "Hegemony",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "heirloom_hammer",
-                      "canonicalName":  "HeirloomHammer",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "hidden_cache",
-                      "canonicalName":  "HiddenCache",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "i_am_invincible",
-                      "canonicalName":  "IAmInvincible",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "kingly_kick",
-                      "canonicalName":  "KinglyKick",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "kingly_punch",
-                      "canonicalName":  "KinglyPunch",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "knockout_blow",
-                      "canonicalName":  "KnockoutBlow",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "know_thy_place",
-                      "canonicalName":  "KnowThyPlace",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "largesse",
-                      "canonicalName":  "Largesse",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "lunar_blast",
-                      "canonicalName":  "LunarBlast",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "make_it_so",
-                      "canonicalName":  "MakeItSo",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "manifest_authority",
-                      "canonicalName":  "ManifestAuthority",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "meteor_shower",
-                      "canonicalName":  "MeteorShower",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "monarchs_gaze",
-                      "canonicalName":  "MonarchsGaze",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "monologue",
-                      "canonicalName":  "Monologue",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "neutron_aegis",
-                      "canonicalName":  "NeutronAegis",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "orbit",
-                      "canonicalName":  "Orbit",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "pale_blue_dot",
-                      "canonicalName":  "PaleBlueDot",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "parry",
-                      "canonicalName":  "Parry",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "particle_wall",
-                      "canonicalName":  "ParticleWall",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "patter",
-                      "canonicalName":  "Patter",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "photon_cut",
-                      "canonicalName":  "PhotonCut",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "pillar_of_creation",
-                      "canonicalName":  "PillarOfCreation",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "prophesize",
-                      "canonicalName":  "Prophesize",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "quasar",
-                      "canonicalName":  "Quasar",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "radiate",
-                      "canonicalName":  "Radiate",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "refine_blade",
-                      "canonicalName":  "RefineBlade",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "reflect",
-                      "canonicalName":  "Reflect",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "reserves",
-                      "canonicalName":  "Reserves",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "resonance",
-                      "canonicalName":  "Resonance",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "royal_corona",
-                      "canonicalName":  "RoyalCorona",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "royal_gamble",
-                      "canonicalName":  "RoyalGamble",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "royalties",
-                      "canonicalName":  "Royalties",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "seeking_edge",
-                      "canonicalName":  "SeekingEdge",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "seven_stars",
-                      "canonicalName":  "SevenStars",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "shining_strike",
-                      "canonicalName":  "ShiningStrike",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "solar_strike",
-                      "canonicalName":  "SolarStrike",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "spectrum_shift",
-                      "canonicalName":  "SpectrumShift",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "spoils_of_battle",
-                      "canonicalName":  "SpoilsOfBattle",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "stardust",
-                      "canonicalName":  "Stardust",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "strike_regent",
-                      "canonicalName":  "StrikeRegent",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "summon_forth",
-                      "canonicalName":  "SummonForth",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "supermassive",
-                      "canonicalName":  "Supermassive",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "sword_sage",
-                      "canonicalName":  "SwordSage",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "terraforming",
-                      "canonicalName":  "Terraforming",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "the_sealed_throne",
-                      "canonicalName":  "TheSealedThrone",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "the_smith",
-                      "canonicalName":  "TheSmith",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "tyranny",
-                      "canonicalName":  "Tyranny",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "venerate",
-                      "canonicalName":  "Venerate",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "void_form",
-                      "canonicalName":  "VoidForm",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "wrought_in_war",
-                      "canonicalName":  "WroughtInWar",
-                      "group":  "regent"
-                  },
-                  {
-                      "cardId":  "accelerant",
-                      "canonicalName":  "Accelerant",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "accuracy",
-                      "canonicalName":  "Accuracy",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "acrobatics",
-                      "canonicalName":  "Acrobatics",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "adrenaline",
-                      "canonicalName":  "Adrenaline",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "afterimage",
-                      "canonicalName":  "Afterimage",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "anticipate",
-                      "canonicalName":  "Anticipate",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "assassinate",
-                      "canonicalName":  "Assassinate",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "backflip",
-                      "canonicalName":  "Backflip",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "backstab",
-                      "canonicalName":  "Backstab",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "blackened_blade",
-                      "canonicalName":  "BlackenedBlade",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "blade_dance",
-                      "canonicalName":  "BladeDance",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "blade_of_ink",
-                      "canonicalName":  "BladeOfInk",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "blur",
-                      "canonicalName":  "Blur",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "bouncing_flask",
-                      "canonicalName":  "BouncingFlask",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "bubble_bubble",
-                      "canonicalName":  "BubbleBubble",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "bullet_time",
-                      "canonicalName":  "BulletTime",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "burst",
-                      "canonicalName":  "Burst",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "calculated_gamble",
-                      "canonicalName":  "CalculatedGamble",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "cloak_and_dagger",
-                      "canonicalName":  "CloakAndDagger",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "corpse_explosion",
-                      "canonicalName":  "CorpseExplosion",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "corrosive_wave",
-                      "canonicalName":  "CorrosiveWave",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "dagger_spray",
-                      "canonicalName":  "DaggerSpray",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "dagger_throw",
-                      "canonicalName":  "DaggerThrow",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "dash",
-                      "canonicalName":  "Dash",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "deadly_poison",
-                      "canonicalName":  "DeadlyPoison",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "defend_silent",
-                      "canonicalName":  "DefendSilent",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "deflect",
-                      "canonicalName":  "Deflect",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "dodge_and_roll",
-                      "canonicalName":  "DodgeAndRoll",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "echoing_slash",
-                      "canonicalName":  "EchoingSlash",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "envenom",
-                      "canonicalName":  "Envenom",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "escape_plan",
-                      "canonicalName":  "EscapePlan",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "expertise",
-                      "canonicalName":  "Expertise",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "expose",
-                      "canonicalName":  "Expose",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "fan_of_knives",
-                      "canonicalName":  "FanOfKnives",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "finisher",
-                      "canonicalName":  "Finisher",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "flanking",
-                      "canonicalName":  "Flanking",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "flechettes",
-                      "canonicalName":  "Flechettes",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "flick_flack",
-                      "canonicalName":  "FlickFlack",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "follow_through",
-                      "canonicalName":  "FollowThrough",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "footwork",
-                      "canonicalName":  "Footwork",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "grand_finale",
-                      "canonicalName":  "GrandFinale",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "hand_trick",
-                      "canonicalName":  "HandTrick",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "haze",
-                      "canonicalName":  "Haze",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "hidden_daggers",
-                      "canonicalName":  "HiddenDaggers",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "infinite_blades",
-                      "canonicalName":  "InfiniteBlades",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "knife_trap",
-                      "canonicalName":  "KnifeTrap",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "leading_strike",
-                      "canonicalName":  "LeadingStrike",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "leg_sweep",
-                      "canonicalName":  "LegSweep",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "malaise",
-                      "canonicalName":  "Malaise",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "master_planner",
-                      "canonicalName":  "MasterPlanner",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "memento_mori",
-                      "canonicalName":  "MementoMori",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "mirage",
-                      "canonicalName":  "Mirage",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "murder",
-                      "canonicalName":  "Murder",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "neutralize",
-                      "canonicalName":  "Neutralize",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "nightmare",
-                      "canonicalName":  "Nightmare",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "noxious_fumes",
-                      "canonicalName":  "NoxiousFumes",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "phantom_blades",
-                      "canonicalName":  "PhantomBlades",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "piercing_wail",
-                      "canonicalName":  "PiercingWail",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "pinpoint",
-                      "canonicalName":  "Pinpoint",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "poisoned_stab",
-                      "canonicalName":  "PoisonedStab",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "pounce",
-                      "canonicalName":  "Pounce",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "precise_cut",
-                      "canonicalName":  "PreciseCut",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "predator",
-                      "canonicalName":  "Predator",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "prepared",
-                      "canonicalName":  "Prepared",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "reflex",
-                      "canonicalName":  "Reflex",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "ricochet",
-                      "canonicalName":  "Ricochet",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "serpent_form",
-                      "canonicalName":  "SerpentForm",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "shadow_step",
-                      "canonicalName":  "ShadowStep",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "shadowmeld",
-                      "canonicalName":  "Shadowmeld",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "skewer",
-                      "canonicalName":  "Skewer",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "slice",
-                      "canonicalName":  "Slice",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "snakebite",
-                      "canonicalName":  "Snakebite",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "sneaky",
-                      "canonicalName":  "Sneaky",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "speedster",
-                      "canonicalName":  "Speedster",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "storm_of_steel",
-                      "canonicalName":  "StormOfSteel",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "strangle",
-                      "canonicalName":  "Strangle",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "strike_silent",
-                      "canonicalName":  "StrikeSilent",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "sucker_punch",
-                      "canonicalName":  "SuckerPunch",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "suppress",
-                      "canonicalName":  "Suppress",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "survivor",
-                      "canonicalName":  "Survivor",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "tactician",
-                      "canonicalName":  "Tactician",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "the_gambit",
-                      "canonicalName":  "TheGambit",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "the_hunt",
-                      "canonicalName":  "TheHunt",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "tools_of_the_trade",
-                      "canonicalName":  "ToolsOfTheTrade",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "tracking",
-                      "canonicalName":  "Tracking",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "untouchable",
-                      "canonicalName":  "Untouchable",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "up_my_sleeve",
-                      "canonicalName":  "UpMySleeve",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "well_laid_plans",
-                      "canonicalName":  "WellLaidPlans",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "wraith_form",
-                      "canonicalName":  "WraithForm",
-                      "group":  "silent"
-                  },
-                  {
-                      "cardId":  "beckon",
-                      "canonicalName":  "Beckon",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "burn",
-                      "canonicalName":  "Burn",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "dazed",
-                      "canonicalName":  "Dazed",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "debris",
-                      "canonicalName":  "Debris",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "frantic_escape",
-                      "canonicalName":  "FranticEscape",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "infection",
-                      "canonicalName":  "Infection",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "slimed",
-                      "canonicalName":  "Slimed",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "soot",
-                      "canonicalName":  "Soot",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "toxic",
-                      "canonicalName":  "Toxic",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "void",
-                      "canonicalName":  "Void",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "wound",
-                      "canonicalName":  "Wound",
-                      "group":  "status"
-                  },
-                  {
-                      "cardId":  "disintegration",
-                      "canonicalName":  "Disintegration",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "giant_rock",
-                      "canonicalName":  "GiantRock",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "luminesce",
-                      "canonicalName":  "Luminesce",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "mind_rot",
-                      "canonicalName":  "MindRot",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "minion_dive_bomb",
-                      "canonicalName":  "MinionDiveBomb",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "minion_sacrifice",
-                      "canonicalName":  "MinionSacrifice",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "minion_strike",
-                      "canonicalName":  "MinionStrike",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "shiv",
-                      "canonicalName":  "Shiv",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "sloth",
-                      "canonicalName":  "Sloth",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "soul",
-                      "canonicalName":  "Soul",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "sovereign_blade",
-                      "canonicalName":  "SovereignBlade",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "starlight_sword",
-                      "canonicalName":  "StarlightSword",
-                      "group":  "token"
-                  },
-                  {
-                      "cardId":  "waste_away",
-                      "canonicalName":  "WasteAway",
-                      "group":  "token"
-                  }
-              ]
+﻿{
+    "version": "sts2-official-card-index-v2",
+    "cards": [
+        {
+            "cardId": "alchemize",
+            "canonicalName": "Alchemize",
+            "group": "colorless"
+        },
+        {
+            "cardId": "anointed",
+            "canonicalName": "Anointed",
+            "group": "colorless"
+        },
+        {
+            "cardId": "automation",
+            "canonicalName": "Automation",
+            "group": "colorless"
+        },
+        {
+            "cardId": "bandage_up",
+            "canonicalName": "BandageUp",
+            "group": "colorless"
+        },
+        {
+            "cardId": "beacon_of_hope",
+            "canonicalName": "BeaconOfHope",
+            "group": "colorless"
+        },
+        {
+            "cardId": "beat_down",
+            "canonicalName": "BeatDown",
+            "group": "colorless"
+        },
+        {
+            "cardId": "believe_in_you",
+            "canonicalName": "BelieveInYou",
+            "group": "colorless"
+        },
+        {
+            "cardId": "beta",
+            "canonicalName": "Beta",
+            "group": "colorless"
+        },
+        {
+            "cardId": "bite",
+            "canonicalName": "Bite",
+            "group": "colorless"
+        },
+        {
+            "cardId": "bolas",
+            "canonicalName": "Bolas",
+            "group": "colorless"
+        },
+        {
+            "cardId": "calamity",
+            "canonicalName": "Calamity",
+            "group": "colorless"
+        },
+        {
+            "cardId": "calm",
+            "canonicalName": "Calm",
+            "group": "colorless"
+        },
+        {
+            "cardId": "catastrophe",
+            "canonicalName": "Catastrophe",
+            "group": "colorless"
+        },
+        {
+            "cardId": "coordinate",
+            "canonicalName": "Coordinate",
+            "group": "colorless"
+        },
+        {
+            "cardId": "dark_shackles",
+            "canonicalName": "DarkShackles",
+            "group": "colorless"
+        },
+        {
+            "cardId": "deep_breath",
+            "canonicalName": "DeepBreath",
+            "group": "colorless"
+        },
+        {
+            "cardId": "discovery",
+            "canonicalName": "Discovery",
+            "group": "colorless"
+        },
+        {
+            "cardId": "dramatic_entrance",
+            "canonicalName": "DramaticEntrance",
+            "group": "colorless"
+        },
+        {
+            "cardId": "entropy",
+            "canonicalName": "Entropy",
+            "group": "colorless"
+        },
+        {
+            "cardId": "equilibrium",
+            "canonicalName": "Equilibrium",
+            "group": "colorless"
+        },
+        {
+            "cardId": "eternal_armor",
+            "canonicalName": "EternalArmor",
+            "group": "colorless"
+        },
+        {
+            "cardId": "expunger",
+            "canonicalName": "Expunger",
+            "group": "colorless"
+        },
+        {
+            "cardId": "fame_and_fortune",
+            "canonicalName": "FameAndFortune",
+            "group": "colorless"
+        },
+        {
+            "cardId": "fasten",
+            "canonicalName": "Fasten",
+            "group": "colorless"
+        },
+        {
+            "cardId": "finesse",
+            "canonicalName": "Finesse",
+            "group": "colorless"
+        },
+        {
+            "cardId": "fisticuffs",
+            "canonicalName": "Fisticuffs",
+            "group": "colorless"
+        },
+        {
+            "cardId": "flash_of_steel",
+            "canonicalName": "FlashOfSteel",
+            "group": "colorless"
+        },
+        {
+            "cardId": "forethought",
+            "canonicalName": "Forethought",
+            "group": "colorless"
+        },
+        {
+            "cardId": "gang_up",
+            "canonicalName": "GangUp",
+            "group": "colorless"
+        },
+        {
+            "cardId": "gold_axe",
+            "canonicalName": "GoldAxe",
+            "group": "colorless"
+        },
+        {
+            "cardId": "golden_axe",
+            "canonicalName": "GoldenAxe",
+            "group": "colorless"
+        },
+        {
+            "cardId": "hand_of_greed",
+            "canonicalName": "HandOfGreed",
+            "group": "colorless"
+        },
+        {
+            "cardId": "hidden_gem",
+            "canonicalName": "HiddenGem",
+            "group": "colorless"
+        },
+        {
+            "cardId": "huddle_up",
+            "canonicalName": "HuddleUp",
+            "group": "colorless"
+        },
+        {
+            "cardId": "impatience",
+            "canonicalName": "Impatience",
+            "group": "colorless"
+        },
+        {
+            "cardId": "insight",
+            "canonicalName": "Insight",
+            "group": "colorless"
+        },
+        {
+            "cardId": "intercept",
+            "canonicalName": "Intercept",
+            "group": "colorless"
+        },
+        {
+            "cardId": "jack_of_all_trades",
+            "canonicalName": "JackOfAllTrades",
+            "group": "colorless"
+        },
+        {
+            "cardId": "jackpot",
+            "canonicalName": "Jackpot",
+            "group": "colorless"
+        },
+        {
+            "cardId": "jax",
+            "canonicalName": "Jax",
+            "group": "colorless"
+        },
+        {
+            "cardId": "knockdown",
+            "canonicalName": "Knockdown",
+            "group": "colorless"
+        },
+        {
+            "cardId": "lift",
+            "canonicalName": "Lift",
+            "group": "colorless"
+        },
+        {
+            "cardId": "master_of_strategy",
+            "canonicalName": "MasterOfStrategy",
+            "group": "colorless"
+        },
+        {
+            "cardId": "mayhem",
+            "canonicalName": "Mayhem",
+            "group": "colorless"
+        },
+        {
+            "cardId": "mimic",
+            "canonicalName": "Mimic",
+            "group": "colorless"
+        },
+        {
+            "cardId": "mind_blast",
+            "canonicalName": "MindBlast",
+            "group": "colorless"
+        },
+        {
+            "cardId": "nostalgia",
+            "canonicalName": "Nostalgia",
+            "group": "colorless"
+        },
+        {
+            "cardId": "omnislice",
+            "canonicalName": "Omnislice",
+            "group": "colorless"
+        },
+        {
+            "cardId": "panache",
+            "canonicalName": "Panache",
+            "group": "colorless"
+        },
+        {
+            "cardId": "panic_button",
+            "canonicalName": "PanicButton",
+            "group": "colorless"
+        },
+        {
+            "cardId": "prep_time",
+            "canonicalName": "PrepTime",
+            "group": "colorless"
+        },
+        {
+            "cardId": "production",
+            "canonicalName": "Production",
+            "group": "colorless"
+        },
+        {
+            "cardId": "prolong",
+            "canonicalName": "Prolong",
+            "group": "colorless"
+        },
+        {
+            "cardId": "prowess",
+            "canonicalName": "Prowess",
+            "group": "colorless"
+        },
+        {
+            "cardId": "purity",
+            "canonicalName": "Purity",
+            "group": "colorless"
+        },
+        {
+            "cardId": "rally",
+            "canonicalName": "Rally",
+            "group": "colorless"
+        },
+        {
+            "cardId": "rend",
+            "canonicalName": "Rend",
+            "group": "colorless"
+        },
+        {
+            "cardId": "restlessness",
+            "canonicalName": "Restlessness",
+            "group": "colorless"
+        },
+        {
+            "cardId": "ritual_dagger",
+            "canonicalName": "RitualDagger",
+            "group": "colorless"
+        },
+        {
+            "cardId": "rolling_boulder",
+            "canonicalName": "RollingBoulder",
+            "group": "colorless"
+        },
+        {
+            "cardId": "safety",
+            "canonicalName": "Safety",
+            "group": "colorless"
+        },
+        {
+            "cardId": "salvo",
+            "canonicalName": "Salvo",
+            "group": "colorless"
+        },
+        {
+            "cardId": "scrawl",
+            "canonicalName": "Scrawl",
+            "group": "colorless"
+        },
+        {
+            "cardId": "secret_technique",
+            "canonicalName": "SecretTechnique",
+            "group": "colorless"
+        },
+        {
+            "cardId": "secret_weapon",
+            "canonicalName": "SecretWeapon",
+            "group": "colorless"
+        },
+        {
+            "cardId": "seeker_strike",
+            "canonicalName": "SeekerStrike",
+            "group": "colorless"
+        },
+        {
+            "cardId": "shockwave",
+            "canonicalName": "Shockwave",
+            "group": "colorless"
+        },
+        {
+            "cardId": "smite",
+            "canonicalName": "Smite",
+            "group": "colorless"
+        },
+        {
+            "cardId": "splash",
+            "canonicalName": "Splash",
+            "group": "colorless"
+        },
+        {
+            "cardId": "stratagem",
+            "canonicalName": "Stratagem",
+            "group": "colorless"
+        },
+        {
+            "cardId": "tag_team",
+            "canonicalName": "TagTeam",
+            "group": "colorless"
+        },
+        {
+            "cardId": "the_bomb",
+            "canonicalName": "TheBomb",
+            "group": "colorless"
+        },
+        {
+            "cardId": "the_gambit",
+            "canonicalName": "TheGambit",
+            "group": "colorless"
+        },
+        {
+            "cardId": "thinking_ahead",
+            "canonicalName": "ThinkingAhead",
+            "group": "colorless"
+        },
+        {
+            "cardId": "through_violence",
+            "canonicalName": "ThroughViolence",
+            "group": "colorless"
+        },
+        {
+            "cardId": "thrumming_hatchet",
+            "canonicalName": "ThrummingHatchet",
+            "group": "colorless"
+        },
+        {
+            "cardId": "transmutation",
+            "canonicalName": "Transmutation",
+            "group": "colorless"
+        },
+        {
+            "cardId": "trip",
+            "canonicalName": "Trip",
+            "group": "colorless"
+        },
+        {
+            "cardId": "ultimate_defend",
+            "canonicalName": "UltimateDefend",
+            "group": "colorless"
+        },
+        {
+            "cardId": "ultimate_strike",
+            "canonicalName": "UltimateStrike",
+            "group": "colorless"
+        },
+        {
+            "cardId": "violence",
+            "canonicalName": "Violence",
+            "group": "colorless"
+        },
+        {
+            "cardId": "volley",
+            "canonicalName": "Volley",
+            "group": "colorless"
+        },
+        {
+            "cardId": "wrath",
+            "canonicalName": "Wrath",
+            "group": "colorless"
+        },
+        {
+            "cardId": "ascenders_bane",
+            "canonicalName": "AscendersBane",
+            "group": "curse"
+        },
+        {
+            "cardId": "bad_luck",
+            "canonicalName": "BadLuck",
+            "group": "curse"
+        },
+        {
+            "cardId": "clumsy",
+            "canonicalName": "Clumsy",
+            "group": "curse"
+        },
+        {
+            "cardId": "curse_of_the_bell",
+            "canonicalName": "CurseOfTheBell",
+            "group": "curse"
+        },
+        {
+            "cardId": "debt",
+            "canonicalName": "Debt",
+            "group": "curse"
+        },
+        {
+            "cardId": "decay",
+            "canonicalName": "Decay",
+            "group": "curse"
+        },
+        {
+            "cardId": "doubt",
+            "canonicalName": "Doubt",
+            "group": "curse"
+        },
+        {
+            "cardId": "enthralled",
+            "canonicalName": "Enthralled",
+            "group": "curse"
+        },
+        {
+            "cardId": "folly",
+            "canonicalName": "Folly",
+            "group": "curse"
+        },
+        {
+            "cardId": "greed",
+            "canonicalName": "Greed",
+            "group": "curse"
+        },
+        {
+            "cardId": "guilty",
+            "canonicalName": "Guilty",
+            "group": "curse"
+        },
+        {
+            "cardId": "injury",
+            "canonicalName": "Injury",
+            "group": "curse"
+        },
+        {
+            "cardId": "normality",
+            "canonicalName": "Normality",
+            "group": "curse"
+        },
+        {
+            "cardId": "poor_sleep",
+            "canonicalName": "PoorSleep",
+            "group": "curse"
+        },
+        {
+            "cardId": "regret",
+            "canonicalName": "Regret",
+            "group": "curse"
+        },
+        {
+            "cardId": "shame",
+            "canonicalName": "Shame",
+            "group": "curse"
+        },
+        {
+            "cardId": "spore_mind",
+            "canonicalName": "SporeMind",
+            "group": "curse"
+        },
+        {
+            "cardId": "writhe",
+            "canonicalName": "Writhe",
+            "group": "curse"
+        },
+        {
+            "cardId": "adaptive_strike",
+            "canonicalName": "AdaptiveStrike",
+            "group": "defect"
+        },
+        {
+            "cardId": "all_for_one",
+            "canonicalName": "AllForOne",
+            "group": "defect"
+        },
+        {
+            "cardId": "ball_lightning",
+            "canonicalName": "BallLightning",
+            "group": "defect"
+        },
+        {
+            "cardId": "barrage",
+            "canonicalName": "Barrage",
+            "group": "defect"
+        },
+        {
+            "cardId": "beam_cell",
+            "canonicalName": "BeamCell",
+            "group": "defect"
+        },
+        {
+            "cardId": "biased_cognition",
+            "canonicalName": "BiasedCognition",
+            "group": "defect"
+        },
+        {
+            "cardId": "boost_away",
+            "canonicalName": "BoostAway",
+            "group": "defect"
+        },
+        {
+            "cardId": "boot_sequence",
+            "canonicalName": "BootSequence",
+            "group": "defect"
+        },
+        {
+            "cardId": "buffer",
+            "canonicalName": "Buffer",
+            "group": "defect"
+        },
+        {
+            "cardId": "bulk_up",
+            "canonicalName": "BulkUp",
+            "group": "defect"
+        },
+        {
+            "cardId": "capacitor",
+            "canonicalName": "Capacitor",
+            "group": "defect"
+        },
+        {
+            "cardId": "chaos",
+            "canonicalName": "Chaos",
+            "group": "defect"
+        },
+        {
+            "cardId": "charge_battery",
+            "canonicalName": "ChargeBattery",
+            "group": "defect"
+        },
+        {
+            "cardId": "chill",
+            "canonicalName": "Chill",
+            "group": "defect"
+        },
+        {
+            "cardId": "claw",
+            "canonicalName": "Claw",
+            "group": "defect"
+        },
+        {
+            "cardId": "cold_snap",
+            "canonicalName": "ColdSnap",
+            "group": "defect"
+        },
+        {
+            "cardId": "compact",
+            "canonicalName": "Compact",
+            "group": "defect"
+        },
+        {
+            "cardId": "compile_driver",
+            "canonicalName": "CompileDriver",
+            "group": "defect"
+        },
+        {
+            "cardId": "consume",
+            "canonicalName": "Consume",
+            "group": "defect"
+        },
+        {
+            "cardId": "consuming_shadow",
+            "canonicalName": "ConsumingShadow",
+            "group": "defect"
+        },
+        {
+            "cardId": "coolant",
+            "canonicalName": "Coolant",
+            "group": "defect"
+        },
+        {
+            "cardId": "coolheaded",
+            "canonicalName": "Coolheaded",
+            "group": "defect"
+        },
+        {
+            "cardId": "creative_ai",
+            "canonicalName": "CreativeAi",
+            "group": "defect"
+        },
+        {
+            "cardId": "darkness",
+            "canonicalName": "Darkness",
+            "group": "defect"
+        },
+        {
+            "cardId": "defend_defect",
+            "canonicalName": "DefendDefect",
+            "group": "defect"
+        },
+        {
+            "cardId": "defragment",
+            "canonicalName": "Defragment",
+            "group": "defect"
+        },
+        {
+            "cardId": "double_energy",
+            "canonicalName": "DoubleEnergy",
+            "group": "defect"
+        },
+        {
+            "cardId": "dualcast",
+            "canonicalName": "Dualcast",
+            "group": "defect"
+        },
+        {
+            "cardId": "echo_form",
+            "canonicalName": "EchoForm",
+            "group": "defect"
+        },
+        {
+            "cardId": "energy_surge",
+            "canonicalName": "EnergySurge",
+            "group": "defect"
+        },
+        {
+            "cardId": "feral",
+            "canonicalName": "Feral",
+            "group": "defect"
+        },
+        {
+            "cardId": "fight_through",
+            "canonicalName": "FightThrough",
+            "group": "defect"
+        },
+        {
+            "cardId": "fission",
+            "canonicalName": "Fission",
+            "group": "defect"
+        },
+        {
+            "cardId": "flak_cannon",
+            "canonicalName": "FlakCannon",
+            "group": "defect"
+        },
+        {
+            "cardId": "focused_strike",
+            "canonicalName": "FocusedStrike",
+            "group": "defect"
+        },
+        {
+            "cardId": "ftl",
+            "canonicalName": "Ftl",
+            "group": "defect"
+        },
+        {
+            "cardId": "fusion",
+            "canonicalName": "Fusion",
+            "group": "defect"
+        },
+        {
+            "cardId": "genetic_algorithm",
+            "canonicalName": "GeneticAlgorithm",
+            "group": "defect"
+        },
+        {
+            "cardId": "glacier",
+            "canonicalName": "Glacier",
+            "group": "defect"
+        },
+        {
+            "cardId": "glasswork",
+            "canonicalName": "Glasswork",
+            "group": "defect"
+        },
+        {
+            "cardId": "go_for_the_eyes",
+            "canonicalName": "GoForTheEyes",
+            "group": "defect"
+        },
+        {
+            "cardId": "gunk_up",
+            "canonicalName": "GunkUp",
+            "group": "defect"
+        },
+        {
+            "cardId": "hailstorm",
+            "canonicalName": "Hailstorm",
+            "group": "defect"
+        },
+        {
+            "cardId": "helix_drill",
+            "canonicalName": "HelixDrill",
+            "group": "defect"
+        },
+        {
+            "cardId": "hologram",
+            "canonicalName": "Hologram",
+            "group": "defect"
+        },
+        {
+            "cardId": "hotfix",
+            "canonicalName": "Hotfix",
+            "group": "defect"
+        },
+        {
+            "cardId": "hyperbeam",
+            "canonicalName": "Hyperbeam",
+            "group": "defect"
+        },
+        {
+            "cardId": "ice_lance",
+            "canonicalName": "IceLance",
+            "group": "defect"
+        },
+        {
+            "cardId": "ignition",
+            "canonicalName": "Ignition",
+            "group": "defect"
+        },
+        {
+            "cardId": "iteration",
+            "canonicalName": "Iteration",
+            "group": "defect"
+        },
+        {
+            "cardId": "leap",
+            "canonicalName": "Leap",
+            "group": "defect"
+        },
+        {
+            "cardId": "lightning_mastery",
+            "canonicalName": "LightningMastery",
+            "group": "defect"
+        },
+        {
+            "cardId": "lightning_rod",
+            "canonicalName": "LightningRod",
+            "group": "defect"
+        },
+        {
+            "cardId": "lock_on",
+            "canonicalName": "LockOn",
+            "group": "defect"
+        },
+        {
+            "cardId": "loop",
+            "canonicalName": "Loop",
+            "group": "defect"
+        },
+        {
+            "cardId": "machine_learning",
+            "canonicalName": "MachineLearning",
+            "group": "defect"
+        },
+        {
+            "cardId": "meteor_strike",
+            "canonicalName": "MeteorStrike",
+            "group": "defect"
+        },
+        {
+            "cardId": "modded",
+            "canonicalName": "Modded",
+            "group": "defect"
+        },
+        {
+            "cardId": "momentum_strike",
+            "canonicalName": "MomentumStrike",
+            "group": "defect"
+        },
+        {
+            "cardId": "multi_cast",
+            "canonicalName": "MultiCast",
+            "group": "defect"
+        },
+        {
+            "cardId": "null",
+            "canonicalName": "Null",
+            "group": "defect"
+        },
+        {
+            "cardId": "overclock",
+            "canonicalName": "Overclock",
+            "group": "defect"
+        },
+        {
+            "cardId": "quadcast",
+            "canonicalName": "Quadcast",
+            "group": "defect"
+        },
+        {
+            "cardId": "rainbow",
+            "canonicalName": "Rainbow",
+            "group": "defect"
+        },
+        {
+            "cardId": "reboot",
+            "canonicalName": "Reboot",
+            "group": "defect"
+        },
+        {
+            "cardId": "refract",
+            "canonicalName": "Refract",
+            "group": "defect"
+        },
+        {
+            "cardId": "rocket_punch",
+            "canonicalName": "RocketPunch",
+            "group": "defect"
+        },
+        {
+            "cardId": "scavenge",
+            "canonicalName": "Scavenge",
+            "group": "defect"
+        },
+        {
+            "cardId": "scrape",
+            "canonicalName": "Scrape",
+            "group": "defect"
+        },
+        {
+            "cardId": "seek",
+            "canonicalName": "Seek",
+            "group": "defect"
+        },
+        {
+            "cardId": "self_repair",
+            "canonicalName": "SelfRepair",
+            "group": "defect"
+        },
+        {
+            "cardId": "shadow_shield",
+            "canonicalName": "ShadowShield",
+            "group": "defect"
+        },
+        {
+            "cardId": "shatter",
+            "canonicalName": "Shatter",
+            "group": "defect"
+        },
+        {
+            "cardId": "signal_boost",
+            "canonicalName": "SignalBoost",
+            "group": "defect"
+        },
+        {
+            "cardId": "skim",
+            "canonicalName": "Skim",
+            "group": "defect"
+        },
+        {
+            "cardId": "smokestack",
+            "canonicalName": "Smokestack",
+            "group": "defect"
+        },
+        {
+            "cardId": "spinner",
+            "canonicalName": "Spinner",
+            "group": "defect"
+        },
+        {
+            "cardId": "storm",
+            "canonicalName": "Storm",
+            "group": "defect"
+        },
+        {
+            "cardId": "strike_defect",
+            "canonicalName": "StrikeDefect",
+            "group": "defect"
+        },
+        {
+            "cardId": "subroutine",
+            "canonicalName": "Subroutine",
+            "group": "defect"
+        },
+        {
+            "cardId": "sunder",
+            "canonicalName": "Sunder",
+            "group": "defect"
+        },
+        {
+            "cardId": "supercritical",
+            "canonicalName": "Supercritical",
+            "group": "defect"
+        },
+        {
+            "cardId": "sweeping_beam",
+            "canonicalName": "SweepingBeam",
+            "group": "defect"
+        },
+        {
+            "cardId": "synchronize",
+            "canonicalName": "Synchronize",
+            "group": "defect"
+        },
+        {
+            "cardId": "synthesis",
+            "canonicalName": "Synthesis",
+            "group": "defect"
+        },
+        {
+            "cardId": "tempest",
+            "canonicalName": "Tempest",
+            "group": "defect"
+        },
+        {
+            "cardId": "tesla_coil",
+            "canonicalName": "TeslaCoil",
+            "group": "defect"
+        },
+        {
+            "cardId": "thunder",
+            "canonicalName": "Thunder",
+            "group": "defect"
+        },
+        {
+            "cardId": "thunder_strike",
+            "canonicalName": "ThunderStrike",
+            "group": "defect"
+        },
+        {
+            "cardId": "trash_to_treasure",
+            "canonicalName": "TrashToTreasure",
+            "group": "defect"
+        },
+        {
+            "cardId": "turbo",
+            "canonicalName": "Turbo",
+            "group": "defect"
+        },
+        {
+            "cardId": "uproar",
+            "canonicalName": "Uproar",
+            "group": "defect"
+        },
+        {
+            "cardId": "voltaic",
+            "canonicalName": "Voltaic",
+            "group": "defect"
+        },
+        {
+            "cardId": "white_noise",
+            "canonicalName": "WhiteNoise",
+            "group": "defect"
+        },
+        {
+            "cardId": "zap",
+            "canonicalName": "Zap",
+            "group": "defect"
+        },
+        {
+            "cardId": "apotheosis",
+            "canonicalName": "Apotheosis",
+            "group": "event"
+        },
+        {
+            "cardId": "apparition",
+            "canonicalName": "Apparition",
+            "group": "event"
+        },
+        {
+            "cardId": "brightest_flame",
+            "canonicalName": "BrightestFlame",
+            "group": "event"
+        },
+        {
+            "cardId": "byrd_swoop",
+            "canonicalName": "ByrdSwoop",
+            "group": "event"
+        },
+        {
+            "cardId": "caltrops",
+            "canonicalName": "Caltrops",
+            "group": "event"
+        },
+        {
+            "cardId": "clash",
+            "canonicalName": "Clash",
+            "group": "event"
+        },
+        {
+            "cardId": "distraction",
+            "canonicalName": "Distraction",
+            "group": "event"
+        },
+        {
+            "cardId": "dual_wield",
+            "canonicalName": "DualWield",
+            "group": "event"
+        },
+        {
+            "cardId": "enlightenment",
+            "canonicalName": "Enlightenment",
+            "group": "event"
+        },
+        {
+            "cardId": "entrench",
+            "canonicalName": "Entrench",
+            "group": "event"
+        },
+        {
+            "cardId": "exterminate",
+            "canonicalName": "Exterminate",
+            "group": "event"
+        },
+        {
+            "cardId": "feeding_frenzy",
+            "canonicalName": "FeedingFrenzy",
+            "group": "event"
+        },
+        {
+            "cardId": "hello_world",
+            "canonicalName": "HelloWorld",
+            "group": "event"
+        },
+        {
+            "cardId": "mad_science_attack",
+            "canonicalName": "MadScienceAttack",
+            "group": "event"
+        },
+        {
+            "cardId": "mad_science_power",
+            "canonicalName": "MadSciencePower",
+            "group": "event"
+        },
+        {
+            "cardId": "mad_science_skill",
+            "canonicalName": "MadScienceSkill",
+            "group": "event"
+        },
+        {
+            "cardId": "maul",
+            "canonicalName": "Maul",
+            "group": "event"
+        },
+        {
+            "cardId": "metamorphosis",
+            "canonicalName": "Metamorphosis",
+            "group": "event"
+        },
+        {
+            "cardId": "neows_fury",
+            "canonicalName": "NeowsFury",
+            "group": "event"
+        },
+        {
+            "cardId": "outmaneuver",
+            "canonicalName": "Outmaneuver",
+            "group": "event"
+        },
+        {
+            "cardId": "peck",
+            "canonicalName": "Peck",
+            "group": "event"
+        },
+        {
+            "cardId": "rebound",
+            "canonicalName": "Rebound",
+            "group": "event"
+        },
+        {
+            "cardId": "relax",
+            "canonicalName": "Relax",
+            "group": "event"
+        },
+        {
+            "cardId": "rip_and_tear",
+            "canonicalName": "RipAndTear",
+            "group": "event"
+        },
+        {
+            "cardId": "squash",
+            "canonicalName": "Squash",
+            "group": "event"
+        },
+        {
+            "cardId": "stack",
+            "canonicalName": "Stack",
+            "group": "event"
+        },
+        {
+            "cardId": "toric_toughness",
+            "canonicalName": "ToricToughness",
+            "group": "event"
+        },
+        {
+            "cardId": "whistle",
+            "canonicalName": "Whistle",
+            "group": "event"
+        },
+        {
+            "cardId": "wish",
+            "canonicalName": "Wish",
+            "group": "event"
+        },
+        {
+            "cardId": "aggression",
+            "canonicalName": "Aggression",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "anger",
+            "canonicalName": "Anger",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "armaments",
+            "canonicalName": "Armaments",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "ashen_strike",
+            "canonicalName": "AshenStrike",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "barricade",
+            "canonicalName": "Barricade",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "bash",
+            "canonicalName": "Bash",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "battle_trance",
+            "canonicalName": "BattleTrance",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "blood_wall",
+            "canonicalName": "BloodWall",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "bloodletting",
+            "canonicalName": "Bloodletting",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "bludgeon",
+            "canonicalName": "Bludgeon",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "body_slam",
+            "canonicalName": "BodySlam",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "brand",
+            "canonicalName": "Brand",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "break",
+            "canonicalName": "Break",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "breakthrough",
+            "canonicalName": "Breakthrough",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "bully",
+            "canonicalName": "Bully",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "burning_pact",
+            "canonicalName": "BurningPact",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "cascade",
+            "canonicalName": "Cascade",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "cinder",
+            "canonicalName": "Cinder",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "colossus",
+            "canonicalName": "Colossus",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "conflagration",
+            "canonicalName": "Conflagration",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "corruption",
+            "canonicalName": "Corruption",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "crimson_mantle",
+            "canonicalName": "CrimsonMantle",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "cruelty",
+            "canonicalName": "Cruelty",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "dark_embrace",
+            "canonicalName": "DarkEmbrace",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "defend_ironclad",
+            "canonicalName": "DefendIronclad",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "demon_form",
+            "canonicalName": "DemonForm",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "demonic_shield",
+            "canonicalName": "DemonicShield",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "dismantle",
+            "canonicalName": "Dismantle",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "dominate",
+            "canonicalName": "Dominate",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "drum_of_battle",
+            "canonicalName": "DrumOfBattle",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "evil_eye",
+            "canonicalName": "EvilEye",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "expect_a_fight",
+            "canonicalName": "ExpectAFight",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "feed",
+            "canonicalName": "Feed",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "feel_no_pain",
+            "canonicalName": "FeelNoPain",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "fiend_fire",
+            "canonicalName": "FiendFire",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "fight_me",
+            "canonicalName": "FightMe",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "flame_barrier",
+            "canonicalName": "FlameBarrier",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "forgotten_ritual",
+            "canonicalName": "ForgottenRitual",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "havoc",
+            "canonicalName": "Havoc",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "headbutt",
+            "canonicalName": "Headbutt",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "hellraiser",
+            "canonicalName": "Hellraiser",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "hemokinesis",
+            "canonicalName": "Hemokinesis",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "howl_from_beyond",
+            "canonicalName": "HowlFromBeyond",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "impervious",
+            "canonicalName": "Impervious",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "infernal_blade",
+            "canonicalName": "InfernalBlade",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "inferno",
+            "canonicalName": "Inferno",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "inflame",
+            "canonicalName": "Inflame",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "iron_wave",
+            "canonicalName": "IronWave",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "juggernaut",
+            "canonicalName": "Juggernaut",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "juggling",
+            "canonicalName": "Juggling",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "limit_break",
+            "canonicalName": "LimitBreak",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "mangle",
+            "canonicalName": "Mangle",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "molten_fist",
+            "canonicalName": "MoltenFist",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "not_yet",
+            "canonicalName": "NotYet",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "offering",
+            "canonicalName": "Offering",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "one_two_punch",
+            "canonicalName": "OneTwoPunch",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "pacts_end",
+            "canonicalName": "PactsEnd",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "perfected_strike",
+            "canonicalName": "PerfectedStrike",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "pillage",
+            "canonicalName": "Pillage",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "pommel_strike",
+            "canonicalName": "PommelStrike",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "primal_force",
+            "canonicalName": "PrimalForce",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "pyre",
+            "canonicalName": "Pyre",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "rage",
+            "canonicalName": "Rage",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "rampage",
+            "canonicalName": "Rampage",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "rupture",
+            "canonicalName": "Rupture",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "second_wind",
+            "canonicalName": "SecondWind",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "setup_strike",
+            "canonicalName": "SetupStrike",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "shrug_it_off",
+            "canonicalName": "ShrugItOff",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "spite",
+            "canonicalName": "Spite",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "stampede",
+            "canonicalName": "Stampede",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "stoke",
+            "canonicalName": "Stoke",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "stomp",
+            "canonicalName": "Stomp",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "stone_armor",
+            "canonicalName": "StoneArmor",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "strike_ironclad",
+            "canonicalName": "StrikeIronclad",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "sword_boomerang",
+            "canonicalName": "SwordBoomerang",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "tank",
+            "canonicalName": "Tank",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "taunt",
+            "canonicalName": "Taunt",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "tear_asunder",
+            "canonicalName": "TearAsunder",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "thrash",
+            "canonicalName": "Thrash",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "thunderclap",
+            "canonicalName": "Thunderclap",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "tremble",
+            "canonicalName": "Tremble",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "true_grit",
+            "canonicalName": "TrueGrit",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "twin_strike",
+            "canonicalName": "TwinStrike",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "unmovable",
+            "canonicalName": "Unmovable",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "unrelenting",
+            "canonicalName": "Unrelenting",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "uppercut",
+            "canonicalName": "Uppercut",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "vicious",
+            "canonicalName": "Vicious",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "whirlwind",
+            "canonicalName": "Whirlwind",
+            "group": "ironclad"
+        },
+        {
+            "cardId": "afterlife",
+            "canonicalName": "Afterlife",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "banshees_cry",
+            "canonicalName": "BansheesCry",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "blight_strike",
+            "canonicalName": "BlightStrike",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "bodyguard",
+            "canonicalName": "Bodyguard",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "bone_shards",
+            "canonicalName": "BoneShards",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "borrowed_time",
+            "canonicalName": "BorrowedTime",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "bury",
+            "canonicalName": "Bury",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "calcify",
+            "canonicalName": "Calcify",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "call_of_the_void",
+            "canonicalName": "CallOfTheVoid",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "capture_spirit",
+            "canonicalName": "CaptureSpirit",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "cleanse",
+            "canonicalName": "Cleanse",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "countdown",
+            "canonicalName": "Countdown",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "danse_macabre",
+            "canonicalName": "DanseMacabre",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "death_march",
+            "canonicalName": "DeathMarch",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "deathbringer",
+            "canonicalName": "Deathbringer",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "deaths_door",
+            "canonicalName": "DeathsDoor",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "debilitate",
+            "canonicalName": "Debilitate",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "defend_necrobinder",
+            "canonicalName": "DefendNecrobinder",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "defile",
+            "canonicalName": "Defile",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "defy",
+            "canonicalName": "Defy",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "delay",
+            "canonicalName": "Delay",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "demesne",
+            "canonicalName": "Demesne",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "devour_life",
+            "canonicalName": "DevourLife",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "dirge",
+            "canonicalName": "Dirge",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "drain_power",
+            "canonicalName": "DrainPower",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "dredge",
+            "canonicalName": "Dredge",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "eidolon",
+            "canonicalName": "Eidolon",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "end_of_days",
+            "canonicalName": "EndOfDays",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "enfeebling_touch",
+            "canonicalName": "EnfeeblingTouch",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "eradicate",
+            "canonicalName": "Eradicate",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "fear",
+            "canonicalName": "Fear",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "fetch",
+            "canonicalName": "Fetch",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "flatten",
+            "canonicalName": "Flatten",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "forbidden_grimoire",
+            "canonicalName": "ForbiddenGrimoire",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "friendship",
+            "canonicalName": "Friendship",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "glimpse_beyond",
+            "canonicalName": "GlimpseBeyond",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "grave_warden",
+            "canonicalName": "GraveWarden",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "graveblast",
+            "canonicalName": "Graveblast",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "hang",
+            "canonicalName": "Hang",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "haunt",
+            "canonicalName": "Haunt",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "high_five",
+            "canonicalName": "HighFive",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "invoke",
+            "canonicalName": "Invoke",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "legion_of_bone",
+            "canonicalName": "LegionOfBone",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "lethality",
+            "canonicalName": "Lethality",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "melancholy",
+            "canonicalName": "Melancholy",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "misery",
+            "canonicalName": "Misery",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "necro_mastery",
+            "canonicalName": "NecroMastery",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "negative_pulse",
+            "canonicalName": "NegativePulse",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "neurosurge",
+            "canonicalName": "Neurosurge",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "no_escape",
+            "canonicalName": "NoEscape",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "oblivion",
+            "canonicalName": "Oblivion",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "pagestorm",
+            "canonicalName": "Pagestorm",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "parse",
+            "canonicalName": "Parse",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "poke",
+            "canonicalName": "Poke",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "protector",
+            "canonicalName": "Protector",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "pull_aggro",
+            "canonicalName": "PullAggro",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "pull_from_below",
+            "canonicalName": "PullFromBelow",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "putrefy",
+            "canonicalName": "Putrefy",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "rabid",
+            "canonicalName": "Rabid",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "rattle",
+            "canonicalName": "Rattle",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "reanimate",
+            "canonicalName": "Reanimate",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "reap",
+            "canonicalName": "Reap",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "reaper_form",
+            "canonicalName": "ReaperForm",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "reave",
+            "canonicalName": "Reave",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "right_hand_hand",
+            "canonicalName": "RightHandHand",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sacrifice",
+            "canonicalName": "Sacrifice",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "scavenge",
+            "canonicalName": "Scavenge",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "scourge",
+            "canonicalName": "Scourge",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sculpting_strike",
+            "canonicalName": "SculptingStrike",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "seance",
+            "canonicalName": "Seance",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sentry_mode",
+            "canonicalName": "SentryMode",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "severance",
+            "canonicalName": "Severance",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "shared_fate",
+            "canonicalName": "SharedFate",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "shroud",
+            "canonicalName": "Shroud",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sic_em",
+            "canonicalName": "SicEm",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sleight_of_flesh",
+            "canonicalName": "SleightOfFlesh",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "snap",
+            "canonicalName": "Snap",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "soul_storm",
+            "canonicalName": "SoulStorm",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "sow",
+            "canonicalName": "Sow",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "spirit_of_ash",
+            "canonicalName": "SpiritOfAsh",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "spur",
+            "canonicalName": "Spur",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "squeeze",
+            "canonicalName": "Squeeze",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "strike_necrobinder",
+            "canonicalName": "StrikeNecrobinder",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "the_scythe",
+            "canonicalName": "TheScythe",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "times_up",
+            "canonicalName": "TimesUp",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "transfigure",
+            "canonicalName": "Transfigure",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "undeath",
+            "canonicalName": "Undeath",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "unleash",
+            "canonicalName": "Unleash",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "veilpiercer",
+            "canonicalName": "Veilpiercer",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "wisp",
+            "canonicalName": "Wisp",
+            "group": "necrobinder"
+        },
+        {
+            "cardId": "byrdonis_egg",
+            "canonicalName": "ByrdonisEgg",
+            "group": "quest"
+        },
+        {
+            "cardId": "lantern_key",
+            "canonicalName": "LanternKey",
+            "group": "quest"
+        },
+        {
+            "cardId": "spoils_map",
+            "canonicalName": "SpoilsMap",
+            "group": "quest"
+        },
+        {
+            "cardId": "alignment",
+            "canonicalName": "Alignment",
+            "group": "regent"
+        },
+        {
+            "cardId": "arsenal",
+            "canonicalName": "Arsenal",
+            "group": "regent"
+        },
+        {
+            "cardId": "astral_pulse",
+            "canonicalName": "AstralPulse",
+            "group": "regent"
+        },
+        {
+            "cardId": "beat_into_shape",
+            "canonicalName": "BeatIntoShape",
+            "group": "regent"
+        },
+        {
+            "cardId": "begone",
+            "canonicalName": "Begone",
+            "group": "regent"
+        },
+        {
+            "cardId": "big_bang",
+            "canonicalName": "BigBang",
+            "group": "regent"
+        },
+        {
+            "cardId": "black_hole",
+            "canonicalName": "BlackHole",
+            "group": "regent"
+        },
+        {
+            "cardId": "bombardment",
+            "canonicalName": "Bombardment",
+            "group": "regent"
+        },
+        {
+            "cardId": "bulwark",
+            "canonicalName": "Bulwark",
+            "group": "regent"
+        },
+        {
+            "cardId": "bundle_of_joy",
+            "canonicalName": "BundleOfJoy",
+            "group": "regent"
+        },
+        {
+            "cardId": "celestial_might",
+            "canonicalName": "CelestialMight",
+            "group": "regent"
+        },
+        {
+            "cardId": "charge",
+            "canonicalName": "Charge",
+            "group": "regent"
+        },
+        {
+            "cardId": "child_of_the_stars",
+            "canonicalName": "ChildOfTheStars",
+            "group": "regent"
+        },
+        {
+            "cardId": "cloak_of_stars",
+            "canonicalName": "CloakOfStars",
+            "group": "regent"
+        },
+        {
+            "cardId": "collision_course",
+            "canonicalName": "CollisionCourse",
+            "group": "regent"
+        },
+        {
+            "cardId": "comet",
+            "canonicalName": "Comet",
+            "group": "regent"
+        },
+        {
+            "cardId": "conqueror",
+            "canonicalName": "Conqueror",
+            "group": "regent"
+        },
+        {
+            "cardId": "convergence",
+            "canonicalName": "Convergence",
+            "group": "regent"
+        },
+        {
+            "cardId": "cosmic_indifference",
+            "canonicalName": "CosmicIndifference",
+            "group": "regent"
+        },
+        {
+            "cardId": "crash_landing",
+            "canonicalName": "CrashLanding",
+            "group": "regent"
+        },
+        {
+            "cardId": "crescent_spear",
+            "canonicalName": "CrescentSpear",
+            "group": "regent"
+        },
+        {
+            "cardId": "crush_under",
+            "canonicalName": "CrushUnder",
+            "group": "regent"
+        },
+        {
+            "cardId": "decisions_decisions",
+            "canonicalName": "DecisionsDecisions",
+            "group": "regent"
+        },
+        {
+            "cardId": "defend_regent",
+            "canonicalName": "DefendRegent",
+            "group": "regent"
+        },
+        {
+            "cardId": "devastate",
+            "canonicalName": "Devastate",
+            "group": "regent"
+        },
+        {
+            "cardId": "dying_star",
+            "canonicalName": "DyingStar",
+            "group": "regent"
+        },
+        {
+            "cardId": "falling_star",
+            "canonicalName": "FallingStar",
+            "group": "regent"
+        },
+        {
+            "cardId": "foregone_conclusion",
+            "canonicalName": "ForegoneConclusion",
+            "group": "regent"
+        },
+        {
+            "cardId": "furnace",
+            "canonicalName": "Furnace",
+            "group": "regent"
+        },
+        {
+            "cardId": "gamma_blast",
+            "canonicalName": "GammaBlast",
+            "group": "regent"
+        },
+        {
+            "cardId": "gather_light",
+            "canonicalName": "GatherLight",
+            "group": "regent"
+        },
+        {
+            "cardId": "genesis",
+            "canonicalName": "Genesis",
+            "group": "regent"
+        },
+        {
+            "cardId": "glimmer",
+            "canonicalName": "Glimmer",
+            "group": "regent"
+        },
+        {
+            "cardId": "glitterstream",
+            "canonicalName": "Glitterstream",
+            "group": "regent"
+        },
+        {
+            "cardId": "glow",
+            "canonicalName": "Glow",
+            "group": "regent"
+        },
+        {
+            "cardId": "guards",
+            "canonicalName": "Guards",
+            "group": "regent"
+        },
+        {
+            "cardId": "guiding_star",
+            "canonicalName": "GuidingStar",
+            "group": "regent"
+        },
+        {
+            "cardId": "hammer_time",
+            "canonicalName": "HammerTime",
+            "group": "regent"
+        },
+        {
+            "cardId": "heavenly_drill",
+            "canonicalName": "HeavenlyDrill",
+            "group": "regent"
+        },
+        {
+            "cardId": "hegemony",
+            "canonicalName": "Hegemony",
+            "group": "regent"
+        },
+        {
+            "cardId": "heirloom_hammer",
+            "canonicalName": "HeirloomHammer",
+            "group": "regent"
+        },
+        {
+            "cardId": "hidden_cache",
+            "canonicalName": "HiddenCache",
+            "group": "regent"
+        },
+        {
+            "cardId": "i_am_invincible",
+            "canonicalName": "IAmInvincible",
+            "group": "regent"
+        },
+        {
+            "cardId": "kingly_kick",
+            "canonicalName": "KinglyKick",
+            "group": "regent"
+        },
+        {
+            "cardId": "kingly_punch",
+            "canonicalName": "KinglyPunch",
+            "group": "regent"
+        },
+        {
+            "cardId": "knockout_blow",
+            "canonicalName": "KnockoutBlow",
+            "group": "regent"
+        },
+        {
+            "cardId": "know_thy_place",
+            "canonicalName": "KnowThyPlace",
+            "group": "regent"
+        },
+        {
+            "cardId": "largesse",
+            "canonicalName": "Largesse",
+            "group": "regent"
+        },
+        {
+            "cardId": "lunar_blast",
+            "canonicalName": "LunarBlast",
+            "group": "regent"
+        },
+        {
+            "cardId": "make_it_so",
+            "canonicalName": "MakeItSo",
+            "group": "regent"
+        },
+        {
+            "cardId": "manifest_authority",
+            "canonicalName": "ManifestAuthority",
+            "group": "regent"
+        },
+        {
+            "cardId": "meteor_shower",
+            "canonicalName": "MeteorShower",
+            "group": "regent"
+        },
+        {
+            "cardId": "monarchs_gaze",
+            "canonicalName": "MonarchsGaze",
+            "group": "regent"
+        },
+        {
+            "cardId": "monologue",
+            "canonicalName": "Monologue",
+            "group": "regent"
+        },
+        {
+            "cardId": "neutron_aegis",
+            "canonicalName": "NeutronAegis",
+            "group": "regent"
+        },
+        {
+            "cardId": "orbit",
+            "canonicalName": "Orbit",
+            "group": "regent"
+        },
+        {
+            "cardId": "pale_blue_dot",
+            "canonicalName": "PaleBlueDot",
+            "group": "regent"
+        },
+        {
+            "cardId": "parry",
+            "canonicalName": "Parry",
+            "group": "regent"
+        },
+        {
+            "cardId": "particle_wall",
+            "canonicalName": "ParticleWall",
+            "group": "regent"
+        },
+        {
+            "cardId": "patter",
+            "canonicalName": "Patter",
+            "group": "regent"
+        },
+        {
+            "cardId": "photon_cut",
+            "canonicalName": "PhotonCut",
+            "group": "regent"
+        },
+        {
+            "cardId": "pillar_of_creation",
+            "canonicalName": "PillarOfCreation",
+            "group": "regent"
+        },
+        {
+            "cardId": "prophesize",
+            "canonicalName": "Prophesize",
+            "group": "regent"
+        },
+        {
+            "cardId": "quasar",
+            "canonicalName": "Quasar",
+            "group": "regent"
+        },
+        {
+            "cardId": "radiate",
+            "canonicalName": "Radiate",
+            "group": "regent"
+        },
+        {
+            "cardId": "refine_blade",
+            "canonicalName": "RefineBlade",
+            "group": "regent"
+        },
+        {
+            "cardId": "reflect",
+            "canonicalName": "Reflect",
+            "group": "regent"
+        },
+        {
+            "cardId": "reserves",
+            "canonicalName": "Reserves",
+            "group": "regent"
+        },
+        {
+            "cardId": "resonance",
+            "canonicalName": "Resonance",
+            "group": "regent"
+        },
+        {
+            "cardId": "royal_corona",
+            "canonicalName": "RoyalCorona",
+            "group": "regent"
+        },
+        {
+            "cardId": "royal_gamble",
+            "canonicalName": "RoyalGamble",
+            "group": "regent"
+        },
+        {
+            "cardId": "royalties",
+            "canonicalName": "Royalties",
+            "group": "regent"
+        },
+        {
+            "cardId": "seeking_edge",
+            "canonicalName": "SeekingEdge",
+            "group": "regent"
+        },
+        {
+            "cardId": "seven_stars",
+            "canonicalName": "SevenStars",
+            "group": "regent"
+        },
+        {
+            "cardId": "shining_strike",
+            "canonicalName": "ShiningStrike",
+            "group": "regent"
+        },
+        {
+            "cardId": "solar_strike",
+            "canonicalName": "SolarStrike",
+            "group": "regent"
+        },
+        {
+            "cardId": "spectrum_shift",
+            "canonicalName": "SpectrumShift",
+            "group": "regent"
+        },
+        {
+            "cardId": "spoils_of_battle",
+            "canonicalName": "SpoilsOfBattle",
+            "group": "regent"
+        },
+        {
+            "cardId": "stardust",
+            "canonicalName": "Stardust",
+            "group": "regent"
+        },
+        {
+            "cardId": "strike_regent",
+            "canonicalName": "StrikeRegent",
+            "group": "regent"
+        },
+        {
+            "cardId": "summon_forth",
+            "canonicalName": "SummonForth",
+            "group": "regent"
+        },
+        {
+            "cardId": "supermassive",
+            "canonicalName": "Supermassive",
+            "group": "regent"
+        },
+        {
+            "cardId": "sword_sage",
+            "canonicalName": "SwordSage",
+            "group": "regent"
+        },
+        {
+            "cardId": "terraforming",
+            "canonicalName": "Terraforming",
+            "group": "regent"
+        },
+        {
+            "cardId": "the_sealed_throne",
+            "canonicalName": "TheSealedThrone",
+            "group": "regent"
+        },
+        {
+            "cardId": "the_smith",
+            "canonicalName": "TheSmith",
+            "group": "regent"
+        },
+        {
+            "cardId": "tyranny",
+            "canonicalName": "Tyranny",
+            "group": "regent"
+        },
+        {
+            "cardId": "venerate",
+            "canonicalName": "Venerate",
+            "group": "regent"
+        },
+        {
+            "cardId": "void_form",
+            "canonicalName": "VoidForm",
+            "group": "regent"
+        },
+        {
+            "cardId": "wrought_in_war",
+            "canonicalName": "WroughtInWar",
+            "group": "regent"
+        },
+        {
+            "cardId": "abrasive",
+            "canonicalName": "Abrasive",
+            "group": "silent"
+        },
+        {
+            "cardId": "accelerant",
+            "canonicalName": "Accelerant",
+            "group": "silent"
+        },
+        {
+            "cardId": "accuracy",
+            "canonicalName": "Accuracy",
+            "group": "silent"
+        },
+        {
+            "cardId": "acrobatics",
+            "canonicalName": "Acrobatics",
+            "group": "silent"
+        },
+        {
+            "cardId": "adrenaline",
+            "canonicalName": "Adrenaline",
+            "group": "silent"
+        },
+        {
+            "cardId": "afterimage",
+            "canonicalName": "Afterimage",
+            "group": "silent"
+        },
+        {
+            "cardId": "anticipate",
+            "canonicalName": "Anticipate",
+            "group": "silent"
+        },
+        {
+            "cardId": "assassinate",
+            "canonicalName": "Assassinate",
+            "group": "silent"
+        },
+        {
+            "cardId": "backflip",
+            "canonicalName": "Backflip",
+            "group": "silent"
+        },
+        {
+            "cardId": "backstab",
+            "canonicalName": "Backstab",
+            "group": "silent"
+        },
+        {
+            "cardId": "blackened_blade",
+            "canonicalName": "BlackenedBlade",
+            "group": "silent"
+        },
+        {
+            "cardId": "blade_dance",
+            "canonicalName": "BladeDance",
+            "group": "silent"
+        },
+        {
+            "cardId": "blade_of_ink",
+            "canonicalName": "BladeOfInk",
+            "group": "silent"
+        },
+        {
+            "cardId": "blur",
+            "canonicalName": "Blur",
+            "group": "silent"
+        },
+        {
+            "cardId": "bouncing_flask",
+            "canonicalName": "BouncingFlask",
+            "group": "silent"
+        },
+        {
+            "cardId": "bubble_bubble",
+            "canonicalName": "BubbleBubble",
+            "group": "silent"
+        },
+        {
+            "cardId": "bullet_time",
+            "canonicalName": "BulletTime",
+            "group": "silent"
+        },
+        {
+            "cardId": "burst",
+            "canonicalName": "Burst",
+            "group": "silent"
+        },
+        {
+            "cardId": "calculated_gamble",
+            "canonicalName": "CalculatedGamble",
+            "group": "silent"
+        },
+        {
+            "cardId": "cloak_and_dagger",
+            "canonicalName": "CloakAndDagger",
+            "group": "silent"
+        },
+        {
+            "cardId": "corpse_explosion",
+            "canonicalName": "CorpseExplosion",
+            "group": "silent"
+        },
+        {
+            "cardId": "corrosive_wave",
+            "canonicalName": "CorrosiveWave",
+            "group": "silent"
+        },
+        {
+            "cardId": "dagger_spray",
+            "canonicalName": "DaggerSpray",
+            "group": "silent"
+        },
+        {
+            "cardId": "dagger_throw",
+            "canonicalName": "DaggerThrow",
+            "group": "silent"
+        },
+        {
+            "cardId": "dash",
+            "canonicalName": "Dash",
+            "group": "silent"
+        },
+        {
+            "cardId": "deadly_poison",
+            "canonicalName": "DeadlyPoison",
+            "group": "silent"
+        },
+        {
+            "cardId": "defend_silent",
+            "canonicalName": "DefendSilent",
+            "group": "silent"
+        },
+        {
+            "cardId": "deflect",
+            "canonicalName": "Deflect",
+            "group": "silent"
+        },
+        {
+            "cardId": "dodge_and_roll",
+            "canonicalName": "DodgeAndRoll",
+            "group": "silent"
+        },
+        {
+            "cardId": "echoing_slash",
+            "canonicalName": "EchoingSlash",
+            "group": "silent"
+        },
+        {
+            "cardId": "envenom",
+            "canonicalName": "Envenom",
+            "group": "silent"
+        },
+        {
+            "cardId": "escape_plan",
+            "canonicalName": "EscapePlan",
+            "group": "silent"
+        },
+        {
+            "cardId": "expertise",
+            "canonicalName": "Expertise",
+            "group": "silent"
+        },
+        {
+            "cardId": "expose",
+            "canonicalName": "Expose",
+            "group": "silent"
+        },
+        {
+            "cardId": "fan_of_knives",
+            "canonicalName": "FanOfKnives",
+            "group": "silent"
+        },
+        {
+            "cardId": "finisher",
+            "canonicalName": "Finisher",
+            "group": "silent"
+        },
+        {
+            "cardId": "flanking",
+            "canonicalName": "Flanking",
+            "group": "silent"
+        },
+        {
+            "cardId": "flechettes",
+            "canonicalName": "Flechettes",
+            "group": "silent"
+        },
+        {
+            "cardId": "flick_flack",
+            "canonicalName": "FlickFlack",
+            "group": "silent"
+        },
+        {
+            "cardId": "follow_through",
+            "canonicalName": "FollowThrough",
+            "group": "silent"
+        },
+        {
+            "cardId": "footwork",
+            "canonicalName": "Footwork",
+            "group": "silent"
+        },
+        {
+            "cardId": "grand_finale",
+            "canonicalName": "GrandFinale",
+            "group": "silent"
+        },
+        {
+            "cardId": "hand_trick",
+            "canonicalName": "HandTrick",
+            "group": "silent"
+        },
+        {
+            "cardId": "haze",
+            "canonicalName": "Haze",
+            "group": "silent"
+        },
+        {
+            "cardId": "hidden_daggers",
+            "canonicalName": "HiddenDaggers",
+            "group": "silent"
+        },
+        {
+            "cardId": "infinite_blades",
+            "canonicalName": "InfiniteBlades",
+            "group": "silent"
+        },
+        {
+            "cardId": "knife_trap",
+            "canonicalName": "KnifeTrap",
+            "group": "silent"
+        },
+        {
+            "cardId": "leading_strike",
+            "canonicalName": "LeadingStrike",
+            "group": "silent"
+        },
+        {
+            "cardId": "leg_sweep",
+            "canonicalName": "LegSweep",
+            "group": "silent"
+        },
+        {
+            "cardId": "malaise",
+            "canonicalName": "Malaise",
+            "group": "silent"
+        },
+        {
+            "cardId": "master_planner",
+            "canonicalName": "MasterPlanner",
+            "group": "silent"
+        },
+        {
+            "cardId": "memento_mori",
+            "canonicalName": "MementoMori",
+            "group": "silent"
+        },
+        {
+            "cardId": "mirage",
+            "canonicalName": "Mirage",
+            "group": "silent"
+        },
+        {
+            "cardId": "murder",
+            "canonicalName": "Murder",
+            "group": "silent"
+        },
+        {
+            "cardId": "neutralize",
+            "canonicalName": "Neutralize",
+            "group": "silent"
+        },
+        {
+            "cardId": "nightmare",
+            "canonicalName": "Nightmare",
+            "group": "silent"
+        },
+        {
+            "cardId": "noxious_fumes",
+            "canonicalName": "NoxiousFumes",
+            "group": "silent"
+        },
+        {
+            "cardId": "outbreak",
+            "canonicalName": "Outbreak",
+            "group": "silent"
+        },
+        {
+            "cardId": "phantom_blades",
+            "canonicalName": "PhantomBlades",
+            "group": "silent"
+        },
+        {
+            "cardId": "piercing_wail",
+            "canonicalName": "PiercingWail",
+            "group": "silent"
+        },
+        {
+            "cardId": "pinpoint",
+            "canonicalName": "Pinpoint",
+            "group": "silent"
+        },
+        {
+            "cardId": "poisoned_stab",
+            "canonicalName": "PoisonedStab",
+            "group": "silent"
+        },
+        {
+            "cardId": "pounce",
+            "canonicalName": "Pounce",
+            "group": "silent"
+        },
+        {
+            "cardId": "precise_cut",
+            "canonicalName": "PreciseCut",
+            "group": "silent"
+        },
+        {
+            "cardId": "predator",
+            "canonicalName": "Predator",
+            "group": "silent"
+        },
+        {
+            "cardId": "prepared",
+            "canonicalName": "Prepared",
+            "group": "silent"
+        },
+        {
+            "cardId": "reflex",
+            "canonicalName": "Reflex",
+            "group": "silent"
+        },
+        {
+            "cardId": "ricochet",
+            "canonicalName": "Ricochet",
+            "group": "silent"
+        },
+        {
+            "cardId": "serpent_form",
+            "canonicalName": "SerpentForm",
+            "group": "silent"
+        },
+        {
+            "cardId": "shadow_step",
+            "canonicalName": "ShadowStep",
+            "group": "silent"
+        },
+        {
+            "cardId": "shadowmeld",
+            "canonicalName": "Shadowmeld",
+            "group": "silent"
+        },
+        {
+            "cardId": "skewer",
+            "canonicalName": "Skewer",
+            "group": "silent"
+        },
+        {
+            "cardId": "slice",
+            "canonicalName": "Slice",
+            "group": "silent"
+        },
+        {
+            "cardId": "snakebite",
+            "canonicalName": "Snakebite",
+            "group": "silent"
+        },
+        {
+            "cardId": "sneaky",
+            "canonicalName": "Sneaky",
+            "group": "silent"
+        },
+        {
+            "cardId": "speedster",
+            "canonicalName": "Speedster",
+            "group": "silent"
+        },
+        {
+            "cardId": "storm_of_steel",
+            "canonicalName": "StormOfSteel",
+            "group": "silent"
+        },
+        {
+            "cardId": "strangle",
+            "canonicalName": "Strangle",
+            "group": "silent"
+        },
+        {
+            "cardId": "strike_silent",
+            "canonicalName": "StrikeSilent",
+            "group": "silent"
+        },
+        {
+            "cardId": "sucker_punch",
+            "canonicalName": "SuckerPunch",
+            "group": "silent"
+        },
+        {
+            "cardId": "suppress",
+            "canonicalName": "Suppress",
+            "group": "silent"
+        },
+        {
+            "cardId": "survivor",
+            "canonicalName": "Survivor",
+            "group": "silent"
+        },
+        {
+            "cardId": "tactician",
+            "canonicalName": "Tactician",
+            "group": "silent"
+        },
+        {
+            "cardId": "the_gambit",
+            "canonicalName": "TheGambit",
+            "group": "silent"
+        },
+        {
+            "cardId": "the_hunt",
+            "canonicalName": "TheHunt",
+            "group": "silent"
+        },
+        {
+            "cardId": "tools_of_the_trade",
+            "canonicalName": "ToolsOfTheTrade",
+            "group": "silent"
+        },
+        {
+            "cardId": "tracking",
+            "canonicalName": "Tracking",
+            "group": "silent"
+        },
+        {
+            "cardId": "untouchable",
+            "canonicalName": "Untouchable",
+            "group": "silent"
+        },
+        {
+            "cardId": "up_my_sleeve",
+            "canonicalName": "UpMySleeve",
+            "group": "silent"
+        },
+        {
+            "cardId": "well_laid_plans",
+            "canonicalName": "WellLaidPlans",
+            "group": "silent"
+        },
+        {
+            "cardId": "wraith_form",
+            "canonicalName": "WraithForm",
+            "group": "silent"
+        },
+        {
+            "cardId": "beckon",
+            "canonicalName": "Beckon",
+            "group": "status"
+        },
+        {
+            "cardId": "burn",
+            "canonicalName": "Burn",
+            "group": "status"
+        },
+        {
+            "cardId": "dazed",
+            "canonicalName": "Dazed",
+            "group": "status"
+        },
+        {
+            "cardId": "debris",
+            "canonicalName": "Debris",
+            "group": "status"
+        },
+        {
+            "cardId": "disintegration",
+            "canonicalName": "Disintegration",
+            "group": "status"
+        },
+        {
+            "cardId": "frantic_escape",
+            "canonicalName": "FranticEscape",
+            "group": "status"
+        },
+        {
+            "cardId": "infection",
+            "canonicalName": "Infection",
+            "group": "status"
+        },
+        {
+            "cardId": "mind_rot",
+            "canonicalName": "MindRot",
+            "group": "status"
+        },
+        {
+            "cardId": "slimed",
+            "canonicalName": "Slimed",
+            "group": "status"
+        },
+        {
+            "cardId": "soot",
+            "canonicalName": "Soot",
+            "group": "status"
+        },
+        {
+            "cardId": "toxic",
+            "canonicalName": "Toxic",
+            "group": "status"
+        },
+        {
+            "cardId": "void",
+            "canonicalName": "Void",
+            "group": "status"
+        },
+        {
+            "cardId": "wound",
+            "canonicalName": "Wound",
+            "group": "status"
+        },
+        {
+            "cardId": "disintegration",
+            "canonicalName": "Disintegration",
+            "group": "token"
+        },
+        {
+            "cardId": "fuel",
+            "canonicalName": "Fuel",
+            "group": "token"
+        },
+        {
+            "cardId": "giant_rock",
+            "canonicalName": "GiantRock",
+            "group": "token"
+        },
+        {
+            "cardId": "luminesce",
+            "canonicalName": "Luminesce",
+            "group": "token"
+        },
+        {
+            "cardId": "mind_rot",
+            "canonicalName": "MindRot",
+            "group": "token"
+        },
+        {
+            "cardId": "minion_dive_bomb",
+            "canonicalName": "MinionDiveBomb",
+            "group": "token"
+        },
+        {
+            "cardId": "minion_sacrifice",
+            "canonicalName": "MinionSacrifice",
+            "group": "token"
+        },
+        {
+            "cardId": "minion_strike",
+            "canonicalName": "MinionStrike",
+            "group": "token"
+        },
+        {
+            "cardId": "shiv",
+            "canonicalName": "Shiv",
+            "group": "token"
+        },
+        {
+            "cardId": "sloth",
+            "canonicalName": "Sloth",
+            "group": "token"
+        },
+        {
+            "cardId": "soul",
+            "canonicalName": "Soul",
+            "group": "token"
+        },
+        {
+            "cardId": "sovereign_blade",
+            "canonicalName": "SovereignBlade",
+            "group": "token"
+        },
+        {
+            "cardId": "starlight_sword",
+            "canonicalName": "StarlightSword",
+            "group": "token"
+        },
+        {
+            "cardId": "sweeping_gaze",
+            "canonicalName": "SweepingGaze",
+            "group": "token"
+        },
+        {
+            "cardId": "waste_away",
+            "canonicalName": "WasteAway",
+            "group": "token"
+        }
+    ]
 }
