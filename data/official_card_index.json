@@ -1,5 +1,5 @@
 ﻿{
-    "version": "sts2-official-card-index-v2",
+    "version": "sts2-official-card-index-v1",
     "cards": [
         {
             "cardId": "alchemize",
@@ -1897,11 +1897,6 @@
             "group": "necrobinder"
         },
         {
-            "cardId": "scavenge",
-            "canonicalName": "Scavenge",
-            "group": "necrobinder"
-        },
-        {
             "cardId": "scourge",
             "canonicalName": "Scourge",
             "group": "necrobinder"
@@ -2897,11 +2892,6 @@
             "group": "silent"
         },
         {
-            "cardId": "the_gambit",
-            "canonicalName": "TheGambit",
-            "group": "silent"
-        },
-        {
             "cardId": "the_hunt",
             "canonicalName": "TheHunt",
             "group": "silent"
@@ -3002,11 +2992,6 @@
             "group": "status"
         },
         {
-            "cardId": "disintegration",
-            "canonicalName": "Disintegration",
-            "group": "token"
-        },
-        {
             "cardId": "fuel",
             "canonicalName": "Fuel",
             "group": "token"
@@ -3019,11 +3004,6 @@
         {
             "cardId": "luminesce",
             "canonicalName": "Luminesce",
-            "group": "token"
-        },
-        {
-            "cardId": "mind_rot",
-            "canonicalName": "MindRot",
             "group": "token"
         },
         {
