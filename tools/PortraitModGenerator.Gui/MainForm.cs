@@ -20,6 +20,8 @@ public sealed class MainForm : Form
     private readonly ListBox _assetListBox;
     private readonly PictureBox _sourcePreviewBox;
     private readonly PictureBox _officialPreviewBox;
+    private readonly Label _sourcePreviewLabel;
+    private readonly Label _officialPreviewLabel;
     private readonly Label _statusLabel;
     private readonly Label _pathLabel;
     private readonly Label _reasonLabel;
@@ -227,11 +229,33 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 1
+            RowCount = 2
         };
         previewLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         previewLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        previewLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        previewLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         detailLayout.Controls.Add(previewLayout, 0, 0);
+
+        _sourcePreviewLabel = new Label
+        {
+            Text = Strings.Label_SourcePreview,
+            AutoSize = true,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0, 0, 0, 4)
+        };
+        previewLayout.Controls.Add(_sourcePreviewLabel, 0, 0);
+
+        _officialPreviewLabel = new Label
+        {
+            Text = Strings.Label_OfficialPreview,
+            AutoSize = true,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0, 0, 0, 4)
+        };
+        previewLayout.Controls.Add(_officialPreviewLabel, 1, 0);
 
         _sourcePreviewBox = new PictureBox
         {
@@ -240,7 +264,7 @@ public sealed class MainForm : Form
             SizeMode = PictureBoxSizeMode.Zoom,
             BackColor = Color.FromArgb(30, 30, 30)
         };
-        previewLayout.Controls.Add(_sourcePreviewBox, 0, 0);
+        previewLayout.Controls.Add(_sourcePreviewBox, 0, 1);
 
         _officialPreviewBox = new PictureBox
         {
@@ -249,7 +273,7 @@ public sealed class MainForm : Form
             SizeMode = PictureBoxSizeMode.Zoom,
             BackColor = Color.FromArgb(30, 30, 30)
         };
-        previewLayout.Controls.Add(_officialPreviewBox, 1, 0);
+        previewLayout.Controls.Add(_officialPreviewBox, 1, 1);
 
         _detailsPanel = new Panel
         {
@@ -446,6 +470,8 @@ public sealed class MainForm : Form
         _discardCheckBox.Text = Strings.Checkbox_Discard;
         _groupLabel.Text = Strings.Label_Group;
         _manualCardLabel.Text = Strings.Label_Card;
+        _sourcePreviewLabel.Text = Strings.Label_SourcePreview;
+        _officialPreviewLabel.Text = Strings.Label_OfficialPreview;
         _helpLabel.Text = Strings.Help_MappingReview;
 
         _menuFile.Text = Strings.Menu_File;
@@ -1175,7 +1201,7 @@ public sealed class MainForm : Form
             _discardCheckBox.Checked = candidate.Ignored;
             BindCardSelection(candidate);
             LoadPreview(_sourcePreviewBox, candidate.SourceAbsolutePath);
-            LoadOfficialPreview(candidate);
+            RefreshOfficialPreview(candidate);
         }
         finally
         {
@@ -1247,9 +1273,23 @@ public sealed class MainForm : Form
         target.Image = null;
     }
 
-    private void LoadOfficialPreview(MergedMappingCandidate candidate)
+    private void RefreshOfficialPreview(MergedMappingCandidate? candidate)
     {
-        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId) || string.IsNullOrWhiteSpace(candidate.Group))
+        string? cardId = null;
+        string? group = null;
+
+        if (_cardComboBox.SelectedItem is CardChoice choice)
+        {
+            cardId = choice.Card.CardId;
+            group = choice.Card.Group;
+        }
+        else if (candidate is not null)
+        {
+            cardId = candidate.MatchedCardId;
+            group = candidate.Group;
+        }
+
+        if (string.IsNullOrWhiteSpace(cardId) || string.IsNullOrWhiteSpace(group))
         {
             ClearPreview(_officialPreviewBox);
             return;
@@ -1257,8 +1297,8 @@ public sealed class MainForm : Form
 
         string portraitPath = Path.Combine(
             AppPaths.OfficialCardPortraitsRoot,
-            candidate.Group,
-            candidate.MatchedCardId + ".png");
+            group,
+            cardId + ".png");
         LoadPreview(_officialPreviewBox, portraitPath);
     }
 
@@ -1300,9 +1340,11 @@ public sealed class MainForm : Form
             return;
         }
 
+        MergedMappingCandidate? candidate = _assetListBox.SelectedItem as MergedMappingCandidate;
         _updateMappingButton.Enabled =
-            _assetListBox.SelectedItem is MergedMappingCandidate &&
+            candidate is not null &&
             _cardComboBox.SelectedItem is CardChoice;
+        RefreshOfficialPreview(candidate);
     }
 
     private void ApplyManualCardSelection()

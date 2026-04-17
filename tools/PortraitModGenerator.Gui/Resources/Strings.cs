@@ -31,6 +31,8 @@ internal static class Strings
 
     public static string Label_Group => Get();
     public static string Label_Card => Get();
+    public static string Label_SourcePreview => Get();
+    public static string Label_OfficialPreview => Get();
     public static string Label_ModId => Get();
     public static string Label_ModName => Get();
     public static string Label_Author => Get();

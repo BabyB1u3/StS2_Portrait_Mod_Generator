@@ -112,6 +112,12 @@
   <data name="Label_Card" xml:space="preserve">
     <value>Card:</value>
   </data>
+  <data name="Label_SourcePreview" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Label_OfficialPreview" xml:space="preserve">
+    <value>Official</value>
+  </data>
   <data name="Label_ModId" xml:space="preserve">
     <value>Mod ID:</value>
   </data>
