@@ -18,7 +18,8 @@ public sealed class MainForm : Form
     private readonly TextBox _searchTextBox;
     private readonly ListBox _packageListBox;
     private readonly ListBox _assetListBox;
-    private readonly PictureBox _previewBox;
+    private readonly PictureBox _sourcePreviewBox;
+    private readonly PictureBox _officialPreviewBox;
     private readonly Label _statusLabel;
     private readonly Label _pathLabel;
     private readonly Label _reasonLabel;
@@ -222,14 +223,33 @@ public sealed class MainForm : Form
         detailLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
         contentSplit.Panel2.Controls.Add(detailLayout);
 
-        _previewBox = new PictureBox
+        TableLayoutPanel previewLayout = new()
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 2,
+            RowCount = 1
+        };
+        previewLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        previewLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        detailLayout.Controls.Add(previewLayout, 0, 0);
+
+        _sourcePreviewBox = new PictureBox
         {
             Dock = DockStyle.Fill,
             BorderStyle = BorderStyle.FixedSingle,
             SizeMode = PictureBoxSizeMode.Zoom,
             BackColor = Color.FromArgb(30, 30, 30)
         };
-        detailLayout.Controls.Add(_previewBox, 0, 0);
+        previewLayout.Controls.Add(_sourcePreviewBox, 0, 0);
+
+        _officialPreviewBox = new PictureBox
+        {
+            Dock = DockStyle.Fill,
+            BorderStyle = BorderStyle.FixedSingle,
+            SizeMode = PictureBoxSizeMode.Zoom,
+            BackColor = Color.FromArgb(30, 30, 30)
+        };
+        previewLayout.Controls.Add(_officialPreviewBox, 1, 0);
 
         _detailsPanel = new Panel
         {
@@ -1128,7 +1148,8 @@ public sealed class MainForm : Form
 
             if (candidate is null)
             {
-                _previewBox.Image = null;
+                ClearPreview(_sourcePreviewBox);
+                ClearPreview(_officialPreviewBox);
                 _statusLabel.Text = string.Empty;
                 _pathLabel.Text = string.Empty;
                 _reasonLabel.Text = string.Empty;
@@ -1153,7 +1174,8 @@ public sealed class MainForm : Form
                 LocalizeReason(candidate.MatchReason ?? candidate.IgnoredReason) ?? Strings.Text_None);
             _discardCheckBox.Checked = candidate.Ignored;
             BindCardSelection(candidate);
-            LoadPreview(candidate.SourceAbsolutePath);
+            LoadPreview(_sourcePreviewBox, candidate.SourceAbsolutePath);
+            LoadOfficialPreview(candidate);
         }
         finally
         {
@@ -1205,18 +1227,39 @@ public sealed class MainForm : Form
         _updateMappingButton.Enabled = false;
     }
 
-    private void LoadPreview(string sourceAbsolutePath)
+    private static void LoadPreview(PictureBox target, string? absolutePath)
     {
-        if (!File.Exists(sourceAbsolutePath))
+        if (string.IsNullOrWhiteSpace(absolutePath) || !File.Exists(absolutePath))
         {
-            _previewBox.Image = null;
+            ClearPreview(target);
             return;
         }
 
-        using MemoryStream stream = new(File.ReadAllBytes(sourceAbsolutePath));
+        using MemoryStream stream = new(File.ReadAllBytes(absolutePath));
         using Image loadedImage = Image.FromStream(stream);
-        _previewBox.Image?.Dispose();
-        _previewBox.Image = new Bitmap(loadedImage);
+        target.Image?.Dispose();
+        target.Image = new Bitmap(loadedImage);
+    }
+
+    private static void ClearPreview(PictureBox target)
+    {
+        target.Image?.Dispose();
+        target.Image = null;
+    }
+
+    private void LoadOfficialPreview(MergedMappingCandidate candidate)
+    {
+        if (string.IsNullOrWhiteSpace(candidate.MatchedCardId) || string.IsNullOrWhiteSpace(candidate.Group))
+        {
+            ClearPreview(_officialPreviewBox);
+            return;
+        }
+
+        string portraitPath = Path.Combine(
+            AppPaths.OfficialCardPortraitsRoot,
+            candidate.Group,
+            candidate.MatchedCardId + ".png");
+        LoadPreview(_officialPreviewBox, portraitPath);
     }
 
     private void ApplyDiscardState()

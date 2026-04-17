@@ -20,6 +20,8 @@ internal static class AppPaths
 
     public static string OfficialCardIndexPath => Path.Combine(AppRoot, "data", "official_card_index.json");
 
+    public static string OfficialCardPortraitsRoot => Path.Combine(AppRoot, "data", "official_card_portraits");
+
     public static string PackagesRoot => Path.Combine(AppRoot, "packages");
 
     public static string CacheRoot => Path.Combine(AppRoot, "cache");
